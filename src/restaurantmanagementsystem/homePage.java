@@ -6,18 +6,18 @@ import java.awt.event.*;
 public class homePage extends JFrame implements ActionListener
 {
     private JLabel lblTitle, lblSubtitle1, lblSubtitle2, lblStatus;
-    private JButton btnLogin;
+    private JButton btnLogin, btnInv;
     
     homePage()
     {
-     header();
+    header();
      
-    setSize (1000,750);
+    setSize (1280,800);
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
     setResizable(false);
-
+    setVisible(true);
     }
     
     private void header()
@@ -45,14 +45,26 @@ public class homePage extends JFrame implements ActionListener
             btnLogin.setBounds(350,500,300,30);
             btnLogin.addActionListener(this);
             add(btnLogin);
+            
+        btnInv = new JButton ("Inventory Management");
+            btnInv.setBounds(350, 550, 300, 30);
+            btnInv.addActionListener(this);
+            add(btnInv) ;
     }
+    
+    
     
     @Override
     public void actionPerformed(ActionEvent e) {
            if (e.getSource() == btnLogin) 
         {
             lblStatus.setText("LOG IN SUCCESSFULLY");
-        }
+        } 
+           else if (e.getSource() == btnInv){
+               dispose();
+               inventoryManagement inv = new inventoryManagement ();
+               inv.setVisible(true);
+           }
     }
     
 }
