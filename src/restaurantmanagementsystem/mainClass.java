@@ -4,4 +4,6 @@ public class mainClass {
     {
         homePage HomePage = new homePage();
         HomePage.setVisible(true);
+        
+        new ReportsGenerator();
 }}
