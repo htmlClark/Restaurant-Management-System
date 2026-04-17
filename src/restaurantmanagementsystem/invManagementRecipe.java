@@ -27,7 +27,7 @@ public class invManagementRecipe extends JFrame implements ActionListener{
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    setResizable(false);
+    setResizable(true);
     setVisible(true);
     
     }

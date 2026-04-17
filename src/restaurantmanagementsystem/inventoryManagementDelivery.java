@@ -6,11 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
 public class inventoryManagementDelivery extends JFrame implements ActionListener{
-    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu;
-    private JLabel lblLogo;
+    
+    private DefaultTableModel model;
+    private JTable deliveryTable;
+    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelDeliveryTable;
+    private JLabel lblLogo, lblDate, lblTime;
     private JTextField txtFieldSearch;
     private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnEdit, btnRemove;
     
@@ -27,7 +34,7 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    setResizable(false);
+    setResizable(true);
     setVisible(true);
     
     }
@@ -78,8 +85,10 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnBack = new JButton();
         btnBack.setText("DASHBOARD");
         btnBack.setBounds(0, 0, 250, 50);
-        btnBack.setBackground(Color.LIGHT_GRAY);
         btnBack.setLayout(null);
+        btnBack.setBackground(Color.decode("#1b4a62"));
+        btnBack.setBorderPainted(false);
+        btnBack.setForeground(Color.WHITE);
         btnBack.addActionListener(this);
         panelDashboard.add(btnBack);
         
@@ -119,18 +128,23 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnLogout = new JButton();
         btnLogout.setText("LOGOUT");
         btnLogout.setBounds(0, 625, 250, 30);
-        btnLogout.setBackground(Color.LIGHT_GRAY);
         btnLogout.setLayout(null);
+        btnLogout.setBackground(Color.decode("#1b4a62"));
+        btnLogout.setBorderPainted(false);
+        btnLogout.setForeground(Color.WHITE);
+        btnLogout.addActionListener(this);
         btnLogout.addActionListener(this);
 
         panelDashboard.add(btnLogout);
         
     
+        
+        
         styleButton(btnInvMain);
         styleButton(btnList);
         styleButton(btnRecipe);
         styleButton(btnDelivery);
-        styleButton(btnLogout);
+
 
         btnBack.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnInvMain.setFont(new Font("Open Sans", Font.BOLD, 25));
@@ -158,14 +172,117 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
     }
     
     private void functionMenu(){
+        
+        /*deliveryID
+        deliveryItemName
+        deliveryItemQuantity
+        deliveryItemCategory
+        deliveryItemMeasurement
+        deliveryDate
+        deliveryTime
+        deliveryCourier
+        deliveryItemExpirationDate*/
+        
+        panelDeliveryTable = new JPanel();
+        panelDeliveryTable.setBounds (275, 100, 975, 400);
+        panelDeliveryTable.setBackground(Color.decode("#f5cfba"));
+        panelDeliveryTable.setLayout(new BorderLayout());
+        
+        model = new DefaultTableModel();
+        
+        model.addColumn("DELIVERY ID");
+        model.addColumn("ITEM ID");
+        model.addColumn("ITEM NAME");
+        model.addColumn("QUANTITY");
+        model.addColumn("CATEGORY");
+        model.addColumn("MEASUREMENT");
+        model.addColumn("ITEM EXPIRATION");
+        model.addColumn("DELIVERY DATE");
+        model.addColumn("DELIVERY TIME");
+        model.addColumn("COURIER");
+
+        deliveryTable = new JTable (model);
+        JScrollPane scrollPane = new JScrollPane(deliveryTable);
+        panelDeliveryTable.add(scrollPane, BorderLayout.CENTER);
+        
+        model.addRow(new Object[]{"DV001", "IT001", "GROUND PORK", "20", "MEAT", "KG", "01/25/2026", "01/17/2026", "04:45 AM", "XANE'S MEATSHOP"});
+        model.addRow(new Object[]{"DV002", "IT002", "PORK BELLY", "15", "MEAT", "KG", "01/25/2026", "01/17/2026", "04:45 AM", "XANE'S MEATSHOP"});
+        model.addRow(new Object[]{"DV003", "IT023", "BROWN SUGAR", "5", "SEASONING", "KG", "04/10/2027", "01/18/2026", "15:37 PM", "RHOXSEASONING"});
+        
+        add(panelDeliveryTable);
+        
         panelFunctionMenu = new JPanel();
         panelFunctionMenu.setBounds(250, 75, 1030, 700);
         panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
         panelFunctionMenu.setLayout(null);
         add(panelFunctionMenu);
+       
+        btnAdd = new JButton();
+        btnAdd.setText("ADD");
+        btnAdd.setBounds(150, 450, 200, 30);
+        btnAdd.setBackground(Color.LIGHT_GRAY);
+        btnAdd.setLayout(null);
+        panelFunctionMenu.add(btnAdd);
+        
+        btnEdit = new JButton();
+        btnEdit.setText("EDIT");
+        btnEdit.setBounds(400, 450, 200, 30);
+        btnEdit.setBackground(Color.LIGHT_GRAY);
+        btnEdit.setLayout(null);
+        panelFunctionMenu.add(btnEdit);
+        
+        btnRemove = new JButton();
+        btnRemove.setText("REMOVE");
+        btnRemove.setBounds(650, 450, 200, 30);
+        btnRemove.setBackground(Color.LIGHT_GRAY);
+        btnRemove.setLayout(null);
+        panelFunctionMenu.add(btnRemove);
+      
+        stylebtnFunction(btnAdd);
+        stylebtnFunction(btnEdit);
+        stylebtnFunction(btnRemove);
+        
+        LocalDateTime now = LocalDateTime.now();
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
+
+        String date = now.format(dateFormat);
+        String time = now.format(timeFormat);
+
+        lblDate = new JLabel("Date: " + date);
+        lblDate.setBounds(250, 550, 200, 30);
+        lblDate.setForeground(Color.decode("#1b4a62"));
+        lblDate.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        lblTime = new JLabel("Time: " + time);
+        lblTime.setBounds(550, 550, 200, 30);
+        lblTime.setForeground(Color.decode("#1b4a62"));
+        lblTime.setFont(new Font("Arial", Font.BOLD, 25));
+
+        
+
+        panelFunctionMenu.add(lblDate);
+        panelFunctionMenu.add(lblTime);
 
     }
     
+    private void stylebtnFunction(JButton btn) {
+        btn.setBackground(Color.decode("#e7191f"));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+
+    btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            btn.setBackground(Color.decode("#b71c1c"));
+        }
+
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            btn.setBackground(Color.decode("#e7191f"));
+        }
+    });
+}
     
     @Override
     public void actionPerformed(ActionEvent e) {
