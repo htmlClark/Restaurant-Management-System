@@ -1,35 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package restaurantmanagementsystem;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.ImageIcon;
-import javax.swing.BorderFactory;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 public class ReportsGenerator extends JFrame {
 
-    JLabel totalSalesLabel, avgSalesLabel, bestSellerLabel;
-    JLabel totalUsedLabel, avgUsageLabel, mostUsedLabel;
-    JLabel totalWasteLabel, avgWasteLabel, mostWasteLabel;
 
     public ReportsGenerator() {
-
-    
+        //color conversion
         Color whitemain = Color.decode("#FFF8E1");
         Color darkblue = Color.decode("#366379");
         Color red = Color.decode("#B71C1C");
         Color snude = Color.decode("#F5CFBA");
         Color steal = Color.decode("#89B7B3");
 
+       //title nya 
         setTitle("Weekly Reports Dashboard");
         setSize(1280, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,235 +25,147 @@ public class ReportsGenerator extends JFrame {
         getContentPane().setBackground(whitemain);
 
     
-        JLabel header = new JLabel("", JLabel.CENTER);
-        header.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        header.setForeground(darkblue);
-        header.setBounds(0, 10, 1280, 50);
-        add(header);
+//panel sa sales
+JPanel salesPanel = new JPanel();
+salesPanel.setLayout(null);
+salesPanel.setBackground(steal);
+salesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+salesPanel.setBounds(390, 80, 560, 700);
 
-   
-         JPanel salesPanel = new JPanel();
-        salesPanel.setLayout(null); 
-        salesPanel.setBackground(steal);
-        salesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        salesPanel.setBounds(390, 80, 550, 670);
+//TITLE sa big panel
+JLabel salesTitle = new JLabel("WEEKLY SALES REPORT");
+salesTitle.setFont(getOpenSans(22f).deriveFont(Font.BOLD));
+salesTitle.setForeground(Color.BLACK); 
+salesTitle.setHorizontalAlignment(JLabel.CENTER);
+salesTitle.setBounds(0, 5, 560, 40);
+salesPanel.add(salesTitle);
 
-        // title for sales
-        JLabel salesTitle = new JLabel("SALES REPORT");
-        salesTitle.setFont(getOpenSans(18f).deriveFont(Font.BOLD));
-        salesTitle.setBounds(180, 10, 200, 30);
-        salesPanel.add(salesTitle);
+//data ng sales panels placeholder only
+add(salesPanel);
+salesPanel.add(createSalesCard("METRIC", "VALUE", 60, darkblue, Color.WHITE));
+salesPanel.add(createSalesCard("Total Weekly Sales", "₱0.00", 115, Color.WHITE, Color.BLACK));
+salesPanel.add(createSalesCard("Average Daily Sales", "₱0.00", 165, Color.WHITE, Color.BLACK));
+salesPanel.add(createSalesCard("Highest Daily Sales", "₱0.00", 215, Color.WHITE, Color.BLACK));
+salesPanel.add(createSalesCard("Lowest Daily Sales", "₱0.00", 265, Color.WHITE, Color.BLACK));
 
-        //header 1
-        JLabel metricHeader = new JLabel("METRIC");
-        metricHeader.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
-        metricHeader.setBounds(40, 60, 200, 25);
-        //header 2
-        JLabel salesHeader = new JLabel("SALES");
-        salesHeader.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
-        salesHeader.setBounds(300, 60, 200, 25);
 
-        salesPanel.add(metricHeader);
-        salesPanel.add(salesHeader);
 
-        //data
-        totalSalesLabel = new JLabel("Total Sales");
-        totalSalesLabel.setFont(getOpenSans(14f));
-        totalSalesLabel.setBounds(40, 100, 200, 25);
+//part paren ng sales panel pero ito sa best seller na
+JLabel bestSellerTitle = new JLabel("BEST SELLERS");
+bestSellerTitle.setFont(getOpenSans(22f).deriveFont(Font.BOLD));
+bestSellerTitle.setForeground(Color.BLACK);
+bestSellerTitle.setHorizontalAlignment(JLabel.CENTER);
+bestSellerTitle.setBounds(0, 360, 560, 40);
+salesPanel.add(bestSellerTitle);
 
-        JLabel totalValue = new JLabel("0.00");
-        totalValue.setFont(getOpenSans(14f));
-        totalValue.setBounds(300, 100, 200, 25);
+//placeholder data for the best seller
+salesPanel.add(createBestSellerRow("DISH", "UNIT SOLD", "REVENUE", 410, darkblue, Color.WHITE));
+salesPanel.add(createBestSellerRow("Chicken Adobo", "150", "₱50,000", 465, Color.WHITE, Color.BLACK));
+salesPanel.add(createBestSellerRow("Pork Sisig", "100", "₱80,000", 520, Color.WHITE, Color.BLACK));
+salesPanel.add(createBestSellerRow("Dinakdakan", "120", "₱70,000", 575, Color.WHITE, Color.BLACK));
 
-        avgSalesLabel = new JLabel("Avg Daily");
-        avgSalesLabel.setFont(getOpenSans(14f));
-        avgSalesLabel.setBounds(40, 140, 200, 25);
 
-        JLabel avgValue = new JLabel("0.00");
-        avgValue.setFont(getOpenSans(14f));
-        avgValue.setBounds(300, 140, 200, 25);
 
-        bestSellerLabel = new JLabel("Transactions");
-        bestSellerLabel.setFont(getOpenSans(14f));
-        bestSellerLabel.setBounds(40, 180, 200, 25);
-
-        JLabel transValue = new JLabel("0");
-        transValue.setFont(getOpenSans(14f));
-        transValue.setBounds(300, 180, 200, 25);
-
-        salesPanel.add(totalSalesLabel);
-        salesPanel.add(totalValue);
-        salesPanel.add(avgSalesLabel);
-        salesPanel.add(avgValue);
-        salesPanel.add(bestSellerLabel);
-        salesPanel.add(transValue);
-
-        //best seller part
-        JLabel bestTitle = new JLabel("BEST SELLERS");
-        bestTitle.setFont(getOpenSans(18f).deriveFont(Font.BOLD));
-        bestTitle.setBounds(170, 240, 250, 30);
-        salesPanel.add(bestTitle);
-
-        // header
-        JLabel dishHeader = new JLabel("DISH");
-        dishHeader.setBounds(40, 280, 150, 25);
-
-        JLabel unitHeader = new JLabel("UNIT SOLD");
-        unitHeader.setBounds(200, 280, 100, 25);
-
-        JLabel revenueHeader = new JLabel("REVENUE");
-        revenueHeader.setBounds(350, 280, 150, 25);
-
-        dishHeader.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
-        unitHeader.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
-        revenueHeader.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
-
-        salesPanel.add(dishHeader);
-        salesPanel.add(unitHeader);
-        salesPanel.add(revenueHeader);
-
-        // ROW 1
-        salesPanel.add(createRowLabel("Chicken Adobo", 40, 320));
-        salesPanel.add(createRowLabel("0", 200, 320));
-        salesPanel.add(createRowLabel("0.00", 350, 320));
-
-        // ROW 2
-        salesPanel.add(createRowLabel("Pork Sisig", 40, 350));
-        salesPanel.add(createRowLabel("0", 200, 350));
-        salesPanel.add(createRowLabel("0.00", 350, 350));
-
-        // ROW 3
-        salesPanel.add(createRowLabel("Turon", 40, 380));
-        salesPanel.add(createRowLabel("0", 200, 380));
-        salesPanel.add(createRowLabel("0.00", 350, 380));
-
-        add(salesPanel);
-
-        JPanel inventoryPanel = new JPanel();
-inventoryPanel.setLayout(null); // 🔥 IMPORTANT
+//inventory panel na po to
+JPanel inventoryPanel = new JPanel();
+inventoryPanel.setLayout(null);
 inventoryPanel.setBackground(steal);
 inventoryPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-inventoryPanel.setBounds(950, 80, 300, 400);
+inventoryPanel.setBounds(970, 80, 300, 350);
 
-// ================= TITLE =================
+//title lang
 JLabel invTitle = new JLabel("INVENTORY", JLabel.CENTER);
-invTitle.setFont(getOpenSans(16f).deriveFont(Font.BOLD));
+invTitle.setFont(getOpenSans(22f).deriveFont(Font.BOLD));
+invTitle.setForeground(Color.BLACK);
+invTitle.setHorizontalAlignment(JLabel.CENTER);
 invTitle.setBounds(50, 10, 200, 30);
 inventoryPanel.add(invTitle);
 
-// ================= HEADERS =================
-JLabel categoryHeader = new JLabel("CATEGORY");
-categoryHeader.setFont(getOpenSans(13f).deriveFont(Font.BOLD));
-categoryHeader.setBounds(20, 50, 150, 25);
-
-JLabel totalHeader = new JLabel("TOTAL");
-totalHeader.setFont(getOpenSans(13f).deriveFont(Font.BOLD));
-totalHeader.setBounds(180, 50, 100, 25);
-
-inventoryPanel.add(categoryHeader);
-inventoryPanel.add(totalHeader);
-
-// ================= DATA (REAL INGREDIENT GROUPS) =================
-
-// ROW 1
-inventoryPanel.add(createInvRow("Pork", 20, 90));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 90));
-
-// ROW 2
-inventoryPanel.add(createInvRow("Pork", 20, 90));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 90));
-
-// ROW 3
-inventoryPanel.add(createInvRow("Vegetables", 20, 150));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 150));
-
-// ROW 4
-inventoryPanel.add(createInvRow("Seafood", 20, 180));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 180));
-
-// ROW 5
-inventoryPanel.add(createInvRow("Rice", 20, 210));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 210));
-
-// ROW 6
-inventoryPanel.add(createInvRow("Condiments", 20, 240));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 240));
-
-// ROW 7
-inventoryPanel.add(createInvRow("Sugar", 20, 270));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 270));
-
-// ROW 8
-inventoryPanel.add(createInvRow("Cooking Oil", 20, 300));
-inventoryPanel.add(createInvRowValue("0 kg", 180, 300));
 
 add(inventoryPanel);
-      
+//placeholder data sa inventory panel
+inventoryPanel.add(createInventoryRow("CATEGORY", "TOTAL", 60, darkblue, Color.WHITE));
+inventoryPanel.add(createInventoryRow("Pork", "50 kg", 105, Color.WHITE, Color.BLACK));
+inventoryPanel.add(createInventoryRow("Beef", "30 kg", 150, Color.WHITE, Color.BLACK));
+inventoryPanel.add(createInventoryRow("Vegetables", "25 kg", 195, Color.WHITE, Color.BLACK));
+inventoryPanel.add(createInventoryRow("Seafood", "15 kg", 240, Color.WHITE, Color.BLACK));
+inventoryPanel.add(createInventoryRow("Rice", "100 kg", 285, Color.WHITE, Color.BLACK));
 
 
-        JPanel wastePanel = new JPanel();
-        wastePanel.setLayout(new GridLayout(4, 1, 5, 5));
-        wastePanel.setBackground(steal);
-        wastePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        wastePanel.setBounds(950, 490, 300, 260);
 
-        JLabel wasteTitle = new JLabel("Waste Statistics");
-        wasteTitle.setFont(new Font("Segoe UI", Font.BOLD, 16));
+//waste panel na
+JPanel wastePanel = new JPanel();
+wastePanel.setLayout(null);
+wastePanel.setBackground(steal);
+wastePanel.setBounds(970, 440, 300, 340); // Positioned under Inventory
 
-        totalWasteLabel = createLabel("Total Waste: 0");
-        avgWasteLabel = createLabel("Avg Daily: 0");
-        mostWasteLabel = createLabel("Most Wasted: -");
+//title
+JLabel wasteTitle = new JLabel("WASTE DISTRIBUTION");
+wasteTitle.setFont(getOpenSans(22f).deriveFont(Font.BOLD));
+wasteTitle.setForeground(Color.BLACK); // Matches your theme
+wasteTitle.setHorizontalAlignment(JLabel.CENTER);
+wasteTitle.setBounds(0, 10, 300, 30);
+wastePanel.add(wasteTitle);
 
-        wastePanel.add(wasteTitle);
-        wastePanel.add(totalWasteLabel);
-        wastePanel.add(avgWasteLabel);
-        wastePanel.add(mostWasteLabel);
+// placeholder po
+String[] wasteItems = {"Pork", "Beef", "Vegetables", "Seafood", "Rice"};
+double[] wasteValues = {45, 25, 15, 10, 5}; 
+Color[] wasteColors = {red, darkblue, snude, Color.WHITE, Color.GRAY};
 
-        add(wastePanel);
+// piecharts
+PieChartPanel pieChart = new PieChartPanel(wasteValues, wasteColors, wasteItems);
+pieChart.setBounds(0, 40, 300, 280); 
+wastePanel.add(pieChart);
+add(wastePanel);
 
-        JPanel dashPanel = new JPanel();
-        dashPanel.setLayout(null);
-        dashPanel.setBackground(darkblue);
-        dashPanel.setBounds(0, 80, 390, 700);
 
-        add(dashPanel);
-        
-        
+//left side na panel
+JPanel dashPanel = new JPanel(null);
+dashPanel.setBackground(darkblue);
+dashPanel.setBounds(0, 80, 390, 700);
 
-      JPanel LOGO = new JPanel();
-      LOGO.setLayout(null);
+//ginawa ko button hahahahahahahaha baka kasi pwede syang like back to main menu siguro
+JButton dashBtn = createNavButton("DASHBOARD", "/images/DASHBOARD.png", 10, false, darkblue);
+dashBtn.setFont(getCubaoFont(35f));
+dashBtn.setBounds(0, 10, 390, 60);  
+dashPanel.add(dashBtn);
+
+
+//ginaya ko sa canva para may linya emerrut
+JPanel line = new JPanel();
+line.setBackground(Color.WHITE);
+line.setBounds(20, 75, 350, 1);
+dashPanel.add(line);
+
+//buttons 
+dashPanel.add(createNavButton("PRODUCTS", "/images/PRODUCTS.png", 100, false, darkblue));
+dashPanel.add(createNavButton("INVENTORY", "/images/ologo.png", 170, false, darkblue));
+dashPanel.add(createNavButton("WEEKLY SUMMARY", "/images/REPORT.png", 240, false, darkblue)); 
+dashPanel.add(createNavButton("WASTE LOGS", "/*/images/WASTE LOG.png", 310, false, darkblue));
+dashPanel.add(createNavButton("DELIVERY", "/i*/mages/DELIVERY.png", 380, false, darkblue));
+dashPanel.add(createNavButton("LOGOUT", "/images/logout.png", 600, false, darkblue));
+
+
+//logo na
+JPanel LOGO = new JPanel();
+LOGO.setLayout(null);
 LOGO.setBackground(red);
-LOGO.setBounds(0, 0, 390, 140);
+LOGO.setBounds(0, 0, 390, 80);
 
+JLabel fullLogo = new JLabel();
+ImageIcon logoIcon = new ImageIcon(getClass().getResource("/images/NAME.png"));
+Image scaledLogo = logoIcon.getImage().getScaledInstance(360, 80, Image.SCALE_SMOOTH);
 
-JLabel leftText = new JLabel("PIN");
-leftText.setFont(getCubaoFont(50f));
-leftText.setForeground(Color.WHITE);
-leftText.setBounds(15, 3, 120, 90);
+fullLogo.setIcon(new ImageIcon(scaledLogo));
+fullLogo.setBounds(15, 10, 360, 80); 
+fullLogo.setHorizontalAlignment(JLabel.CENTER);
 
-
-JLabel logoImage = new JLabel();
-
-ImageIcon iconlogo = new ImageIcon(getClass().getResource("/images/ologo.png"));
-Image scaledlogo = iconlogo.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH);
-
-logoImage.setIcon(new ImageIcon(scaledlogo));
-logoImage.setBounds(73, 0, 120, 90);
-
-
-JLabel rightText = new JLabel("Y PLATTERS");
-rightText.setFont(getCubaoFont(50f));
-rightText.setForeground(Color.WHITE);
-rightText.setBounds(115, 3, 350, 90);
-
-// ADD ALL
-LOGO.add(leftText);
-LOGO.add(logoImage);
-LOGO.add(rightText);
-
+LOGO.add(fullLogo);
 add(LOGO);
+add(dashPanel);
+        
+// sa search
 
-     System.out.println(getClass().getResource("/images/search.png"));
     JPanel SEARCH = new JPanel();
     SEARCH.setLayout(null);
     SEARCH.setBackground(snude);
@@ -297,6 +196,8 @@ add(LOGO);
         setVisible(true);
     }
 
+    
+    
     private Font getCubaoFont(float size) {
         try {
             Font font = Font.createFont(Font.TRUETYPE_FONT,
@@ -317,45 +218,269 @@ add(LOGO);
             return new Font("Segoe UI", Font.BOLD, (int) size);
         }
     }
-private JLabel createRowLabel(String text, int x, int y) {
-    JLabel label = new JLabel(text);
-    label.setFont(getOpenSans(14f));
-    label.setBounds(x, y, 200, 25);
-    return label;
-    
 
-}
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        return label;
-    }
-
-private JLabel createInvRow(String text, int x, int y) {
-    JLabel label = new JLabel(text);
-    label.setFont(getOpenSans(13f));
-    label.setBounds(x, y, 150, 25);
-    return label;
-}
-
-private JLabel createInvRowValue(String text, int x, int y) {
-    JLabel label = new JLabel(text);
-    label.setFont(getOpenSans(13f));
-    label.setBounds(x, y, 100, 25);
-    return label;
-}
 
 
     
 
-    public void updateWaste(double totalWaste, String mostWaste) {
-        totalWasteLabel.setText("Total Waste: " + totalWaste);
-        avgWasteLabel.setText("Avg Daily: " + String.format("%.2f", totalWaste / 7));
-        mostWasteLabel.setText("Most Wasted: " + mostWaste);
+   
+    
+private JPanel createSalesCard(String metric, String value, int y, Color cardColor, Color textColor) {
+    JPanel container = new JPanel();
+    container.setLayout(null);
+    container.setOpaque(false);
+    // CHANGE: Height from 60 to 45 to match the cards exactly
+    container.setBounds(20, y, 550, 45); 
+
+    // LEFT CARD
+    JPanel leftCard = new JPanel(null);
+    leftCard.setBackground(cardColor);
+    leftCard.setBounds(0, 0, 260, 45);
+
+    JLabel metricLabel = new JLabel(metric);
+    metricLabel.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
+    metricLabel.setForeground(textColor);
+    metricLabel.setHorizontalAlignment(JLabel.CENTER);
+    // CHANGE: Center the text vertically by using the full 45 height
+    metricLabel.setBounds(0, 0, 260, 45); 
+    leftCard.add(metricLabel);
+
+    // RIGHT CARD
+    JPanel rightCard = new JPanel(null);
+    rightCard.setBackground(cardColor);
+    rightCard.setBounds(270, 0, 260, 45);
+
+    JLabel valueLabel = new JLabel(value);
+    valueLabel.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
+    valueLabel.setForeground(textColor);
+    valueLabel.setHorizontalAlignment(JLabel.CENTER);
+    // CHANGE: Center the text vertically by using the full 45 height
+    valueLabel.setBounds(0, 0, 260, 45); 
+    rightCard.add(valueLabel);
+
+    container.add(leftCard);
+    container.add(rightCard);
+
+    return container;
+}
+    
+private JPanel createBestSellerRow(String dish, String units, String revenue, int y, Color cardColor, Color textColor) {
+    JPanel container = new JPanel();
+    container.setLayout(null);
+    container.setOpaque(false);
+    container.setBounds(20, y, 550, 60); 
+
+    // Width for 3 columns: (550 / 3) approx 170. 
+    // Let's use 165 width with 15px gaps.
+
+    // LEFT CARD (DISH)
+    JPanel leftCard = new JPanel();
+    leftCard.setLayout(null);
+    leftCard.setBackground(cardColor);
+    leftCard.setBounds(0, 0, 165, 45);
+
+    JLabel dishLabel = new JLabel(dish);
+    dishLabel.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
+    dishLabel.setForeground(textColor);
+    dishLabel.setHorizontalAlignment(JLabel.CENTER);
+    dishLabel.setBounds(5, 12, 155, 20);
+    leftCard.add(dishLabel);
+
+    // CENTER CARD (UNIT SOLD)
+    JPanel centerCard = new JPanel();
+    centerCard.setLayout(null);
+    centerCard.setBackground(cardColor);
+    centerCard.setBounds(180, 0, 165, 45); // 165 width + 15 gap
+
+    JLabel unitLabel = new JLabel(units);
+    unitLabel.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
+    unitLabel.setForeground(textColor);
+    unitLabel.setHorizontalAlignment(JLabel.CENTER);
+    unitLabel.setBounds(5, 12, 155, 20);
+    centerCard.add(unitLabel);
+
+    // RIGHT CARD (REVENUE)
+    JPanel rightCard = new JPanel();
+    rightCard.setLayout(null);
+    rightCard.setBackground(cardColor);
+    rightCard.setBounds(360, 0, 165, 45); // 180 + 165 + 15 gap
+
+    JLabel revenueLabel = new JLabel(revenue);
+    revenueLabel.setFont(getOpenSans(14f).deriveFont(Font.BOLD));
+    revenueLabel.setForeground(textColor);
+    revenueLabel.setHorizontalAlignment(JLabel.CENTER);
+    revenueLabel.setBounds(5, 12, 155, 20);
+    rightCard.add(revenueLabel);
+
+    container.add(leftCard);
+    container.add(centerCard);
+    container.add(rightCard);
+
+    return container;
+}
+
+private JPanel createInventoryRow(String item, String qty, int y, Color cardColor, Color textColor) {
+    JPanel container = new JPanel();
+    container.setLayout(null);
+    container.setOpaque(false);
+    // 280 width to fit comfortably inside your 300px wide panel
+    container.setBounds(10, y, 280, 45); 
+
+    // --- LEFT CARD (CATEGORY / ITEM NAME) ---
+    JPanel itemCard = new JPanel();
+    itemCard.setLayout(null);
+    itemCard.setBackground(cardColor);
+    itemCard.setBounds(0, 0, 150, 35); // 150px wide
+
+    JLabel itemLabel = new JLabel(item);
+    itemLabel.setFont(getOpenSans(12f).deriveFont(Font.BOLD));
+    itemLabel.setForeground(textColor);
+    itemLabel.setHorizontalAlignment(JLabel.CENTER);
+    itemLabel.setBounds(5, 7, 140, 20);
+    itemCard.add(itemLabel);
+
+    // --- RIGHT CARD (TOTAL / VALUE) ---
+    JPanel qtyCard = new JPanel();
+    qtyCard.setLayout(null);
+    qtyCard.setBackground(cardColor);
+    qtyCard.setBounds(155, 0, 115, 35); // 115px wide (5px gap from left card)
+
+    JLabel qtyLabel = new JLabel(qty);
+    qtyLabel.setFont(getOpenSans(12f).deriveFont(Font.BOLD));
+    qtyLabel.setForeground(textColor);
+    qtyLabel.setHorizontalAlignment(JLabel.CENTER);
+    qtyLabel.setBounds(5, 7, 105, 20);
+    qtyCard.add(qtyLabel);
+
+    container.add(itemCard);
+    container.add(qtyCard);
+
+    return container;
+}
+class PieChartPanel extends JPanel {
+    private double[] values;
+    private Color[] colors;
+    private String[] labels; // Added labels for the hover effect
+
+    public PieChartPanel(double[] values, Color[] colors, String[] labels) {
+        this.values = values;
+        this.colors = colors;
+        this.labels = labels;
+        setOpaque(false);
+
+        //hover code
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(java.awt.event.MouseEvent e) {
+                int size = 180;
+                int centerX = getWidth() / 2;
+                int centerY = getHeight() / 2;
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+             
+                double distance = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+                
+                if (distance <= size / 2) {
+            
+                    double angle = Math.toDegrees(Math.atan2(centerY - mouseY, mouseX - centerX));
+                    if (angle < 0) angle += 360; 
+                    
+           
+                    double total = 0;
+                    for (double v : values) total += v;
+
+                    double currentAngle = 0;
+                    for (int i = 0; i < values.length; i++) {
+                        double sliceAngle = (values[i] / total) * 360;
+                        if (angle >= currentAngle && angle <= (currentAngle + sliceAngle)) {
+    double percent = (values[i] / total) * 100;
+    
+   
+    setToolTipText(String.format("%s: %.1f%% (Value: %.0f kg)", labels[i], percent, values[i]));
+    return;
+}
+                        currentAngle += sliceAngle;
+                    }
+                } else {
+                    setToolTipText(null); // Hide tooltip if mouse is outside circle
+                }
+            }
+        });
+    }
+//code for the pie chart creation
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        int size = 180;
+        int x = (getWidth() - size) / 2;
+        int y = (getHeight() - size) / 2;
+
+        double total = 0;
+        for (double val : values) total += val;
+
+        double startAngle = 0;
+        for (int i = 0; i < values.length; i++) {
+            double arcAngle = (values[i] / total) * 360.0;
+            g2.setColor(colors[i % colors.length]);
+            g2.fillArc(x, y, size, size, (int) startAngle, (int) arcAngle);
+            startAngle += arcAngle;
+        }
     }
 
+}
+//buttons
+private JButton createNavButton(String text, String iconPath, int y, boolean isActive, Color darkblue) {
+    JButton btn = new JButton(text);
+    
+    btn.setBounds(0, y, 390, 60);
+    
+    btn.setFocusPainted(false);
+    btn.setBorderPainted(false);
+    btn.setContentAreaFilled(isActive); // Highlight only the active one
+    btn.setBackground(Color.decode("#264653")); // Darker shade for active button
+    btn.setOpaque(isActive);
+    
+    btn.setForeground(Color.WHITE);
+    btn.setFont(getOpenSans(20f).deriveFont(Font.BOLD));
+    
+    btn.setHorizontalAlignment(SwingConstants.LEFT);
+    btn.setIconTextGap(30); // Gap between icon and text
+    btn.setMargin(new java.awt.Insets(0, 30, 0, 0)); // Padding from the left edge
 
+    try {
+        ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+        Image scaled = icon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(scaled));
+    } catch (Exception e) {
+        System.out.println("Could not find icon: " + iconPath);
+    }
+btn.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(null, 
+                "You clicked on: " + text + "\nThis feature is coming soon!", 
+                "Navigation Placeholder", 
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+    });
+  
+    btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            btn.setContentAreaFilled(true);
+            btn.setBackground(Color.decode("#457B9D")); // Light blue hover
+        }
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            btn.setContentAreaFilled(isActive);
+            btn.setBackground(Color.decode("#264653"));
+        }
+    });
 
+    return btn;
+}
     public static void main(String[] args) {
         new ReportsGenerator();
     }
