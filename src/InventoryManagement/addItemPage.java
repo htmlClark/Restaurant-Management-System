@@ -1,5 +1,5 @@
 
-package restaurantmanagementsystem;
+package InventoryManagement;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-public class removeItemPage extends JFrame implements ActionListener {
-    
-    removeItemPage(){
+public class addItemPage extends JFrame implements ActionListener{
+
+    addItemPage(){
     
     setTitle ("Add Item");
     setSize (1000,500);
@@ -21,7 +21,7 @@ public class removeItemPage extends JFrame implements ActionListener {
     setVisible(true);
         
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

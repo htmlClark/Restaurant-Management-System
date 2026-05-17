@@ -1,27 +1,25 @@
 
-package restaurantmanagementsystem;
+package InventoryManagement;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.table.DefaultTableModel;
-import java.awt.BorderLayout;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
-public class inventoryManagementDelivery extends JFrame implements ActionListener{
-    
+
+public class inventoryManagement extends JFrame implements ActionListener{
+    private JTable itemTable;
     private DefaultTableModel model;
-    private JTable deliveryTable;
-    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelDeliveryTable;
-    private JLabel lblLogo, lblDate, lblTime;
+    
+    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelItemTable;
+    private JLabel lblLogo;
     private JTextField txtFieldSearch;
     private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnEdit, btnRemove;
     
-    inventoryManagementDelivery()
+    public inventoryManagement()
     {
         
     dashboardMenu();
@@ -29,7 +27,7 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
     headerBar();
     functionMenu();
             
-    setTitle ("Delivery");
+    setTitle ("Inventory Management");
     setSize (1280,800);
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,7 +45,7 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         panelHeaderLogo.setLayout(null);
         add(panelHeaderLogo);
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo.png"));
         Image logo = icon.getImage().getScaledInstance(250, 100, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(logo);
         lblLogo = new JLabel(resizedIcon);
@@ -95,7 +93,6 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnInvMain = new JButton();
         btnInvMain.setText("-");
         btnInvMain.setBounds(0, 100, 250, 50);
-        btnInvMain.setBackground(Color.LIGHT_GRAY);
         btnInvMain.setLayout(null);
         btnInvMain.addActionListener(this);
         panelDashboard.add(btnInvMain);
@@ -103,7 +100,6 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnList = new JButton();
         btnList.setText("LIST");
         btnList.setBounds(0, 175, 250, 50);
-        btnList.setBackground(Color.LIGHT_GRAY);
         btnList.setLayout(null);
         btnList.addActionListener(this);
         panelDashboard.add(btnList);
@@ -111,7 +107,6 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnRecipe = new JButton();
         btnRecipe.setText("RECIPE");
         btnRecipe.setBounds(0, 250, 250, 50);
-        btnRecipe.setBackground(Color.LIGHT_GRAY);
         btnRecipe.setLayout(null);
         btnRecipe.addActionListener(this);
         panelDashboard.add(btnRecipe);
@@ -119,7 +114,6 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnDelivery = new JButton();
         btnDelivery.setText("DELIVERY");
         btnDelivery.setBounds(0, 325, 250, 50);
-        btnDelivery.setBackground(Color.LIGHT_GRAY);
         btnDelivery.setLayout(null);
         btnDelivery.addActionListener(this);
 
@@ -135,23 +129,129 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnLogout.addActionListener(this);
         btnLogout.addActionListener(this);
 
-        panelDashboard.add(btnLogout);
-        
-    
-        
-        
         styleButton(btnInvMain);
         styleButton(btnList);
         styleButton(btnRecipe);
         styleButton(btnDelivery);
-
-
+        
         btnBack.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnInvMain.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnList.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnRecipe.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnDelivery.setFont(new Font("Open Sans", Font.BOLD, 25));
         btnLogout.setFont(new Font("Open Sans", Font.BOLD, 25));
+        
+        panelDashboard.add(btnLogout);
+    }
+    
+    
+    private void functionMenu(){
+        panelItemTable = new JPanel();
+        panelItemTable.setBounds (275, 100, 975, 575);
+        panelItemTable.setBackground(Color.decode("#f5cfba"));
+        panelItemTable.setLayout(new BorderLayout());
+        
+        model = new DefaultTableModel();
+        
+        model.addColumn("ID");
+        model.addColumn("NAME");
+        model.addColumn("QUANTITY");
+        model.addColumn("CATEGORY");
+        model.addColumn("MEASUREMENT");
+
+        itemTable = new JTable (model);
+        JScrollPane scrollPane = new JScrollPane(itemTable);
+        panelItemTable.add(scrollPane, BorderLayout.CENTER);
+        
+        //categories = vegetable, meat, seafood, seasoning, condiments, dairy
+        
+        //meat models goes here 
+        model.addRow(new Object[]{"IT001", "GROUND PORK", "10", "MEAT", "KG"});
+        model.addRow(new Object[]{"IT002", "PORK BELLY", "6", "MEAT", "KG"});
+        model.addRow(new Object[]{"IT003", "CHICKEN PIECES", "12", "MEAT", "KG"});
+        model.addRow(new Object[]{"IT004", "PORK INTESTINES", "5", "MEAT", "KG"});
+        model.addRow(new Object[]{"IT005", "FRIED TOFU CUBES", "8", "MEAT", "KG"});
+        
+        //vegetable models goes here
+        model.addRow(new Object[]{"IT006", "CARROTS", "15", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT007", "ONIONS", "20", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT008", "GARLIC", "25", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT009", "EGGPLANT", "10", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT010", "AMPALAYA", "8", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT011", "OKRA", "12", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT012", "SQUASH", "10", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT013", "STRING BEANS", "14", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT014", "TOMATOES", "18", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT015", "CHILI PEPPERS", "5", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT016", "GINGER", "7", "VEGETABLES", "KG"});
+        model.addRow(new Object[]{"IT017", "TARO LEAVES", "6", "VEGETABLES", "KG"});
+        
+        //seasoning models goes here
+        model.addRow(new Object[]{"IT018", "SALT", "50", "SEASONINGS", "PACK"});
+        model.addRow(new Object[]{"IT019", "PEPPER", "40", "SEASONINGS", "PACK"});
+        model.addRow(new Object[]{"IT020", "BAY LEAVES", "8", "SEASONINGS", "PACK"});
+        model.addRow(new Object[]{"IT021", "PEPPERCORN", "6", "SEASONINGS", "PACK"});
+        model.addRow(new Object[]{"IT022", "SUGAR", "35", "SEASONINGS", "KG"});
+        model.addRow(new Object[]{"IT023", "BROWN SUGAR", "20", "SEASONINGS", "KG"});
+        model.addRow(new Object[]{"IT024", "GINGER POWDER", "10", "SEASONINGS", "KG"});
+        
+        //condiments models goes here
+        model.addRow(new Object[]{"IT025", "SOY SAUCE", "30", "CONDIMENTS", "BOTTLE"});
+        model.addRow(new Object[]{"IT026", "VINEGAR", "25", "CONDIMENTS", "BOTTLE"});
+        model.addRow(new Object[]{"IT027", "FISH SAUCE", "12", "CONDIMENTS", "BOTTLE"});
+        model.addRow(new Object[]{"IT028", "BAGOONG (SHRIMP PASTE)", "10", "CONDIMENTS", "JAR"});
+        model.addRow(new Object[]{"IT029", "MAYONNAISE", "8", "CONDIMENTS", "JAR"});
+        model.addRow(new Object[]{"IT030", "CALAMANSI JUICE", "15", "CONDIMENTS", "KG"});
+        
+        //other models goes here
+        model.addRow(new Object[]{"IT031", "LUMPIA WRAPPERS", "50", "OTHERS", "PACK"});
+        model.addRow(new Object[]{"IT032", "COOKING OIL", "20", "OTHERS", "BOTTLE"});
+        model.addRow(new Object[]{"IT033", "TAPIOCA PEARLS (SAGO)", "10", "OTHERS", "PACK"});
+        model.addRow(new Object[]{"IT034", "GULAMAN", "12", "OTHERS", "PACK"});
+        model.addRow(new Object[]{"IT035", "ICE", "30", "OTHERS", "KG"});
+        model.addRow(new Object[]{"IT036", "TEA BAGS", "25", "OTHERS", "BOX"});
+        model.addRow(new Object[]{"IT037", "LEMON / CALAMANSI", "15", "OTHERS", "KG"});
+        model.addRow(new Object[]{"IT038", "BROWN SUGAR SYRUP (ARNIBAL)", "10", "OTHERS", "BOTTLE"});
+        model.addRow(new Object[]{"IT039", "SHAVED ICE", "20", "OTHERS", "KG"});
+
+        //for adding new row
+        // model.addRow(new Object[]{"", "", "", "", ""});
+
+        
+        add(panelItemTable);
+        
+        
+        
+        panelFunctionMenu = new JPanel();
+        panelFunctionMenu.setBounds(250, 75, 1030, 700);
+        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
+        panelFunctionMenu.setLayout(null);
+        add(panelFunctionMenu);
+        
+        btnAdd = new JButton();
+        btnAdd.setText("ADD");
+        btnAdd.setBounds(150, 625, 200, 30);
+        btnAdd.setBackground(Color.LIGHT_GRAY);
+        btnAdd.setLayout(null);
+        panelFunctionMenu.add(btnAdd);
+        
+        btnEdit = new JButton();
+        btnEdit.setText("EDIT");
+        btnEdit.setBounds(400, 625, 200, 30);
+        btnEdit.setBackground(Color.LIGHT_GRAY);
+        btnEdit.setLayout(null);
+        panelFunctionMenu.add(btnEdit);
+        
+        btnRemove = new JButton();
+        btnRemove.setText("REMOVE");
+        btnRemove.setBounds(650, 625, 200, 30);
+        btnRemove.setBackground(Color.LIGHT_GRAY);
+        btnRemove.setLayout(null);
+        panelFunctionMenu.add(btnRemove);
+      
+        stylebtnFunction(btnAdd);
+        stylebtnFunction(btnEdit);
+        stylebtnFunction(btnRemove);
     }
     
     private void styleButton(JButton btn) {
@@ -169,102 +269,6 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
                 btn.setOpaque(false);
             }
         });
-    }
-    
-    private void functionMenu(){
-        
-        /*deliveryID
-        deliveryItemName
-        deliveryItemQuantity
-        deliveryItemCategory
-        deliveryItemMeasurement
-        deliveryDate
-        deliveryTime
-        deliveryCourier
-        deliveryItemExpirationDate*/
-        
-        panelDeliveryTable = new JPanel();
-        panelDeliveryTable.setBounds (275, 100, 975, 400);
-        panelDeliveryTable.setBackground(Color.decode("#f5cfba"));
-        panelDeliveryTable.setLayout(new BorderLayout());
-        
-        model = new DefaultTableModel();
-        
-        model.addColumn("DELIVERY ID");
-        model.addColumn("ITEM ID");
-        model.addColumn("ITEM NAME");
-        model.addColumn("QUANTITY");
-        model.addColumn("CATEGORY");
-        model.addColumn("MEASUREMENT");
-        model.addColumn("ITEM EXPIRATION");
-        model.addColumn("DELIVERY DATE");
-        model.addColumn("DELIVERY TIME");
-        model.addColumn("COURIER");
-
-        deliveryTable = new JTable (model);
-        JScrollPane scrollPane = new JScrollPane(deliveryTable);
-        panelDeliveryTable.add(scrollPane, BorderLayout.CENTER);
-        
-        model.addRow(new Object[]{"DV001", "IT001", "GROUND PORK", "20", "MEAT", "KG", "01/25/2026", "01/17/2026", "04:45 AM", "XANE'S MEATSHOP"});
-        model.addRow(new Object[]{"DV002", "IT002", "PORK BELLY", "15", "MEAT", "KG", "01/25/2026", "01/17/2026", "04:45 AM", "XANE'S MEATSHOP"});
-        model.addRow(new Object[]{"DV003", "IT023", "BROWN SUGAR", "5", "SEASONING", "KG", "04/10/2027", "01/18/2026", "15:37 PM", "RHOXSEASONING"});
-        
-        add(panelDeliveryTable);
-        
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(250, 75, 1030, 700);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-       
-        btnAdd = new JButton();
-        btnAdd.setText("ADD");
-        btnAdd.setBounds(150, 450, 200, 30);
-        btnAdd.setBackground(Color.LIGHT_GRAY);
-        btnAdd.setLayout(null);
-        panelFunctionMenu.add(btnAdd);
-        
-        btnEdit = new JButton();
-        btnEdit.setText("EDIT");
-        btnEdit.setBounds(400, 450, 200, 30);
-        btnEdit.setBackground(Color.LIGHT_GRAY);
-        btnEdit.setLayout(null);
-        panelFunctionMenu.add(btnEdit);
-        
-        btnRemove = new JButton();
-        btnRemove.setText("REMOVE");
-        btnRemove.setBounds(650, 450, 200, 30);
-        btnRemove.setBackground(Color.LIGHT_GRAY);
-        btnRemove.setLayout(null);
-        panelFunctionMenu.add(btnRemove);
-      
-        stylebtnFunction(btnAdd);
-        stylebtnFunction(btnEdit);
-        stylebtnFunction(btnRemove);
-        
-        LocalDateTime now = LocalDateTime.now();
-
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
-
-        String date = now.format(dateFormat);
-        String time = now.format(timeFormat);
-
-        lblDate = new JLabel("Date: " + date);
-        lblDate.setBounds(250, 550, 200, 30);
-        lblDate.setForeground(Color.decode("#1b4a62"));
-        lblDate.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        lblTime = new JLabel("Time: " + time);
-        lblTime.setBounds(550, 550, 200, 30);
-        lblTime.setForeground(Color.decode("#1b4a62"));
-        lblTime.setFont(new Font("Arial", Font.BOLD, 25));
-
-        
-
-        panelFunctionMenu.add(lblDate);
-        panelFunctionMenu.add(lblTime);
-
     }
     
     private void stylebtnFunction(JButton btn) {
@@ -286,10 +290,9 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        
         if (e.getSource() == btnList) {
-        dispose();
-        new inventoryManagement();
+            dispose();
+            new inventoryManagement();
         }
 
         else if (e.getSource() == btnRecipe){
@@ -306,7 +309,7 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
             dispose();
             new inventoryManagement();
         }
-
          
     }
+    
 }
