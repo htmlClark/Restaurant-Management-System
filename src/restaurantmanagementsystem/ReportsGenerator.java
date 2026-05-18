@@ -139,7 +139,7 @@ dashPanel.add(line);
 
 //buttons 
 dashPanel.add(createNavButton("PRODUCTS", "/images/PRODUCTS.png", 100, false, darkblue));
-dashPanel.add(createNavButton("INVENTORY", "/images/ologo.png", 170, false, darkblue));
+dashPanel.add(createNavButton("INVENTORY", "/images/INVENTORY.png", 170, false, darkblue));
 dashPanel.add(createNavButton("WEEKLY SUMMARY", "/images/REPORT.png", 240, false, darkblue)); 
 dashPanel.add(createNavButton("WASTE LOGS", "/images/WASTE LOG.png", 310, false, darkblue));
 dashPanel.add(createNavButton("DELIVERY", "/images/DELIVERY.png", 380, false, darkblue));
