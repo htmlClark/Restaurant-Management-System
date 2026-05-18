@@ -125,7 +125,7 @@ dashPanel.setBackground(darkblue);
 dashPanel.setBounds(0, 80, 390, 700);
 
 //ginawa ko button hahahahahahahaha baka kasi pwede syang like back to main menu siguro
-JButton dashBtn = createNavButton("DASHBOARD", "/images/DASHBOARD.png", 10, false, darkblue);
+JButton dashBtn = createNavButton("DASHBOARD", "/images/DASHBOARD_1.png", 10, false, darkblue);
 dashBtn.setFont(getCubaoFont(35f));
 dashBtn.setBounds(0, 10, 390, 60);  
 dashPanel.add(dashBtn);
