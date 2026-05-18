@@ -19,7 +19,6 @@ public class homePage extends JFrame implements ActionListener
     setLocationRelativeTo(null);
     setResizable(false);
     getContentPane().setBackground(Color.decode("#B71C1C"));
-    setVisible(true);
     }
     
     private void header()
@@ -27,7 +26,7 @@ public class homePage extends JFrame implements ActionListener
         ImageIcon restuarantTitle = new ImageIcon (getClass().getResource("/images/name.png"));
         Image titleSize = restuarantTitle.getImage().getScaledInstance(1100, 300, Image.SCALE_SMOOTH);
         lblHeading = new JLabel (new ImageIcon(titleSize));
-            lblHeading.setBounds(100, 150, 1100, 300);
+            lblHeading.setBounds(100, 150, 1050, 300);
             add(lblHeading);
             
         lblStatus = new JLabel ("");
@@ -35,14 +34,14 @@ public class homePage extends JFrame implements ActionListener
             add(lblStatus);
             
         btnStart = new JButton ("GET STARTED");
-            btnStart.setBounds(500,540,300,40);
+            btnStart.setBounds(480,540,300,40);
             btnStart.setBackground(Color.decode("#FFF8E1"));
             btnStart.setBorderPainted(false);
             btnStart.addActionListener(this);
             add(btnStart);
             
         btnInv = new JButton ("Inventory Management");
-            btnInv.setBounds(500, 600, 300, 40);
+            btnInv.setBounds(480, 600, 300, 40);
             btnInv.setBackground(Color.decode("#FFF8E1"));
             btnInv.setBorderPainted(false);
             btnInv.addActionListener(this);
@@ -55,7 +54,9 @@ public class homePage extends JFrame implements ActionListener
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnStart) 
         {
-             
+            dispose();
+             mainPlacementFrame main = new mainPlacementFrame();
+             main.setVisible(true);
         } 
         else if (e.getSource() == btnInv)
         {
