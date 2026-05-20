@@ -109,7 +109,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         ImageIcon userLogo = new ImageIcon (getClass().getResource("/src_pack/images/user.png"));
         Image userSize = userLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
-        btnDelivery = new JButton("  DELIVERY",new ImageIcon(userSize));
+        btnDelivery = new JButton("    MANAGE USERS",new ImageIcon(userSize));
             btnDelivery.setBounds(0, 560, 300, 80);
             btnDelivery.setForeground(Color.WHITE);
             btnDelivery.setBackground(Color.decode("#366379"));

@@ -110,6 +110,10 @@ public class Products extends JPanel implements ActionListener {
             {
                 ((adminFrame) frame).switchPanel(nextPanel);
             }
+            else if (frame instanceof superAdminFrame)
+            {
+                ((superAdminFrame) frame).switchPanel(nextPanel);
+            }
         }
     }
 }

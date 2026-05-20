@@ -154,10 +154,21 @@ public class LoginPage extends JFrame implements ActionListener
                 userFrame UserFrame = new userFrame();
                 UserFrame.setVisible(true);
             }
-            if ((usernameInput.equals("admin123")) && (passwordInput.equals("admin123"))) {
+            else if ((usernameInput.equals("admin123")) && (passwordInput.equals("admin123"))) {
                 dispose();
                 adminFrame AdminFrame = new adminFrame();
                 AdminFrame.setVisible(true);
+            }
+            else if ((usernameInput.equals("superadmin123")) && (passwordInput.equals("superadmin123"))) {
+                dispose();
+                superAdminFrame SuperAdminFrame = new superAdminFrame();
+                SuperAdminFrame.setVisible(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"Invalid username or password. Please try again.","LOGIN FAILED",JOptionPane.ERROR_MESSAGE);
+                txtUsername.setText("");
+                pwdPass.setText("");
             }
         }
 }}
