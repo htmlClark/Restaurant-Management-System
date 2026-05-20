@@ -1,7 +1,6 @@
 package RestaurantManagementSystem_.Products;
 
-import MainPlacementFrame.userFrame;
-
+import MainPlacementFrame.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,18 +84,32 @@ public class Products extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        userFrame frame = (userFrame) getParent().getParent().getParent().getParent();
+        JFrame frame = (JFrame) getParent().getParent().getParent().getParent();
+        JPanel nextPanel = null;
+
         if (e.getSource() == btnAppetizer) {
-            frame.switchPanel(new Appetizer());
+            nextPanel = new Appetizer();
         }
         else if (e.getSource() == btnMainCourse) {
-            frame.switchPanel(new MainCourse());
+            nextPanel = new MainCourse();
         }
         else if (e.getSource() == btnDessert) {
-            frame.switchPanel(new Dessert());
+            nextPanel = new Dessert();
         }
         else if (e.getSource() == btnBeverage) {
-            frame.switchPanel(new Beverage());
+            nextPanel = new Beverage();
+        }
+
+        //added this for switching based on the user logged in hehe
+        if (nextPanel != null) {
+            if (frame instanceof userFrame)
+            {
+                ((userFrame) frame).switchPanel(nextPanel);
+            }
+            else if (frame instanceof adminFrame)
+            {
+                ((adminFrame) frame).switchPanel(nextPanel);
+            }
         }
     }
 }
