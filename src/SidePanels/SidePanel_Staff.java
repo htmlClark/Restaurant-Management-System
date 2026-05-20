@@ -1,4 +1,5 @@
 package SidePanels;
+import MainClasses.LoginPage;
 import MainPlacementFrame.userFrame;
 import RestaurantManagementSystem_.InventoryManagement.*;
 import RestaurantManagementSystem_.Products.*;
@@ -133,7 +134,9 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
             int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);
                 if (confirmLogout == JOptionPane.YES_OPTION)
                 {
-                    System.exit(0);
+                    frame.dispose();
+                    LoginPage loginPage = new LoginPage();
+                    loginPage.setVisible(true);
                 }
         }
     }

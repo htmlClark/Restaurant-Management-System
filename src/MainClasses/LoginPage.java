@@ -154,5 +154,10 @@ public class LoginPage extends JFrame implements ActionListener
                 userFrame UserFrame = new userFrame();
                 UserFrame.setVisible(true);
             }
+            if ((usernameInput.equals("admin123")) && (passwordInput.equals("admin123"))) {
+                dispose();
+                adminFrame AdminFrame = new adminFrame();
+                AdminFrame.setVisible(true);
+            }
         }
 }}

@@ -1,5 +1,10 @@
 package SidePanels;
+import MainClasses.LoginPage;
+import MainPlacementFrame.adminFrame;
+import MainPlacementFrame.userFrame;
+import RestaurantManagementSystem_.InventoryManagement.inventoryManagement;
 import RestaurantManagementSystem_.Products.Appetizer;
+import RestaurantManagementSystem_.Products.Products;
 
 import java.awt.*;
 import javax.swing.*;
@@ -124,11 +129,15 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        adminFrame frame = (adminFrame) getParent().getParent().getParent().getParent();
         if (e.getSource() == btnDashboard) {
 
         }
+        else if (e.getSource() == btnProducts) {
+            frame.switchPanel(new Products());
+        }
         else if (e.getSource() == btnInventory) {
-
+            frame.switchPanel(new inventoryManagement());
         }
         else if (e.getSource() == btnReport) {
 
@@ -140,7 +149,13 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
 
         }
         else if (e.getSource() == btnLogout) {
-
+            int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);
+            if (confirmLogout == JOptionPane.YES_OPTION)
+            {
+                frame.dispose();
+                LoginPage loginPage = new LoginPage();
+                loginPage.setVisible(true);
+            }
         }
     }
 }
