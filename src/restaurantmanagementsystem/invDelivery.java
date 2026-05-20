@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 
-public class inventoryManagementDelivery extends JFrame implements ActionListener{
+public class invDelivery extends JFrame implements ActionListener{
     
     private DefaultTableModel model;
     private JTable deliveryTable;
     private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelDeliveryTable;
     private JLabel lblLogo, lblDate, lblTime;
     private JTextField txtFieldSearch;
-    private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnEdit, btnRemove;
+    private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnModify, btnRemove;
     
-    inventoryManagementDelivery()
+    invDelivery()
     {
         
     dashboardMenu();
@@ -224,12 +224,12 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         btnAdd.setLayout(null);
         panelFunctionMenu.add(btnAdd);
         
-        btnEdit = new JButton();
-        btnEdit.setText("EDIT");
-        btnEdit.setBounds(400, 450, 200, 30);
-        btnEdit.setBackground(Color.LIGHT_GRAY);
-        btnEdit.setLayout(null);
-        panelFunctionMenu.add(btnEdit);
+        btnModify = new JButton();
+        btnModify.setText("EDIT");
+        btnModify.setBounds(400, 450, 200, 30);
+        btnModify.setBackground(Color.LIGHT_GRAY);
+        btnModify.setLayout(null);
+        panelFunctionMenu.add(btnModify);
         
         btnRemove = new JButton();
         btnRemove.setText("REMOVE");
@@ -239,7 +239,7 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         panelFunctionMenu.add(btnRemove);
       
         stylebtnFunction(btnAdd);
-        stylebtnFunction(btnEdit);
+        stylebtnFunction(btnModify);
         stylebtnFunction(btnRemove);
         
         LocalDateTime now = LocalDateTime.now();
@@ -289,22 +289,22 @@ public class inventoryManagementDelivery extends JFrame implements ActionListene
         
         if (e.getSource() == btnList) {
         dispose();
-        new inventoryManagement();
+        new invList();
         }
 
         else if (e.getSource() == btnRecipe){
             dispose();
-            new invManagementRecipe();
+            new invRecipe();
         }
 
         else if (e.getSource() == btnDelivery){
             dispose();
-            new inventoryManagementDelivery();
+            new invDelivery();
         }
 
         else if (e.getSource() == btnLogout){
             dispose();
-            new inventoryManagement();
+            new invList();
         }
 
          

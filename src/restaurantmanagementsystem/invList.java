@@ -11,7 +11,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
-public class inventoryManagement extends JFrame implements ActionListener{
+public class invList extends JFrame implements ActionListener{
 
     private JTable itemTable;
     private DefaultTableModel model;
@@ -19,8 +19,8 @@ public class inventoryManagement extends JFrame implements ActionListener{
     private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelItemTable;
     private JLabel lblLogo;
     private JTextField txtFieldSearch;
-    private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnEdit, btnRemove;
-    inventoryManagement()
+    private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnModify, btnRemove;
+    invList()
     {
         
     dashboardMenu();
@@ -148,7 +148,7 @@ public class inventoryManagement extends JFrame implements ActionListener{
     
     private void functionMenu(){
         panelItemTable = new JPanel();
-        panelItemTable.setBounds (275, 100, 975, 575);
+        panelItemTable.setBounds (275, 250, 850, 460);
         panelItemTable.setBackground(Color.decode("#f5cfba"));
         panelItemTable.setLayout(new BorderLayout());
         
@@ -163,7 +163,10 @@ public class inventoryManagement extends JFrame implements ActionListener{
         itemTable = new JTable (model);
         JScrollPane scrollPane = new JScrollPane(itemTable);
         panelItemTable.add(scrollPane, BorderLayout.CENTER);
-        
+        itemTable.setBackground(Color.WHITE);
+        itemTable.setForeground(Color.BLACK);
+        itemTable.getTableHeader().setBackground(Color.decode("#B71C1C"));
+        itemTable.getTableHeader().setForeground(Color.WHITE);
         //categories = vegetable, meat, seafood, seasoning, condiments, dairy
         
         //meat models goes here 
@@ -222,7 +225,6 @@ public class inventoryManagement extends JFrame implements ActionListener{
         add(panelItemTable);
         
         
-        
         panelFunctionMenu = new JPanel();
         panelFunctionMenu.setBounds(250, 75, 1030, 700);
         panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
@@ -231,27 +233,27 @@ public class inventoryManagement extends JFrame implements ActionListener{
         
         btnAdd = new JButton();
         btnAdd.setText("ADD");
-        btnAdd.setBounds(150, 625, 200, 30);
+        btnAdd.setBounds(895, 175, 100, 30);
         btnAdd.setBackground(Color.LIGHT_GRAY);
         btnAdd.setLayout(null);
         panelFunctionMenu.add(btnAdd);
         
-        btnEdit = new JButton();
-        btnEdit.setText("EDIT");
-        btnEdit.setBounds(400, 625, 200, 30);
-        btnEdit.setBackground(Color.LIGHT_GRAY);
-        btnEdit.setLayout(null);
-        panelFunctionMenu.add(btnEdit);
+        btnModify = new JButton();
+        btnModify.setText("MODIFY");
+        btnModify.setBounds(895, 225, 100, 30);
+        btnModify.setBackground(Color.LIGHT_GRAY);
+        btnModify.setLayout(null);
+        panelFunctionMenu.add(btnModify);
         
         btnRemove = new JButton();
         btnRemove.setText("REMOVE");
-        btnRemove.setBounds(650, 625, 200, 30);
+        btnRemove.setBounds(895, 275, 100, 30);
         btnRemove.setBackground(Color.LIGHT_GRAY);
         btnRemove.setLayout(null);
         panelFunctionMenu.add(btnRemove);
       
         stylebtnFunction(btnAdd);
-        stylebtnFunction(btnEdit);
+        stylebtnFunction(btnModify);
         stylebtnFunction(btnRemove);
     }
     
@@ -293,22 +295,22 @@ public class inventoryManagement extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnList) {
             dispose();
-            new inventoryManagement();
+            new invList();
         }
 
         else if (e.getSource() == btnRecipe){
             dispose();
-            new invManagementRecipe();
+            new invRecipe();
         }
 
         else if (e.getSource() == btnDelivery){
             dispose();
-            new inventoryManagementDelivery();
+            new invDelivery();
         }
 
         else if (e.getSource() == btnLogout){
             dispose();
-            new inventoryManagement();
+            new invList();
         }
          
     }

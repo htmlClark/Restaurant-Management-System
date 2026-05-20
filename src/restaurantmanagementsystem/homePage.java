@@ -62,7 +62,7 @@ public class homePage extends JFrame implements ActionListener
         } 
            else if (e.getSource() == btnInv){
                dispose();
-               inventoryManagement inv = new inventoryManagement ();
+               invList inv = new invList ();
                inv.setVisible(true);
            }
     }

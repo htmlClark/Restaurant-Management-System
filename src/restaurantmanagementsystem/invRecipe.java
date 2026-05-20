@@ -8,13 +8,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-public class invManagementRecipe extends JFrame implements ActionListener{
+public class invRecipe extends JFrame implements ActionListener{
     private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu;
     private JLabel lblLogo;
     private JTextField txtFieldSearch;
     private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout;
     
-    invManagementRecipe()
+    invRecipe()
     {
         
     dashboardMenu();
@@ -169,22 +169,22 @@ public class invManagementRecipe extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
          if (e.getSource() == btnList) {
             dispose();
-            new inventoryManagement();
+            new invList();
         }
 
         else if (e.getSource() == btnRecipe){
             dispose();
-            new invManagementRecipe();
+            new invRecipe();
         }
 
         else if (e.getSource() == btnDelivery){
             dispose();
-            new inventoryManagementDelivery();
+            new invDelivery();
         }
 
         else if (e.getSource() == btnLogout){
             dispose();
-            new inventoryManagement();
+            new invList();
         }
     }
     
