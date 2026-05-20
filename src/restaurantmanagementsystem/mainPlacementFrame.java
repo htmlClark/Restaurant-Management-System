@@ -22,7 +22,7 @@ public class mainPlacementFrame extends JFrame implements ActionListener{
         
         SidePanels.SidePanel_SuperAdmin adminPanel = new SidePanel_SuperAdmin();
         add(adminPanel);
-    }
+    }   
     
     @Override
     public void actionPerformed(ActionEvent e) {
