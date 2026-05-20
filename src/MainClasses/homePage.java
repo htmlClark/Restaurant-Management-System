@@ -35,18 +35,11 @@ public class homePage extends JFrame implements ActionListener
             add(lblStatus);
             
         btnStart = new JButton ("GET STARTED");
-            btnStart.setBounds(480,540,300,40);
+            btnStart.setBounds(480,550,300,40);
             btnStart.setBackground(Color.decode("#FFF8E1"));
             btnStart.setBorderPainted(false);
             btnStart.addActionListener(this);
             add(btnStart);
-            
-        btnInv = new JButton ("Inventory Management");
-            btnInv.setBounds(480, 600, 300, 40);
-            btnInv.setBackground(Color.decode("#FFF8E1"));
-            btnInv.setBorderPainted(false);
-            btnInv.addActionListener(this);
-            add(btnInv); 
     }
     
     
@@ -58,11 +51,5 @@ public class homePage extends JFrame implements ActionListener
             dispose();
             LoginPage login = new LoginPage();
             login.setVisible(true);
-        } 
-        else if (e.getSource() == btnInv)
-        {
-            dispose();
-            inventoryManagement inv = new inventoryManagement();
-            inv.setVisible(true);
         }
 }}
