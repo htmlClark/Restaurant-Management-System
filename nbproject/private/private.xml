@@ -5,8 +5,12 @@
         <group>
             <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/mainClass.java</file>
             <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/homePage.java</file>
-            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invManagementRecipe.java</file>
-            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/inventoryManagement.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invList.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invDelivery.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invRecipe.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invListAdd.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invDeliveryAdd.java</file>
+            <file>file:/C:/Users/Kyrine/source/repos/Restaurant-Management-System/src/restaurantmanagementsystem/invDeliveryEdit.java</file>
         </group>
     </open-files>
 </project-private>

@@ -16,10 +16,12 @@ public class invList extends JFrame implements ActionListener{
     private JTable itemTable;
     private DefaultTableModel model;
     
-    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelItemTable;
-    private JLabel lblLogo;
+    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelItemTable, panelStock, panelDelivery, panelOption;
+    private JLabel lblLogo, lblStock1, lblStock2, lblDelivery1, lblDelivery2;
     private JTextField txtFieldSearch;
-    private JButton btnBack, btnInvMain, btnList, btnRecipe, btnDelivery, btnLogout, btnAdd, btnModify, btnRemove;
+    private JComboBox cbSwitchClass;
+    
+    private JButton btnAdd, btnModify, btnRemove;
     invList()
     {
         
@@ -33,7 +35,7 @@ public class invList extends JFrame implements ActionListener{
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
-    setResizable(true);
+    setResizable(false);
     setVisible(true);
     
     }
@@ -41,23 +43,23 @@ public class invList extends JFrame implements ActionListener{
     
     private void headerLogo() {
         panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
+        panelHeaderLogo.setBounds(0, 0, 300, 80);
         panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
         panelHeaderLogo.setLayout(null);
         add(panelHeaderLogo);
         
         ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(250, 100, Image.SCALE_SMOOTH);
+        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(logo);
         lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 250, 75);
+        lblLogo.setBounds(0, 0, 300, 80);
 
         panelHeaderLogo.add(lblLogo);
     }
     
     private void headerBar(){
         panelHeaderBar = new JPanel();
-        panelHeaderBar.setBounds(250, 0, 1030, 75);
+        panelHeaderBar.setBounds(300, 0, 1030, 80);
         panelHeaderBar.setBackground(Color.decode("#f5cfba"));
         panelHeaderBar.setLayout(null);
         add(panelHeaderBar);
@@ -76,80 +78,76 @@ public class invList extends JFrame implements ActionListener{
     private void dashboardMenu() {
     
         panelDashboard = new JPanel();
-        panelDashboard.setBounds(0, 75, 250, 700);
+        panelDashboard.setBounds(0, 80, 300, 800);
         panelDashboard.setBackground(Color.decode("#366379"));
         panelDashboard.setLayout(null);
         add(panelDashboard);
-        
-        btnBack = new JButton();
-        btnBack.setText("DASHBOARD");
-        btnBack.setBounds(0, 0, 250, 50);
-        btnBack.setLayout(null);
-        btnBack.setBackground(Color.decode("#1b4a62"));
-        btnBack.setBorderPainted(false);
-        btnBack.setForeground(Color.WHITE);
-        btnBack.addActionListener(this);
-        panelDashboard.add(btnBack);
-        
-        btnInvMain = new JButton();
-        btnInvMain.setText("-");
-        btnInvMain.setBounds(0, 100, 250, 50);
-        btnInvMain.setLayout(null);
-        btnInvMain.addActionListener(this);
-        panelDashboard.add(btnInvMain);
-        
-        btnList = new JButton();
-        btnList.setText("LIST");
-        btnList.setBounds(0, 175, 250, 50);
-        btnList.setLayout(null);
-        btnList.addActionListener(this);
-        panelDashboard.add(btnList);
-        
-        btnRecipe = new JButton();
-        btnRecipe.setText("RECIPE");
-        btnRecipe.setBounds(0, 250, 250, 50);
-        btnRecipe.setLayout(null);
-        btnRecipe.addActionListener(this);
-        panelDashboard.add(btnRecipe);
-        
-        btnDelivery = new JButton();
-        btnDelivery.setText("DELIVERY");
-        btnDelivery.setBounds(0, 325, 250, 50);
-        btnDelivery.setLayout(null);
-        btnDelivery.addActionListener(this);
-
-        panelDashboard.add(btnDelivery);
-        
-        btnLogout = new JButton();
-        btnLogout.setText("LOGOUT");
-        btnLogout.setBounds(0, 625, 250, 30);
-        btnLogout.setLayout(null);
-        btnLogout.setBackground(Color.decode("#1b4a62"));
-        btnLogout.setBorderPainted(false);
-        btnLogout.setForeground(Color.WHITE);
-        btnLogout.addActionListener(this);
-        btnLogout.addActionListener(this);
-
-        styleButton(btnInvMain);
-        styleButton(btnList);
-        styleButton(btnRecipe);
-        styleButton(btnDelivery);
-        
-        btnBack.setFont(new Font("Open Sans", Font.BOLD, 25));
-        btnInvMain.setFont(new Font("Open Sans", Font.BOLD, 25));
-        btnList.setFont(new Font("Open Sans", Font.BOLD, 25));
-        btnRecipe.setFont(new Font("Open Sans", Font.BOLD, 25));
-        btnDelivery.setFont(new Font("Open Sans", Font.BOLD, 25));
-        btnLogout.setFont(new Font("Open Sans", Font.BOLD, 25));
-        
-        panelDashboard.add(btnLogout);
+  
     }
     
     
     private void functionMenu(){
+        panelFunctionMenu = new JPanel();
+        panelFunctionMenu.setBounds(300, 80, 1030, 700);
+        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
+        panelFunctionMenu.setLayout(null);
+        add(panelFunctionMenu);
+        
+        panelStock = new JPanel();
+        panelStock.setBounds(25, 25, 300, 100);
+        panelStock.setBackground(Color.decode("#1b4a62"));
+        
+        lblStock1 = new JLabel("Warning: Low Stocks!");
+        lblStock1.setBounds(25, 25, 200, 30);
+        lblStock1.setFont(new Font("Arial", Font.BOLD, 25));
+        lblStock1.setForeground(Color.WHITE);
+        
+        lblStock2 = new JLabel("[!] Pork");
+        lblStock2.setBounds(25, 50, 200, 30);
+        lblStock2.setFont(new Font("Arial", Font.BOLD, 25));
+        lblStock2.setForeground(Color.WHITE);
+        
+        panelDelivery = new JPanel();
+        panelDelivery.setBounds(350, 25, 315, 100);
+        panelDelivery.setBackground(Color.decode("#1b4a62"));
+        
+        lblDelivery1 = new JLabel("Latest Delivery: ");
+        lblDelivery1.setBounds(25, 25, 200, 30);
+        lblDelivery1.setFont(new Font("Arial", Font.BOLD, 25));
+        lblDelivery1.setForeground(Color.WHITE);
+        
+        lblDelivery2 = new JLabel("1/18/2026");
+        lblDelivery2.setBounds(25, 75, 200, 30);
+        lblDelivery2.setFont(new Font("Arial", Font.BOLD, 25));
+        lblDelivery2.setForeground(Color.WHITE);
+        
+        String[] pages = {"INVENTORY", "RECIPE", "DELIVERY"};
+        cbSwitchClass = new JComboBox<>(pages);
+        cbSwitchClass.setBounds(690, 25, 250, 50);
+        cbSwitchClass.addActionListener(e -> {
+            String selected = (String) cbSwitchClass.getSelectedItem();
+
+            dispose();
+
+            if (selected.equals("INVENTORY")) {
+                new invList();
+                dispose();
+            }
+            else if (selected.equals("RECIPE")) {
+                new invRecipe();
+                dispose();
+
+            }
+            else if (selected.equals("DELIVERY")) {
+                new invDelivery();
+                dispose();
+            }
+        });
+  
+        
         panelItemTable = new JPanel();
-        panelItemTable.setBounds (275, 250, 850, 460);
-        panelItemTable.setBackground(Color.decode("#f5cfba"));
+        panelItemTable.setBounds (25, 150, 800, 475);
+        panelItemTable.setBackground(Color.decode("#89B7B3"));
         panelItemTable.setLayout(new BorderLayout());
         
         model = new DefaultTableModel();
@@ -163,9 +161,11 @@ public class invList extends JFrame implements ActionListener{
         itemTable = new JTable (model);
         JScrollPane scrollPane = new JScrollPane(itemTable);
         panelItemTable.add(scrollPane, BorderLayout.CENTER);
+        
+        itemTable.setDefaultEditor(Object.class, null);
         itemTable.setBackground(Color.WHITE);
         itemTable.setForeground(Color.BLACK);
-        itemTable.getTableHeader().setBackground(Color.decode("#B71C1C"));
+        itemTable.getTableHeader().setBackground(Color.decode("#1b4a62"));
         itemTable.getTableHeader().setForeground(Color.WHITE);
         //categories = vegetable, meat, seafood, seasoning, condiments, dairy
         
@@ -220,67 +220,55 @@ public class invList extends JFrame implements ActionListener{
 
         //for adding new row
         // model.addRow(new Object[]{"", "", "", "", ""});
+        panelFunctionMenu.add(cbSwitchClass);
+        panelFunctionMenu.add(panelStock);
+        panelFunctionMenu.add(panelDelivery);
+        panelFunctionMenu.add(panelItemTable);
+        
+        panelStock.add(lblStock1);
+        panelStock.add(lblStock2);
 
-        
-        add(panelItemTable);
-        
-        
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(250, 75, 1030, 700);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
+        panelDelivery.add(lblDelivery1);
+        panelDelivery.add(lblDelivery2);
+
         
         btnAdd = new JButton();
         btnAdd.setText("ADD");
-        btnAdd.setBounds(895, 175, 100, 30);
+        btnAdd.setBounds(845, 150, 100, 30);
         btnAdd.setBackground(Color.LIGHT_GRAY);
         btnAdd.setLayout(null);
         panelFunctionMenu.add(btnAdd);
         
         btnModify = new JButton();
         btnModify.setText("MODIFY");
-        btnModify.setBounds(895, 225, 100, 30);
+        btnModify.setBounds(845, 200, 100, 30);
         btnModify.setBackground(Color.LIGHT_GRAY);
         btnModify.setLayout(null);
         panelFunctionMenu.add(btnModify);
         
         btnRemove = new JButton();
         btnRemove.setText("REMOVE");
-        btnRemove.setBounds(895, 275, 100, 30);
+        btnRemove.setBounds(845, 250, 100, 30);
         btnRemove.setBackground(Color.LIGHT_GRAY);
         btnRemove.setLayout(null);
         panelFunctionMenu.add(btnRemove);
-      
-        stylebtnFunction(btnAdd);
-        stylebtnFunction(btnModify);
-        stylebtnFunction(btnRemove);
+     
+        btnFunction(btnAdd);
+        btnFunction(btnModify);
+        btnFunction(btnRemove);
+        
+        btnAdd.addActionListener(this);
+        btnModify.addActionListener(this);
+        btnRemove.addActionListener(this);
     }
-    
-    private void styleButton(JButton btn) {
-        btn.setBorderPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setForeground(Color.WHITE);
-
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                btn.setOpaque(true);
-                btn.setBackground(Color.decode("#1b4a62"));
-            }
-
-            public void mouseExited(MouseEvent e) {
-                btn.setOpaque(false);
-            }
-        });
-    }
-    
-    private void stylebtnFunction(JButton btn) {
+  
+    private void btnFunction(JButton btn) {
         btn.setBackground(Color.decode("#e7191f"));
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setBorderPainted(false);
 
-    btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseEntered(java.awt.event.MouseEvent e) {
             btn.setBackground(Color.decode("#b71c1c"));
         }
@@ -289,29 +277,27 @@ public class invList extends JFrame implements ActionListener{
             btn.setBackground(Color.decode("#e7191f"));
         }
     });
+        
 }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnList) {
-            dispose();
-            new invList();
-        }
+        
+       dispose();
+       
+       if (e.getSource() == btnAdd){
+       
+       new invListAdd();
+       }
+       
+       else if (e.getSource() == btnModify){
+       new invListEdit();
+       }
+       
+       else if (e.getSource() == btnRemove){
+       new invListRemove();
+       }
 
-        else if (e.getSource() == btnRecipe){
-            dispose();
-            new invRecipe();
-        }
-
-        else if (e.getSource() == btnDelivery){
-            dispose();
-            new invDelivery();
-        }
-
-        else if (e.getSource() == btnLogout){
-            dispose();
-            new invList();
-        }
          
     }
     
