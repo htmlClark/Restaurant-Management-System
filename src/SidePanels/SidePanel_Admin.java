@@ -2,7 +2,6 @@ package SidePanels;
 import MainClasses.LoginPage;
 import MainPlacementFrame.adminFrame;
 import MainPlacementFrame.userFrame;
-import RestaurantManagementSystem_.InventoryManagement.inventoryManagement;
 import RestaurantManagementSystem_.Products.Appetizer;
 import RestaurantManagementSystem_.Products.Products;
 
@@ -137,7 +136,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
             frame.switchPanel(new Products());
         }
         else if (e.getSource() == btnInventory) {
-            frame.switchPanel(new inventoryManagement());
+            //frame.switchPanel(new inventoryManagement());
         }
         else if (e.getSource() == btnReport) {
 
