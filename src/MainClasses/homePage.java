@@ -1,5 +1,4 @@
 package MainClasses;
-import RestaurantManagementSystem_.InventoryManagement.inventoryManagement;
 
 import java.awt.*;
 import javax.swing.*;
