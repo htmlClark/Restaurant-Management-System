@@ -3,7 +3,7 @@ package RestaurantManagementSystem_.PaymentProcess;
 import RestaurantManagementSystem_.PaymentProcess.Order;
 
 public class PaymentMain {
-    public static void main(String[] args) {
+    public PaymentMain() {
         Order order = new Order(37);
         order.addItem(new OrderItem("Lumpiang Shanghai", 120, 1));
         order.addItem(new OrderItem("Chicken Adobo", 160, 2));

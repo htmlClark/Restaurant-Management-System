@@ -1,5 +1,4 @@
-
-package restaurantmanagementsystem;
+package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
