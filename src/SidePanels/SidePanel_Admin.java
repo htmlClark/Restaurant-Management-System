@@ -1,7 +1,6 @@
 package SidePanels;
 import MainClasses.LoginPage;
-import MainPlacementFrame.adminFrame;
-import MainPlacementFrame.userFrame;
+import MainPlacementFrame.*;
 import RestaurantManagementSystem_.Products.Appetizer;
 import RestaurantManagementSystem_.Products.Products;
 

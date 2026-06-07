@@ -1,4 +1,8 @@
 package SidePanels;
+import MainClasses.LoginPage;
+import MainPlacementFrame.*;
+import RestaurantManagementSystem_.Products.Products;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -136,6 +140,33 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        superAdminFrame frame = (superAdminFrame) getParent().getParent().getParent().getParent();
+        if (e.getSource() == btnDashboard) {
+
+        }
+        else if (e.getSource() == btnProducts) {
+            frame.switchPanel(new Products());
+        }
+        else if (e.getSource() == btnInventory) {
+            //frame.switchPanel(new inventoryManagement());
+        }
+        else if (e.getSource() == btnReport) {
+
+        }
+        else if (e.getSource() == btnWasteLogs) {
+
+        }
+        else if (e.getSource() == btnDelivery) {
+
+        }
+        else if (e.getSource() == btnLogout) {
+            int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);
+            if (confirmLogout == JOptionPane.YES_OPTION)
+            {
+                frame.dispose();
+                LoginPage loginPage = new LoginPage();
+                loginPage.setVisible(true);
+            }
+        }
     }
 }

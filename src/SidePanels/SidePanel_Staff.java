@@ -1,6 +1,6 @@
 package SidePanels;
 import MainClasses.LoginPage;
-import MainPlacementFrame.userFrame;
+import MainPlacementFrame.*;
 import RestaurantManagementSystem_.Products.*;
 
 import java.awt.*;
