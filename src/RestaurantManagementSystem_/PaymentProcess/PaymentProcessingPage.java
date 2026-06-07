@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
-public class PaymentProcessingPage extends JFrame implements ActionListener {
+public class PaymentProcessingPage extends JPanel implements ActionListener {
 
     private JLabel lblLogo, lblUser;
     private JLabel lblPaymentProcessing;
@@ -43,35 +43,12 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
 
     Order order;
 
-    PaymentProcessingPage(Order order) {
-        this.order = order;
+    public PaymentProcessingPage() {
 
-        setSize(1280, 800);
+        setBounds (300,80,980,720);
         setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Pinoy Platters - Payment Processing");
-        setResizable(false);
+        setBackground(Color.decode("#FFF8E1"));
 
-        getContentPane().setBackground(colorCream);
-
-        JPanel pnlTopBar = new JPanel();
-        pnlTopBar.setLayout(null);
-        pnlTopBar.setBounds(0, 0, 1280, 70);
-        pnlTopBar.setBackground(colorCream);
-        add(pnlTopBar);
-
-        txtSearch = new JTextField("SEARCH");
-        txtSearch.setBounds(20, 15, 300, 35);
-        txtSearch.setFont(fontNormal);
-        txtSearch.setForeground(Color.GRAY);
-        pnlTopBar.add(txtSearch);
-
-        ImageIcon userIcon = new ImageIcon("icons/USER.png");
-        Image userImg = userIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        lblUser = new JLabel("USER", new ImageIcon(userImg), JLabel.LEFT);
-        lblUser.setBounds(1100, 20, 120, 30);
-        lblUser.setFont(fontBold);
-        pnlTopBar.add(lblUser);
 
         JPanel pnlPaymentHeader = new JPanel();
         pnlPaymentHeader.setLayout(null);
@@ -291,7 +268,7 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
             try {
                 double tendered = Double.parseDouble(txtAmountTendered.getText().trim());
                 if (tendered >= order.getTotal()) {
-                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(this, order);
+                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(null,order);
                     dialog.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Insufficient amount!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -300,7 +277,7 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Please enter a valid amount!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else if (e.getSource() == btnCancel) {
-            dispose();
+
         }
     }
 }

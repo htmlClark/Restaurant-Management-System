@@ -1,7 +1,5 @@
 package RestaurantManagementSystem_.PaymentProcess;
 
-import RestaurantManagementSystem_.PaymentProcess.Order;
-
 public class PaymentMain {
     public PaymentMain() {
         Order order = new Order(37);
@@ -9,7 +7,7 @@ public class PaymentMain {
         order.addItem(new OrderItem("Chicken Adobo", 160, 2));
         order.addItem(new OrderItem("Buko Juice", 70, 1));
 
-        PaymentProcessingPage pp = new PaymentProcessingPage(order);
+        PaymentProcessingPage pp = new PaymentProcessingPage();
         pp.setVisible(true);
     }
 }

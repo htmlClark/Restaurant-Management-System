@@ -1,12 +1,4 @@
-package RestaurantManagementSystem_.PaymentProcess;/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author aamar
- */
+package RestaurantManagementSystem_.PaymentProcess;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
