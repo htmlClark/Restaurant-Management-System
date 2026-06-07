@@ -2,11 +2,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ManageUsersAdmin extends JFrame {
+public class ManageUsersAdmin extends JPanel {
 
     private JTextField txtSearch;
 
-    // ── Colors ──────────────────────────────────────────────────
     Color colorCream       = new Color(0xFF, 0xF8, 0xE1);
     Color colorRed         = new Color(0xB7, 0x1C, 0x1C);
     Color colorGold        = new Color(0xFF, 0xB3, 0x00);
@@ -17,14 +16,12 @@ public class ManageUsersAdmin extends JFrame {
     Color colorRowEven     = new Color(0xC9, 0xD4, 0xD8);
     Color colorWhite       = Color.WHITE;
 
-    // ── Fonts ───────────────────────────────────────────────────
     Font fontLogo   = new Font("Impact", Font.BOLD, 28);
     Font fontHeader = new Font("Impact", Font.BOLD, 22);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
     Font fontBold   = new Font("Arial", Font.BOLD, 14);
     Font fontSearch = new Font("Arial", Font.PLAIN, 14);
 
-    // ── Sample Data ─────────────────────────────────────────────
     String[][] userData = {
         {"08:00 AM", "05:00 PM", "EMP-001", "Juan dela Cruz",   "Active"},
         {"09:00 AM", "06:00 PM", "EMP-002", "Maria Santos",     "Active"},
@@ -34,26 +31,18 @@ public class ManageUsersAdmin extends JFrame {
     };
 
     String[] colHeaders = {"TIME LOGGED IN", "TIME LOGGED OUT", "EMPLOYEE NUMBER", "NAME", "STATUS"};
-    int[]    colWidths  = {150, 150, 160, 260, 130};  // total = 850
+    int[]    colWidths  = {150, 150, 160, 260, 130};
 
     public ManageUsersAdmin() {
-        setTitle("Pinoy Platters - Manage Users (Admin)");
-        setSize(1366, 768);
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        getContentPane().setBackground(colorCream);
+        setBackground(Color.decode("#FFF8E1"));
 
         buildTopBar();
         buildTableCard();
-
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 
-    // ── TOP BAR ─────────────────────────────────────────────────
     private void buildTopBar() {
-        // Red logo
         JPanel pnlLogo = new JPanel(null);
         pnlLogo.setBounds(0, 0, 280, 70);
         pnlLogo.setBackground(colorRed);
@@ -65,15 +54,13 @@ public class ManageUsersAdmin extends JFrame {
         lblLogo.setForeground(colorWhite);
         pnlLogo.add(lblLogo);
 
-        // Peach top bar
         JPanel pnlTopBar = new JPanel(null);
-        pnlTopBar.setBounds(280, 0, 1086, 70);
+        pnlTopBar.setBounds(280, 0, 700, 70);
         pnlTopBar.setBackground(colorSalmon);
         add(pnlTopBar);
 
-        // Search
         txtSearch = new JTextField("SEARCH");
-        txtSearch.setBounds(30, 16, 500, 38);
+        txtSearch.setBounds(30, 16, 380, 38);
         txtSearch.setFont(fontSearch);
         txtSearch.setForeground(Color.GRAY);
         txtSearch.setBorder(BorderFactory.createCompoundBorder(
@@ -91,26 +78,18 @@ public class ManageUsersAdmin extends JFrame {
         });
         pnlTopBar.add(txtSearch);
 
-        // Role label
         JLabel lblRole = new JLabel("ADMIN");
-        lblRole.setBounds(790, 20, 180, 30);
+        lblRole.setBounds(490, 20, 150, 30);
         lblRole.setFont(fontBold);
         lblRole.setForeground(new Color(0x33, 0x33, 0x33));
         lblRole.setHorizontalAlignment(SwingConstants.RIGHT);
         pnlTopBar.add(lblRole);
 
-        // User icon image
-        ImageIcon userIcon = new ImageIcon("USER.png");
-        Image userImg = userIcon.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
-        JLabel lblUserIcon = new JLabel(new ImageIcon(userImg));
-        lblUserIcon.setBounds(984, 17, 36, 36);
-        pnlTopBar.add(lblUserIcon);
     }
 
-    // ── TABLE CARD ──────────────────────────────────────────────
     private void buildTableCard() {
         JPanel pnlTableCard = new JPanel(null);
-        pnlTableCard.setBounds(20, 85, 1326, 648);
+        pnlTableCard.setBounds(10, 80, 960, 630);
         pnlTableCard.setBackground(colorMutedTeal);
         pnlTableCard.setBorder(BorderFactory.createLineBorder(new Color(0x70, 0x99, 0x9E), 1));
         add(pnlTableCard);
@@ -124,22 +103,20 @@ public class ManageUsersAdmin extends JFrame {
         buildTableRows(pnlTableCard);
     }
 
-    // ── ROWS (pure JPanel + JLabel) ─────────────────────────────
     private void buildTableRows(JPanel pnlTableCard) {
         JPanel pnlRows = new JPanel(null);
-        pnlRows.setBounds(20, 56, 1286, 580);
+        pnlRows.setBounds(20, 56, 920, 560);
         pnlRows.setBackground(colorMutedTeal);
         pnlTableCard.add(pnlRows);
 
-        // Header
         JPanel pnlHeader = new JPanel(null);
-        pnlHeader.setBounds(0, 0, 1286, 50);
+        pnlHeader.setBounds(0, 0, 920, 50);
         pnlHeader.setBackground(colorTableHeader);
         pnlRows.add(pnlHeader);
 
         int xCol = 0;
         for (int c = 0; c < colHeaders.length; c++) {
-            int w = (1286 * colWidths[c]) / 850;
+            int w = (920 * colWidths[c]) / 850;
             JLabel lblH = new JLabel(colHeaders[c], SwingConstants.CENTER);
             lblH.setBounds(xCol, 0, w, 50);
             lblH.setFont(new Font("Arial", Font.BOLD, 12));
@@ -148,20 +125,19 @@ public class ManageUsersAdmin extends JFrame {
             xCol += w;
         }
 
-        // Data rows
         int ROW_H = 58;
         for (int r = 0; r < userData.length; r++) {
             Color rowBg = (r % 2 == 0) ? colorRowOdd : colorRowEven;
             int yRow = 53 + r * (ROW_H + 3);
 
             JPanel pnlRow = new JPanel(null);
-            pnlRow.setBounds(0, yRow, 1286, ROW_H);
+            pnlRow.setBounds(0, yRow, 920, ROW_H);
             pnlRow.setBackground(rowBg);
             pnlRows.add(pnlRow);
 
             xCol = 0;
             for (int c = 0; c < userData[r].length; c++) {
-                int w = (1286 * colWidths[c]) / 850;
+                int w = (920 * colWidths[c]) / 850;
                 JLabel lblCell = new JLabel(userData[r][c], SwingConstants.CENTER);
                 lblCell.setBounds(xCol, 0, w, ROW_H);
                 if (c == 4) {
@@ -176,7 +152,7 @@ public class ManageUsersAdmin extends JFrame {
             }
 
             JPanel pnlSep = new JPanel();
-            pnlSep.setBounds(0, yRow + ROW_H, 1286, 3);
+            pnlSep.setBounds(0, yRow + ROW_H, 920, 3);
             pnlSep.setBackground(colorMutedTeal);
             pnlRows.add(pnlSep);
         }

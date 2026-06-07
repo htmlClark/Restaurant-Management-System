@@ -23,7 +23,7 @@ public class Main {
             if (role.equals("SUPER ADMIN")) {
                 new ManageUsersSuperAdminPanel();
             } else {
-                new ManageUsersAdminPanel();
+                new ManageUsersAdmin();
             }
         });
     }

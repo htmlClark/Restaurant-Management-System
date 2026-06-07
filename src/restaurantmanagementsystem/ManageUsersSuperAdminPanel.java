@@ -2,15 +2,14 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener {
+public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener {
 
     private JButton btnAddUser, btnEditUsers, btnDeleteUser, btnConfirmEdit;
     private JTextField txtSearch;
     private JPanel pnlTableCard, pnlButtons, pnlRowsContainer;
-    private JPanel pnlOverlay; // for Add/Edit overlay
+    private JPanel pnlOverlay;
     private JCheckBox[] rowCheckboxes;
 
-    // ── Colors ──────────────────────────────────────────────────
     Color colorCream       = new Color(0xFF, 0xF8, 0xE1);
     Color colorRed         = new Color(0xB7, 0x1C, 0x1C);
     Color colorGold        = new Color(0xFF, 0xB3, 0x00);
@@ -22,7 +21,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
     Color colorWhite       = Color.WHITE;
     Color colorOverlayBg   = new Color(0xF5, 0xF0, 0xE8);
 
-    // ── Fonts ───────────────────────────────────────────────────
     Font fontLogo   = new Font("Impact", Font.BOLD, 28);
     Font fontHeader = new Font("Impact", Font.BOLD, 22);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
@@ -41,24 +39,17 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
     };
 
     String[] colHeaders = {"TIME LOGGED IN", "TIME LOGGED OUT", "EMPLOYEE NUMBER", "NAME", "STATUS"};
-    int[]    colWidths  = {150, 150, 160, 260, 130}; // total = 850
+    int[]    colWidths  = {150, 150, 160, 260, 130};
 
     public ManageUsersSuperAdminPanel() {
-        setTitle("Pinoy Platters - Manage Users (Super Admin)");
-        setSize(1366, 768);
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        getContentPane().setBackground(colorCream);
+        setBackground(Color.decode("#FFF8E1"));
 
         buildTopBar();
         buildTableCard();
-
-        setLocationRelativeTo(null);
-        setVisible(true);
     }
 
-    // ── TOP BAR ─────────────────────────────────────────────────
     private void buildTopBar() {
         JPanel pnlLogo = new JPanel(null);
         pnlLogo.setBounds(0, 0, 280, 70);
@@ -72,12 +63,12 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlLogo.add(lblLogo);
 
         JPanel pnlTopBar = new JPanel(null);
-        pnlTopBar.setBounds(280, 0, 1086, 70);
+        pnlTopBar.setBounds(280, 0, 700, 70);
         pnlTopBar.setBackground(colorSalmon);
         add(pnlTopBar);
 
         txtSearch = new JTextField("SEARCH");
-        txtSearch.setBounds(30, 16, 500, 38);
+        txtSearch.setBounds(30, 16, 380, 38);
         txtSearch.setFont(fontSearch);
         txtSearch.setForeground(Color.GRAY);
         txtSearch.setBorder(BorderFactory.createCompoundBorder(
@@ -96,24 +87,17 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlTopBar.add(txtSearch);
 
         JLabel lblRole = new JLabel("SUPER ADMIN");
-        lblRole.setBounds(760, 20, 210, 30);
+        lblRole.setBounds(450, 20, 180, 30);
         lblRole.setFont(fontBold);
         lblRole.setForeground(new Color(0x33, 0x33, 0x33));
         lblRole.setHorizontalAlignment(SwingConstants.RIGHT);
         pnlTopBar.add(lblRole);
 
-        // User icon image
-        ImageIcon userIcon = new ImageIcon("USER.png");
-        Image userImg = userIcon.getImage().getScaledInstance(36, 36, Image.SCALE_SMOOTH);
-        JLabel lblUserIcon = new JLabel(new ImageIcon(userImg));
-        lblUserIcon.setBounds(984, 17, 36, 36);
-        pnlTopBar.add(lblUserIcon);
     }
 
-    // ── TABLE CARD ──────────────────────────────────────────────
     private void buildTableCard() {
         pnlTableCard = new JPanel(null);
-        pnlTableCard.setBounds(20, 85, 1326, 648);
+        pnlTableCard.setBounds(10, 80, 960, 630);
         pnlTableCard.setBackground(colorMutedTeal);
         pnlTableCard.setBorder(BorderFactory.createLineBorder(new Color(0x70, 0x99, 0x9E), 1));
         add(pnlTableCard);
@@ -127,28 +111,26 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         buildTableRows();
 
         pnlButtons = new JPanel(null);
-        pnlButtons.setBounds(0, 586, 1326, 62);
+        pnlButtons.setBounds(0, 568, 960, 62);
         pnlButtons.setBackground(colorMutedTeal);
         pnlTableCard.add(pnlButtons);
 
         refreshButtons();
     }
 
-    // ── ROWS (pure JPanel + JLabel) ─────────────────────────────
     private void buildTableRows() {
         if (pnlRowsContainer != null) pnlTableCard.remove(pnlRowsContainer);
 
         pnlRowsContainer = new JPanel(null);
-        pnlRowsContainer.setBounds(20, 56, 1286, 526);
+        pnlRowsContainer.setBounds(20, 56, 920, 508);
         pnlRowsContainer.setBackground(colorMutedTeal);
         pnlTableCard.add(pnlRowsContainer);
 
         int checkboxColW = editMode ? 42 : 0;
-        int totalW = 1286 - checkboxColW;
+        int totalW = 920 - checkboxColW;
 
-        // Header
         JPanel pnlHeader = new JPanel(null);
-        pnlHeader.setBounds(0, 0, 1286, 50);
+        pnlHeader.setBounds(0, 0, 920, 50);
         pnlHeader.setBackground(colorTableHeader);
         pnlRowsContainer.add(pnlHeader);
 
@@ -169,7 +151,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
             xCol += w;
         }
 
-        // Data rows
         int ROW_H = 58;
         rowCheckboxes = new JCheckBox[userData.length];
 
@@ -178,7 +159,7 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
             int yRow = 53 + r * (ROW_H + 3);
 
             JPanel pnlRow = new JPanel(null);
-            pnlRow.setBounds(0, yRow, 1286, ROW_H);
+            pnlRow.setBounds(0, yRow, 920, ROW_H);
             pnlRow.setBackground(rowBg);
             pnlRowsContainer.add(pnlRow);
 
@@ -207,7 +188,7 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
             }
 
             JPanel pnlSep = new JPanel();
-            pnlSep.setBounds(0, yRow + ROW_H, 1286, 3);
+            pnlSep.setBounds(0, yRow + ROW_H, 920, 3);
             pnlSep.setBackground(colorMutedTeal);
             pnlRowsContainer.add(pnlSep);
         }
@@ -216,28 +197,27 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlTableCard.repaint();
     }
 
-    // ── BUTTONS ─────────────────────────────────────────────────
     private void refreshButtons() {
         pnlButtons.removeAll();
 
         if (!editMode) {
             btnAddUser = makeRedButton("ADD USER");
-            btnAddUser.setBounds(986, 10, 150, 42);
+            btnAddUser.setBounds(630, 10, 150, 42);
             btnAddUser.addActionListener(this);
             pnlButtons.add(btnAddUser);
 
             btnEditUsers = makeRedButton("EDIT USERS");
-            btnEditUsers.setBounds(1150, 10, 150, 42);
+            btnEditUsers.setBounds(794, 10, 150, 42);
             btnEditUsers.addActionListener(this);
             pnlButtons.add(btnEditUsers);
         } else {
             btnDeleteUser = makeRedButton("🗑 DELETE USER");
-            btnDeleteUser.setBounds(986, 10, 150, 42);
+            btnDeleteUser.setBounds(630, 10, 150, 42);
             btnDeleteUser.addActionListener(this);
             pnlButtons.add(btnDeleteUser);
 
             btnConfirmEdit = makeRedButton("✔ CONFIRM EDIT");
-            btnConfirmEdit.setBounds(1150, 10, 150, 42);
+            btnConfirmEdit.setBounds(794, 10, 150, 42);
             btnConfirmEdit.addActionListener(this);
             pnlButtons.add(btnConfirmEdit);
         }
@@ -257,7 +237,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         return btn;
     }
 
-    // ── ACTION LISTENER ─────────────────────────────────────────
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnAddUser) {
@@ -276,7 +255,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         }
     }
 
-    // ── REMOVE OVERLAY ──────────────────────────────────────────
     private void removeOverlay() {
         if (pnlOverlay != null) {
             pnlTableCard.remove(pnlOverlay);
@@ -286,11 +264,9 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         }
     }
 
-    // ── ADD USER OVERLAY (nakapatong sa table card) ─────────────
     private void showAddUserOverlay() {
         removeOverlay();
 
-        // Dimmed background overlay
         pnlOverlay = new JPanel(null) {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -298,13 +274,12 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
                 g.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-        pnlOverlay.setBounds(0, 0, 1326, 648);
+        pnlOverlay.setBounds(0, 0, 960, 630);
         pnlOverlay.setOpaque(false);
 
-        // White card centered
-        int cardW = 480, cardH = 400;
-        int cardX = (1326 - cardW) / 2;
-        int cardY = (648 - cardH) / 2;
+        int cardW = 460, cardH = 390;
+        int cardX = (960 - cardW) / 2;
+        int cardY = (630 - cardH) / 2;
 
         JPanel pnlCard = new JPanel(null);
         pnlCard.setBounds(cardX, cardY, cardW, cardH);
@@ -312,7 +287,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlCard.setBorder(BorderFactory.createLineBorder(new Color(0xCC, 0xCC, 0xCC), 1));
         pnlOverlay.add(pnlCard);
 
-        // Title bar
         JPanel pnlTitle = new JPanel(null);
         pnlTitle.setBounds(0, 0, cardW, 56);
         pnlTitle.setBackground(colorRed);
@@ -324,13 +298,10 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         lblTitle.setForeground(colorWhite);
         pnlTitle.add(lblTitle);
 
-        // Form fields
         Font fLabel = new Font("Arial", Font.BOLD, 13);
         Font fField = new Font("Arial", Font.PLAIN, 13);
 
-        String[] labels   = {"Employee No.:", "Full Name:", "Role:", "Username:", "Password:"};
-        int yForm = 74;
-
+        String[] labels = {"Employee No.:", "Full Name:", "Role:", "Username:", "Password:"};
         JTextField txtEmpNo   = new JTextField(); txtEmpNo.setFont(fField);
         JTextField txtName    = new JTextField(); txtName.setFont(fField);
         JComboBox<String> cmbRole = new JComboBox<>(new String[]{"Admin", "Super Admin"}); cmbRole.setFont(fField);
@@ -338,20 +309,19 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         JPasswordField txtPwd = new JPasswordField(); txtPwd.setFont(fField);
         JComponent[] inputs   = {txtEmpNo, txtName, cmbRole, txtUser, txtPwd};
 
+        int yForm = 70;
         for (int i = 0; i < labels.length; i++) {
             JLabel lbl = new JLabel(labels[i]);
             lbl.setBounds(30, yForm, 120, 28);
             lbl.setFont(fLabel);
             pnlCard.add(lbl);
-
-            inputs[i].setBounds(160, yForm, 300, 28);
+            inputs[i].setBounds(160, yForm, 280, 28);
             pnlCard.add(inputs[i]);
             yForm += 44;
         }
 
-        // Cancel button
         JButton btnCancel = new JButton("CANCEL");
-        btnCancel.setBounds(30, cardH - 58, 130, 38);
+        btnCancel.setBounds(30, cardH - 54, 130, 38);
         btnCancel.setFont(fontBold);
         btnCancel.setForeground(colorRed);
         btnCancel.setBackground(colorOverlayBg);
@@ -361,9 +331,8 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         btnCancel.addActionListener(ev -> removeOverlay());
         pnlCard.add(btnCancel);
 
-        // Save button
         JButton btnSave = makeRedButton("SAVE USER");
-        btnSave.setBounds(320, cardH - 58, 140, 38);
+        btnSave.setBounds(300, cardH - 54, 140, 38);
         btnSave.addActionListener(ev -> {
             removeOverlay();
             JOptionPane.showMessageDialog(this, "User added successfully!", "Add User", JOptionPane.INFORMATION_MESSAGE);
@@ -376,7 +345,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlTableCard.repaint();
     }
 
-    // ── DELETE OVERLAY (nakapatong sa table card) ───────────────
     private void showDeleteOverlay() {
         removeOverlay();
 
@@ -391,7 +359,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         }
         final String finalEmpNum = empNum;
 
-        // Dimmed overlay
         pnlOverlay = new JPanel(null) {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -399,13 +366,12 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
                 g.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-        pnlOverlay.setBounds(0, 0, 1326, 648);
+        pnlOverlay.setBounds(0, 0, 960, 630);
         pnlOverlay.setOpaque(false);
 
-        // Card
-        int cardW = 560, cardH = 280;
-        int cardX = (1326 - cardW) / 2;
-        int cardY = (648 - cardH) / 2;
+        int cardW = 540, cardH = 280;
+        int cardX = (960 - cardW) / 2;
+        int cardY = (630 - cardH) / 2;
 
         JPanel pnlCard = new JPanel(null);
         pnlCard.setBounds(cardX, cardY, cardW, cardH);
@@ -413,7 +379,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         pnlCard.setBorder(BorderFactory.createLineBorder(new Color(0xCC, 0xCC, 0xCC), 1));
         pnlOverlay.add(pnlCard);
 
-        // Title bar
         JPanel pnlTitle = new JPanel(null);
         pnlTitle.setBounds(0, 0, cardW, 56);
         pnlTitle.setBackground(colorRed);
@@ -425,7 +390,6 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         lblTitle.setForeground(colorWhite);
         pnlTitle.add(lblTitle);
 
-        // Body text
         JLabel lblBody = new JLabel(
             "<html><div style='text-align:center'>ARE YOU SURE YOU WANT TO <b>DELETE</b><br>USER " + finalEmpNum + "?</div></html>",
             SwingConstants.CENTER);
@@ -433,13 +397,11 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         lblBody.setFont(new Font("Arial", Font.PLAIN, 15));
         pnlCard.add(lblBody);
 
-        // Separator
         JSeparator sep = new JSeparator();
         sep.setBounds(0, 188, cardW, 2);
         sep.setForeground(Color.LIGHT_GRAY);
         pnlCard.add(sep);
 
-        // Confirm
         JButton btnConfirm = new JButton("CONFIRM");
         btnConfirm.setBounds(0, 190, cardW / 2, 90);
         btnConfirm.setFont(fontBold);
@@ -454,13 +416,11 @@ public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener
         });
         pnlCard.add(btnConfirm);
 
-        // Vertical divider
         JSeparator vertDiv = new JSeparator(SwingConstants.VERTICAL);
         vertDiv.setBounds(cardW / 2, 190, 2, 90);
         vertDiv.setForeground(Color.LIGHT_GRAY);
         pnlCard.add(vertDiv);
 
-        // Cancel
         JButton btnCancel = new JButton("CANCEL");
         btnCancel.setBounds(cardW / 2 + 2, 190, cardW / 2 - 2, 90);
         btnCancel.setFont(fontBold);
