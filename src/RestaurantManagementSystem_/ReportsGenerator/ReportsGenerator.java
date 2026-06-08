@@ -6,8 +6,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 public class ReportsGenerator extends JFrame {
-
-
     public ReportsGenerator() {
         //color conversion
         Color whitemain = Color.decode("#FFF8E1");

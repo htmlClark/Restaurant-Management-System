@@ -1,5 +1,9 @@
 package RestaurantManagementSystem_.Products;
 
+import RestaurantManagementSystem_.PaymentProcess.Order;
+import RestaurantManagementSystem_.PaymentProcess.OrderItem;
+import RestaurantManagementSystem_.PaymentProcess.PaymentProcessingPage;
+
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -202,17 +206,50 @@ public class ProductSummary extends JPanel implements ActionListener {
         rowPanel.repaint();
     }
 
+    private Order processOrder()
+    {
+        Order order = new Order(1);
+
+        for (Component component : rowPanel.getComponents())
+        {
+            JPanel row = (JPanel) component;
+            JLabel rowName    = (JLabel)   row.getComponent(1);
+            JSpinner rowSpinner = (JSpinner) row.getComponent(2);
+            JLabel rowPrice   = (JLabel)   row.getComponent(3);
+
+            String name    = rowName.getText();
+            int quantity   = (int) rowSpinner.getValue();
+            double price   = Double.parseDouble(rowPrice.getText().replace("₱", "")) / quantity;
+
+            order.addItem(new OrderItem(name, price, quantity));
+        }
+        return order;
+    }
+
+    private void placeOrder()
+    {
+        if(rowPanel.getComponentCount()>0)
+        {
+            Order order = processOrder();
+
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(new PaymentProcessingPage(order, this));
+            frame.revalidate();
+            frame.repaint();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null,"No products have been added to this order", "ORDER ERROR",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnPlaceOrder)
         {
-            if(rowPanel.getComponentCount()>0)
-            {
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(null,"No products have been added to this order", "ORDER ERROR",JOptionPane.ERROR_MESSAGE);
-            }
+            placeOrder();
         }
         if (e.getSource() == btnDeleteItem)
         {

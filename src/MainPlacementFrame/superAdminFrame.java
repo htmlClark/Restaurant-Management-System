@@ -9,6 +9,7 @@ public class superAdminFrame extends JFrame implements ActionListener{
     public superAdminFrame()
     {
         setSize (1280,800);
+        setTitle("PINOY PLATTERS  |  RMS");
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

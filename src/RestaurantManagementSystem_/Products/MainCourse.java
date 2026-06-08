@@ -5,8 +5,8 @@ import javax.swing.*;
 
 public class MainCourse extends JPanel implements ActionListener{
     private ProductSummary summaryPanel;
-    private JButton btnTuron, btnHaloHalo, btnBack;
-    private JLabel lblBeverage, lbl;
+    private JButton btnAdobo, btnBicolExp, btnSisig, btnLaing, btnPinakbet, btnTorta, btnBack;
+    private JLabel lblMainCourse, lblMeat, lblVeggie;
 
     public MainCourse(ProductSummary summaryPanel)
     {
@@ -27,48 +27,94 @@ public class MainCourse extends JPanel implements ActionListener{
         ImageIcon appLogo = new ImageIcon (getClass().getResource("/src_pack/images/main_bg.png"));
         Image appSize = appLogo.getImage().getScaledInstance(350, 78, Image.SCALE_DEFAULT);
 
-        lblBeverage = new JLabel(new ImageIcon(appSize));
-        lblBeverage.setBounds(30,20,350,78);
-        add(lblBeverage);
+        lblMainCourse = new JLabel(new ImageIcon(appSize));
+            lblMainCourse.setBounds(30,20,350,78);
+            add(lblMainCourse);
 
         //Meat & Poultry
+        lblMeat = new JLabel("MEAT & POULTRY");
+            lblMeat.setFont(new Font("Arial",Font.BOLD,20));
+            lblMeat.setBounds(30,110,200,30);
+            add(lblMeat);
 
         //Vegetables
+        lblVeggie = new JLabel("VEGETABLES");
+            lblVeggie.setFont(new Font("Arial",Font.BOLD,20));
+            lblVeggie.setBounds(30,360,200,30);
+            add(lblVeggie);
 
         //Back Button
         ImageIcon backLogo = new ImageIcon (getClass().getResource("/src_pack/images/back.png"));
         Image backSize = backLogo.getImage().getScaledInstance(150, 33, Image.SCALE_DEFAULT);
 
         btnBack = new JButton(new ImageIcon(backSize));
-        btnBack.setBackground(Color.decode("#B71C1C"));
-        btnBack.setBounds(400,620,150,33);
-        btnBack.addActionListener(this);
-        add(btnBack);
+            btnBack.setBackground(Color.decode("#B71C1C"));
+            btnBack.setBounds(400,620,150,33);
+            btnBack.addActionListener(this);
+            add(btnBack);
     }
 
     private void mainCourse()
     {
         //Chicken Adobo
-        ImageIcon trnLogo = new ImageIcon (getClass().getResource("/src_pack/images/37.png"));
-        Image trnSize = trnLogo.getImage().getScaledInstance(180, 200, Image.SCALE_DEFAULT);
+        ImageIcon adbLogo = new ImageIcon (getClass().getResource("/src_pack/images/31.png"));
+        Image adbSize = adbLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
 
-        btnTuron = new JButton(new ImageIcon(trnSize));
-        btnTuron.setBounds(30,120,200,220);
-        btnTuron.setBackground(Color.decode("#F2D0BD"));
-        btnTuron.addActionListener(this);
-        add(btnTuron);
+        btnAdobo = new JButton(new ImageIcon(adbSize));
+            btnAdobo.setBounds(30,150,160, 190);
+            btnAdobo.setBackground(Color.decode("#F2D0BD"));
+            btnAdobo.addActionListener(this);
+            add(btnAdobo);
 
         //Bicol Express
-        ImageIcon haloLogo = new ImageIcon (getClass().getResource("/src_pack/images/38.png"));
-        Image haloSize = haloLogo.getImage().getScaledInstance(180, 200, Image.SCALE_DEFAULT);
+        ImageIcon bclLogo = new ImageIcon (getClass().getResource("/src_pack/images/32.png"));
+        Image bclSize = bclLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
 
-        btnHaloHalo = new JButton(new ImageIcon(haloSize));
-        btnHaloHalo.setBounds(260,120,200,220);
-        btnHaloHalo.setBackground(Color.decode("#F2D0BD"));
-        btnHaloHalo.addActionListener(this);
-        add(btnHaloHalo);
+        btnBicolExp = new JButton(new ImageIcon(bclSize));
+            btnBicolExp.setBounds(200,150,160, 190);
+            btnBicolExp.setBackground(Color.decode("#F2D0BD"));
+            btnBicolExp.addActionListener(this);
+            add(btnBicolExp);
 
         //Pork Sisig
+        ImageIcon ssgLogo = new ImageIcon (getClass().getResource("/src_pack/images/33.png"));
+        Image ssgSize = ssgLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
+
+        btnSisig = new JButton(new ImageIcon(ssgSize));
+            btnSisig.setBounds(370,150,160, 190);
+            btnSisig.setBackground(Color.decode("#F2D0BD"));
+            btnSisig.addActionListener(this);
+            add(btnSisig);
+
+        //Laing
+        ImageIcon lngLogo = new ImageIcon (getClass().getResource("/src_pack/images/34.png"));
+        Image lngSize = lngLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
+
+        btnLaing = new JButton(new ImageIcon(lngSize));
+            btnLaing.setBounds(30,400,160, 190);
+            btnLaing.setBackground(Color.decode("#F2D0BD"));
+            btnLaing.addActionListener(this);
+            add(btnLaing);
+
+        //Pinakbet
+        ImageIcon pnkLogo = new ImageIcon (getClass().getResource("/src_pack/images/35.png"));
+        Image pnkSize = pnkLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
+
+        btnPinakbet = new JButton(new ImageIcon(pnkSize));
+            btnPinakbet.setBounds(200,400,160, 190);
+            btnPinakbet.setBackground(Color.decode("#F2D0BD"));
+            btnPinakbet.addActionListener(this);
+            add(btnPinakbet);
+
+        //Tortang Talong
+        ImageIcon trtaLogo = new ImageIcon (getClass().getResource("/src_pack/images/36.png"));
+        Image trtaSize = trtaLogo.getImage().getScaledInstance(160, 190, Image.SCALE_DEFAULT);
+
+        btnTorta = new JButton(new ImageIcon(trtaSize));
+            btnTorta.setBounds(370,400,160, 190);
+            btnTorta.setBackground(Color.decode("#F2D0BD"));
+            btnTorta.addActionListener(this);
+            add(btnTorta);
     }
 
     @Override
@@ -82,13 +128,29 @@ public class MainCourse extends JPanel implements ActionListener{
             frame.revalidate();
             frame.repaint();
         }
-        if (e.getSource() == btnTuron)
+        if (e.getSource() == btnAdobo)
         {
-            summaryPanel.addProduct("TURON", 180);
+            summaryPanel.addProduct("CHKN ADB", 160);
         }
-        if (e.getSource() == btnHaloHalo)
+        if (e.getSource() == btnBicolExp)
         {
-            summaryPanel.addProduct("HALO-HALO", 120);
+            summaryPanel.addProduct("BCL EXP", 180);
+        }
+        if (e.getSource() == btnSisig)
+        {
+            summaryPanel.addProduct("PRK SSG", 190);
+        }
+        if (e.getSource() == btnLaing)
+        {
+            summaryPanel.addProduct("LNG", 140);
+        }
+        if (e.getSource() == btnPinakbet)
+        {
+            summaryPanel.addProduct("PNKBT", 150);
+        }
+        if (e.getSource() == btnTorta)
+        {
+            summaryPanel.addProduct("TRTA TLNG", 120);
         }
     }
 }

@@ -5,7 +5,7 @@ public class Order {
     private int orderNumber;
     private ArrayList<OrderItem> items;
     
-    Order (int OrderNumber) {
+    public Order(int OrderNumber) {
         this.orderNumber = orderNumber;
         this.items = new ArrayList<OrderItem>();
     }

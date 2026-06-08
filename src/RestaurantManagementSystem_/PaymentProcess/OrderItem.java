@@ -4,7 +4,7 @@ public class OrderItem {
     private double price;
     private int quantity;
     
-    OrderItem(String itemName, double price, int quantity) {
+    public OrderItem(String itemName, double price, int quantity) {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;

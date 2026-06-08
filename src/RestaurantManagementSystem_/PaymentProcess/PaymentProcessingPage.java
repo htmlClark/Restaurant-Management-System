@@ -1,5 +1,7 @@
 package RestaurantManagementSystem_.PaymentProcess;
 
+import RestaurantManagementSystem_.Products.ProductSummary;
+
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Font;
@@ -8,7 +10,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class PaymentProcessingPage extends JPanel implements ActionListener {
-
     private JLabel lblLogo, lblUser;
     private JLabel lblPaymentProcessing;
     private JLabel lblOrderSummary;
@@ -43,7 +44,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
 
     Order order;
 
-    public PaymentProcessingPage() {
+    private ProductSummary summaryPanel;
+    public PaymentProcessingPage(Order order, ProductSummary summaryPanel) {
+
+        this.summaryPanel = summaryPanel;
 
         setBounds (300,80,980,720);
         setLayout(null);

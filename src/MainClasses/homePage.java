@@ -14,6 +14,7 @@ public class homePage extends JFrame implements ActionListener
     header();
 
     setSize (1280,800);
+    setTitle("Restaurant Management System");
     setLayout(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setLocationRelativeTo(null);
