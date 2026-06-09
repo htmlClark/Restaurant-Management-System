@@ -79,7 +79,6 @@ public class Appetizer extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        JPanel nextPanel = null;
         if (e.getSource() == btnBack)
         {
             frame.getContentPane().remove(this);

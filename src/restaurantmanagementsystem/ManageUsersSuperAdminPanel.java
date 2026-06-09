@@ -2,7 +2,7 @@ package restaurantmanagementsystem;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;   
+import javax.swing.*;
 
 public class ManageUsersSuperAdminPanel extends JFrame implements ActionListener {
 

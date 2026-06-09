@@ -1,9 +1,9 @@
 package RestaurantManagementSystem_.Products;
 
-import RestaurantManagementSystem_.PaymentProcess.Order;
-import RestaurantManagementSystem_.PaymentProcess.OrderItem;
-import RestaurantManagementSystem_.PaymentProcess.PaymentProcessingPage;
-
+import HeaderPanels.*;
+import MainPlacementFrame.*;
+import RestaurantManagementSystem_.PaymentProcess.*;
+import SidePanels.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -126,13 +126,13 @@ public class ProductSummary extends JPanel implements ActionListener {
             updateDeleteItem();});
 
         JLabel lblProdName = new JLabel(prodName);
-        lblProdName.setBounds(40,10,100,30);
+            lblProdName.setBounds(40,10,100,30);
 
         JSpinner spnQuantity = new JSpinner(new SpinnerNumberModel(1,1,99,1));
-        spnQuantity.setBounds(200,10,50,30);
+            spnQuantity.setBounds(200,10,50,30);
 
         JLabel lblProdPrice = new JLabel("₱"+prodPrice);
-        lblProdPrice.setBounds(320,10,50,30);
+            lblProdPrice.setBounds(320,10,50,30);
 
         int prevQuanti[] = {1};
         spnQuantity.addChangeListener(e ->{
@@ -236,6 +236,22 @@ public class ProductSummary extends JPanel implements ActionListener {
 
             frame.getContentPane().removeAll();
             frame.getContentPane().add(new PaymentProcessingPage(order, this));
+
+            if(frame instanceof userFrame)
+            {
+                frame.getContentPane().add(new SidePanel_Staff());
+                frame.getContentPane().add(new Header_Staff("USER"));
+            }
+            else if (frame instanceof adminFrame)
+            {
+                frame.getContentPane().add(new SidePanel_Admin());
+                frame.getContentPane().add(new Header_Admin("ADMIN"));
+            }
+            else if (frame instanceof superAdminFrame)
+            {
+                frame.getContentPane().add(new SidePanel_SuperAdmin());
+            }
+
             frame.revalidate();
             frame.repaint();
         }

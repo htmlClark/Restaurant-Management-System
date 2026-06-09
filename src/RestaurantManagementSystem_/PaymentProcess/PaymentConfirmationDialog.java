@@ -1,4 +1,8 @@
 package RestaurantManagementSystem_.PaymentProcess;
+import MainPlacementFrame.adminFrame;
+import MainPlacementFrame.userFrame;
+import RestaurantManagementSystem_.Products.Products;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,18 +16,21 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
     private JLabel lblOrderNo;
     private JButton btnPrintReceipt;
     private JButton btnConfirm;
+    private JFrame parentFrame;
 
     Color colorCream = new Color(0xFF, 0xF8, 0xE1);
     Color colorRed = new Color(0xB7, 0x1C, 0x1C);
     Color colorGold = new Color(0xFF, 0xB3, 0x00);
+    Color colorGreen   = new Color(0x2E, 0x7D, 0x32);
     Color colorWhite = new Color(0xFF, 0xFF, 0xFF);
     Color colorBlack = new Color(0x00, 0x00, 0x00);
 
-    Font fontHeader = new Font("Impact", Font.BOLD, 26);
+    Font fontHeader = new Font("Impact", Font.BOLD, 35);
     Font fontNormal = new Font("Arial", Font.PLAIN, 14);
 
-    PaymentConfirmationDialog(JFrame parent, Order order) {
+    public PaymentConfirmationDialog(JFrame parent, Order order) {
         super(parent, true);
+        this.parentFrame = parent;
         setSize(500, 380);
         setLayout(null);
         setResizable(false);
@@ -39,7 +46,7 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
         add(pnlHeader);
 
         lblPaymentProcessed = new JLabel("PAYMENT PROCESSED");
-        lblPaymentProcessed.setBounds(50, 10, 340, 40);
+        lblPaymentProcessed.setBounds(70, 10, 340, 40);
         lblPaymentProcessed.setFont(fontHeader);
         lblPaymentProcessed.setForeground(colorCream);
         pnlHeader.add(lblPaymentProcessed);
@@ -49,12 +56,12 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
                 + "   " + String.format("%02d", now.getHour()) + ":" + String.format("%02d", now.getMinute());
 
         lblDateTime = new JLabel(dateTime);
-        lblDateTime.setBounds(150, 95, 200, 25);
+        lblDateTime.setBounds(190, 95, 200, 25);
         lblDateTime.setFont(fontNormal);
         add(lblDateTime);
 
         lblOrderNo = new JLabel("ORDER NO. " + order.getOrderNumber());
-        lblOrderNo.setBounds(130, 130, 250, 40);
+        lblOrderNo.setBounds(160, 130, 250, 40);
         lblOrderNo.setFont(new Font("Arial", Font.BOLD, 26));
         add(lblOrderNo);
 
@@ -64,7 +71,7 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
 
         btnPrintReceipt = new JButton("PRINT RECEIPT");
         btnPrintReceipt.setBounds(130, 190, 240, 45);
-        btnPrintReceipt.setFont(new Font("Impact", Font.BOLD, 14));
+        btnPrintReceipt.setFont(new Font("Arial", Font.BOLD, 20));
         btnPrintReceipt.setBackground(colorGold);
         btnPrintReceipt.setForeground(colorWhite);
         btnPrintReceipt.setBorderPainted(false);
@@ -72,9 +79,9 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
 
         btnConfirm = new JButton("CONFIRM");
         btnConfirm.setBounds(30, 285, 440, 55);
-        btnConfirm.setFont(new Font("Impact", Font.BOLD, 20));
-        btnConfirm.setBackground(colorCream);
-        btnConfirm.setForeground(colorBlack);
+        btnConfirm.setFont(new Font("Impact", Font.BOLD, 35));
+        btnConfirm.setBackground(colorGreen);
+        btnConfirm.setForeground(colorWhite);
         btnConfirm.setBorderPainted(true);
         add(btnConfirm);
 
@@ -84,11 +91,21 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnConfirm) {
+        if (e.getSource() == btnConfirm)
+        {
             dispose();
-        } else if (e.getSource() == btnPrintReceipt) {
+            JPanel nextPanel = new Products();
+            parentFrame.getContentPane().removeAll();
+            parentFrame.getContentPane().add(nextPanel);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+
+            if (parentFrame instanceof userFrame)            { ((userFrame) parentFrame).switchPanel(nextPanel); }
+            else if (parentFrame instanceof adminFrame)      { ((adminFrame) parentFrame).switchPanel(nextPanel); }
+        }
+        else if (e.getSource() == btnPrintReceipt)
+        {
             JOptionPane.showMessageDialog(this, "Printing receipt...", "Print", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
 }

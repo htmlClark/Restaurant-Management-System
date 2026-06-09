@@ -1,4 +1,5 @@
 package MainPlacementFrame;
+import HeaderPanels.*;
 import RestaurantManagementSystem_.Products.*;
 import SidePanels.*;
 
@@ -16,6 +17,7 @@ public class adminFrame extends JFrame implements ActionListener{
         setResizable(false);
 
         add(new SidePanel_Admin());
+        add(new Header_Admin("ADMIN"));
         add (new Products());
 
         setVisible(true);
@@ -25,6 +27,7 @@ public class adminFrame extends JFrame implements ActionListener{
     {
         getContentPane().removeAll();
         add(new SidePanel_Admin());
+        add(new Header_Admin("ADMIN"));
         add(thisPanel);
         revalidate();
         repaint();

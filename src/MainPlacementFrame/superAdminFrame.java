@@ -1,4 +1,5 @@
 package MainPlacementFrame;
+import HeaderPanels.*;
 import RestaurantManagementSystem_.Products.*;
 import SidePanels.*;
 
@@ -16,6 +17,7 @@ public class superAdminFrame extends JFrame implements ActionListener{
         setResizable(false);
 
         add(new SidePanel_SuperAdmin());
+        add(new Header_SuperAdmin("SUPER ADMIN"));
         add (new Products());
 
         setVisible(true);
@@ -25,6 +27,7 @@ public class superAdminFrame extends JFrame implements ActionListener{
     {
         getContentPane().removeAll();
         add(new SidePanel_SuperAdmin());
+        add(new Header_SuperAdmin("SUPER ADMIN"));
         add(thisPanel);
         revalidate();
         repaint();

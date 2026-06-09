@@ -127,7 +127,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        adminFrame frame = (adminFrame) getParent().getParent().getParent().getParent();
+        adminFrame frame = (adminFrame) SwingUtilities.getWindowAncestor(this);
         if (e.getSource() == btnDashboard) {
 
         }
