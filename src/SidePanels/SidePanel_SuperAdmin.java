@@ -1,7 +1,7 @@
 package SidePanels;
 import MainClasses.*;
 import MainPlacementFrame.*;
-import RestaurantManagementSystem_.FoodWasteTracker.WasteLog;
+import RestaurantManagementSystem_.FoodWasteTracker.*;
 import RestaurantManagementSystem_.InventoryManagement.*;
 import RestaurantManagementSystem_.ManageUsers.ManageUsersSuperAdminPanel;
 import RestaurantManagementSystem_.Products.*;
@@ -158,7 +158,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
             frame.switchPanel(new ReportsGenerator());
         }
         else if (e.getSource() == btnWasteLogs) {
-
+            frame.switchPanel(WasteLogPanel.forSuperAdmin());
         }
         else if (e.getSource() == btnDelivery) {
 
