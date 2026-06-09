@@ -2,13 +2,10 @@ package FoodWasteTracker;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
-import java.util.EventObject;
 import java.util.List;
 import javax.swing.*;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import javax.swing.border.*;
 import javax.swing.table.*;
 
 public class AdminApp extends JFrame {
