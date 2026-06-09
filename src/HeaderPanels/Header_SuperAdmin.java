@@ -24,7 +24,7 @@ public class Header_SuperAdmin extends JPanel{
         lblIcon.setBounds(890, 20, 40, 40);
 
         lblRole = new JLabel(role);
-        lblRole.setBounds(800, 27, 80, 25);
+        lblRole.setBounds(730, 27, 150, 25);
         lblRole.setFont(new Font("Arial", Font.BOLD, 18));
         lblRole.setForeground(Color.BLACK);
         lblRole.setHorizontalAlignment(SwingConstants.RIGHT);

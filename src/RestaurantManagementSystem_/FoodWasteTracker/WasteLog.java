@@ -1,4 +1,4 @@
-package FoodWasteTracker;
+package RestaurantManagementSystem_.FoodWasteTracker;
 
 public class WasteLog {
     public String time, item, qty, reason, staff, remarks;

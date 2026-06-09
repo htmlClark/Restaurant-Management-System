@@ -3,6 +3,7 @@ import MainClasses.*;
 import MainPlacementFrame.*;
 import RestaurantManagementSystem_.InventoryManagement.*;
 import RestaurantManagementSystem_.Products.*;
+import RestaurantManagementSystem_.ReportsGenerator.*;
 
 import java.awt.*;
 import javax.swing.*;
@@ -138,7 +139,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
             frame.switchPanel(new invList());
         }
         else if (e.getSource() == btnReport) {
-
+            frame.switchPanel(new ReportsGenerator());
         }
         else if (e.getSource() == btnWasteLogs) {
 

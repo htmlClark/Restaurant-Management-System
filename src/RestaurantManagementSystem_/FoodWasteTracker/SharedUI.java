@@ -1,10 +1,8 @@
-package FoodWasteTracker;
+package RestaurantManagementSystem_.FoodWasteTracker;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
-import java.net.URL;
 
 public class SharedUI {
 public static final Color C_CREAM = new Color(0xFF, 0xF8, 0xE1);

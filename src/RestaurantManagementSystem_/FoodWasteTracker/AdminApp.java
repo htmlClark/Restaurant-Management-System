@@ -1,4 +1,4 @@
-package FoodWasteTracker;
+package RestaurantManagementSystem_.FoodWasteTracker;
 
 import java.awt.*;
 import java.awt.event.*;
