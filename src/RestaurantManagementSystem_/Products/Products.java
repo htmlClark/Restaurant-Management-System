@@ -2,17 +2,23 @@ package RestaurantManagementSystem_.Products;
 
 import MainPlacementFrame.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.*;
 
 public class Products extends JPanel implements ActionListener {
+    ProductSummary summaryPanel;
     private JButton btnAppetizer, btnMainCourse, btnDessert, btnBeverage;
     private JLabel lblSplash, lblFood;
-    private JPanel contentPanel = null;
+
 
     public Products()
     {
+        this (new ProductSummary());
+    }
+
+    public Products(ProductSummary summaryPanel)
+    {
+        this.summaryPanel = summaryPanel;
         setBounds (300,80,980,720);
         setLayout(null);
         setBackground(Color.decode("#FFF8E1"));
@@ -53,7 +59,7 @@ public class Products extends JPanel implements ActionListener {
             btnDessert.addActionListener(this);
             add(btnDessert);
 
-        //Beverage
+        //Appetizer
         ImageIcon bevLogo = new ImageIcon (getClass().getResource("/src_pack/images/beverage.png"));
         Image bevSize = bevLogo.getImage().getScaledInstance(450, 100, Image.SCALE_DEFAULT);
 
@@ -84,24 +90,20 @@ public class Products extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        JFrame frame = (JFrame) getParent().getParent().getParent().getParent();
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
         JPanel nextPanel = null;
 
-        if (e.getSource() == btnAppetizer) {
-            nextPanel = new Appetizer();
-        }
-        else if (e.getSource() == btnMainCourse) {
-            nextPanel = new MainCourse();
-        }
-        else if (e.getSource() == btnDessert) {
-            nextPanel = new Dessert();
-        }
-        else if (e.getSource() == btnBeverage) {
-            nextPanel = new Beverage();
-        }
+        if (e.getSource() == btnAppetizer) nextPanel = new Appetizer(summaryPanel);
+        else if (e.getSource() == btnMainCourse) nextPanel = new MainCourse(summaryPanel);
+        else if (e.getSource() == btnDessert) nextPanel = new Dessert(summaryPanel);
+        else if (e.getSource() == btnBeverage) nextPanel = new Beverage(summaryPanel);
 
         //added this for switching based on the user logged in hehe
         if (nextPanel != null) {
+            frame.getContentPane().remove(this);
+            frame.getContentPane().add(nextPanel);
+            frame.revalidate();
+            frame.repaint();
             if (frame instanceof userFrame)
             {
                 ((userFrame) frame).switchPanel(nextPanel);

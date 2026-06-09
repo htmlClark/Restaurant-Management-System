@@ -1,4 +1,12 @@
 package SidePanels;
+import MainClasses.*;
+import MainPlacementFrame.*;
+import RestaurantManagementSystem_.FoodWasteTracker.WasteLog;
+import RestaurantManagementSystem_.InventoryManagement.*;
+import RestaurantManagementSystem_.ManageUsers.ManageUsersSuperAdminPanel;
+import RestaurantManagementSystem_.Products.*;
+import RestaurantManagementSystem_.ReportsGenerator.*;
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -109,15 +117,15 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         ImageIcon userLogo = new ImageIcon (getClass().getResource("/src_pack/images/user.png"));
         Image userSize = userLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
-        btnDelivery = new JButton("    MANAGE USERS",new ImageIcon(userSize));
-            btnDelivery.setBounds(0, 560, 300, 80);
-            btnDelivery.setForeground(Color.WHITE);
-            btnDelivery.setBackground(Color.decode("#366379"));
-            btnDelivery.setFont(new Font("Arial", Font.BOLD, 20));
-            btnDelivery.setHorizontalAlignment(SwingConstants.LEFT);
-            btnDelivery.setBorderPainted(false);
-            btnDelivery.addActionListener(this);
-            add(btnDelivery);  
+        btnUsers = new JButton("    MANAGE USERS",new ImageIcon(userSize));
+            btnUsers.setBounds(0, 560, 300, 80);
+            btnUsers.setForeground(Color.WHITE);
+            btnUsers.setBackground(Color.decode("#366379"));
+            btnUsers.setFont(new Font("Arial", Font.BOLD, 20));
+            btnUsers.setHorizontalAlignment(SwingConstants.LEFT);
+            btnUsers.setBorderPainted(false);
+            btnUsers.addActionListener(this);
+            add(btnUsers);
             
         //Logout 
         ImageIcon logoutLogo = new ImageIcon (getClass().getResource("/src_pack/images/logout.png"));
@@ -136,6 +144,36 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        superAdminFrame frame = (superAdminFrame) getParent().getParent().getParent().getParent();
+        if (e.getSource() == btnDashboard) {
+
+        }
+        else if (e.getSource() == btnProducts) {
+            frame.switchPanel(new Products());
+        }
+        else if (e.getSource() == btnInventory) {
+            frame.switchPanel(new invList());
+        }
+        else if (e.getSource() == btnReport) {
+            frame.switchPanel(new ReportsGenerator());
+        }
+        else if (e.getSource() == btnWasteLogs) {
+
+        }
+        else if (e.getSource() == btnDelivery) {
+
+        }
+        else if (e.getSource() == btnUsers) {
+            frame.switchPanel(new ManageUsersSuperAdminPanel());
+        }
+        else if (e.getSource() == btnLogout) {
+            int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);
+            if (confirmLogout == JOptionPane.YES_OPTION)
+            {
+                frame.dispose();
+                LoginPage loginPage = new LoginPage();
+                loginPage.setVisible(true);
+            }
+        }
     }
 }

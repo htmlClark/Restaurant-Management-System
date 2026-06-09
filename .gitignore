@@ -1,1 +1,15 @@
+# To Ignore
 /dist/
+/build/
+/out/
+
+# NetBeans 
+/src/nbproject/private/
+/Restaurant-Management-System_/nbproject/private/
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/

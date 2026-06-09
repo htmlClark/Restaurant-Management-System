@@ -1,69 +1,27 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import javax.swing.*;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class invListEdit extends JFrame implements ActionListener{
+public class invListEdit extends JPanel implements ActionListener {
 
-    invListEdit(){
-    headerLogo();
-    dashboardMenu();
-    functionMenu();
-    setTitle ("Edit Item");
-    setSize (750,500);
-    setLayout(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setResizable(false);
-    setVisible(true);
-
-    }
-
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-    private JLabel lblLogo, lblOld, lblID, lblName, lblQty, lblCategory, lblMeasurement;
-    private JTextField txtOldID;
-    private JTextField txtNewID, txtName, txtQuantity;
+    private JLabel lblOld, lblName, lblQty, lblCategory, lblMeasurement;
+    private JTextField txtOldID, txtName, txtQuantity;
     private JComboBox cbCategory, cbMeasurement;
     private JButton btnEdit;
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
+    public invListEdit()
+    {
+        functionMenu();
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(logo);
-        lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
+        setBounds(300, 80, 980, 720);
+        setLayout(null);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void dashboardMenu() {
-
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-
-    }
-
-    private void functionMenu(){
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         lblOld = new JLabel("OLD ID:");
         lblOld.setBounds(30, 30, 100, 25);
 
@@ -101,29 +59,16 @@ public class invListEdit extends JFrame implements ActionListener{
         btnEdit.setBackground(Color.decode("#B71C1C"));
         btnEdit.setForeground(Color.WHITE);
         btnEdit.setFocusPainted(false);
+        btnEdit.addActionListener(this);
 
-        panelFunctionMenu.add(lblOld);
-        panelFunctionMenu.add(txtOldID);
-
-        panelFunctionMenu.add(lblName);
-        panelFunctionMenu.add(txtName);
-
-        panelFunctionMenu.add(lblQty);
-        panelFunctionMenu.add(txtQuantity);
-
-        panelFunctionMenu.add(lblCategory);
-        panelFunctionMenu.add(cbCategory);
-
-        panelFunctionMenu.add(lblMeasurement);
-        panelFunctionMenu.add(cbMeasurement);
-
-        panelFunctionMenu.add(btnEdit);
-
+        add(lblOld);         add(txtOldID);
+        add(lblName);        add(txtName);
+        add(lblQty);         add(txtQuantity);
+        add(lblCategory);    add(cbCategory);
+        add(lblMeasurement); add(cbMeasurement);
+        add(btnEdit);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void actionPerformed(ActionEvent e) { }
 }
-

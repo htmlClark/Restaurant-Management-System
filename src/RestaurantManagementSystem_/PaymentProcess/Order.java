@@ -1,19 +1,11 @@
-package RestaurantManagementSystem_.PaymentProcess;/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author aamar
- */
+package RestaurantManagementSystem_.PaymentProcess;
 import java.util.ArrayList;
 public class Order {
     
     private int orderNumber;
     private ArrayList<OrderItem> items;
     
-    Order (int OrderNumber) {
+    public Order(int OrderNumber) {
         this.orderNumber = orderNumber;
         this.items = new ArrayList<OrderItem>();
     }

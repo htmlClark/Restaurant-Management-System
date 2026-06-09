@@ -1,69 +1,27 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class invListAdd extends JFrame implements ActionListener{
+public class invListAdd extends JPanel implements ActionListener {
 
-    invListAdd(){
-
-    headerLogo();
-    dashboardMenu();
-    functionMenu();
-
-    setTitle ("Add Item");
-    setSize (750,500);
-    setLayout(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setResizable(false);
-    setVisible(true);
-
-    }
-
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-    private JLabel lblLogo, lblID, lblName, lblQuantity, lblCategory, lblMeasurement;
+    private JLabel lblID, lblName, lblQuantity, lblCategory, lblMeasurement;
     private JTextField txtID, txtName, txtQuantity;
     private JComboBox cbCategory, cbMeasurement;
     private JButton btnAdd;
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
+    public invListAdd()
+    {
+        functionMenu();
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(logo);
-        lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
+        setBounds(300, 80, 980, 720);
+        setLayout(null);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void dashboardMenu() {
-
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-
-    }
-
-    private void functionMenu(){
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         lblID = new JLabel("ID:");
         lblID.setBounds(20, 20, 100, 25);
 
@@ -97,27 +55,20 @@ public class invListAdd extends JFrame implements ActionListener{
         cbMeasurement.setBounds(420, 60, 130, 25);
 
         btnAdd = new JButton("ADD");
-        btnAdd.setBounds(300, 100, 100, 30);
+        btnAdd.setBounds(300, 150, 100, 30);
         btnAdd.setBackground(Color.decode("#B71C1C"));
         btnAdd.setForeground(Color.WHITE);
         btnAdd.setFocusPainted(false);
+        btnAdd.addActionListener(this);
 
-        panelFunctionMenu.add(lblID);
-        panelFunctionMenu.add(txtID);
-        panelFunctionMenu.add(lblName);
-        panelFunctionMenu.add(txtName);
-        panelFunctionMenu.add(lblQuantity);
-        panelFunctionMenu.add(txtQuantity);
-        panelFunctionMenu.add(lblCategory);
-        panelFunctionMenu.add(cbCategory);
-        panelFunctionMenu.add(lblMeasurement);
-        panelFunctionMenu.add(cbMeasurement);
-        panelFunctionMenu.add(btnAdd);
+        add(lblID);          add(txtID);
+        add(lblName);        add(txtName);
+        add(lblQuantity);    add(txtQuantity);
+        add(lblCategory);    add(cbCategory);
+        add(lblMeasurement); add(cbMeasurement);
+        add(btnAdd);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
+    public void actionPerformed(ActionEvent e) { }
 }

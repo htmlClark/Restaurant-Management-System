@@ -1,9 +1,9 @@
 package SidePanels;
-import MainClasses.LoginPage;
-import MainPlacementFrame.adminFrame;
-import MainPlacementFrame.userFrame;
-import RestaurantManagementSystem_.Products.Appetizer;
-import RestaurantManagementSystem_.Products.Products;
+import MainClasses.*;
+import MainPlacementFrame.*;
+import RestaurantManagementSystem_.InventoryManagement.*;
+import RestaurantManagementSystem_.Products.*;
+import RestaurantManagementSystem_.ReportsGenerator.*;
 
 import java.awt.*;
 import javax.swing.*;
@@ -128,7 +128,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        adminFrame frame = (adminFrame) getParent().getParent().getParent().getParent();
+        adminFrame frame = (adminFrame) SwingUtilities.getWindowAncestor(this);
         if (e.getSource() == btnDashboard) {
 
         }
@@ -136,10 +136,10 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
             frame.switchPanel(new Products());
         }
         else if (e.getSource() == btnInventory) {
-            //frame.switchPanel(new inventoryManagement());
+            frame.switchPanel(new invList());
         }
         else if (e.getSource() == btnReport) {
-
+            frame.switchPanel(new ReportsGenerator());
         }
         else if (e.getSource() == btnWasteLogs) {
 

@@ -21,6 +21,7 @@ public class LoginPage extends JFrame implements ActionListener
         loginPanel();
 
         setSize (1280,800);
+        setTitle("Login Page");
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

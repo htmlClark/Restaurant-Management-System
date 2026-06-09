@@ -1,147 +1,121 @@
 package RestaurantManagementSystem_.PaymentProcess;
 
-import java.awt.Image;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import MainPlacementFrame.*;
+import RestaurantManagementSystem_.Products.*;
+
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class PaymentProcessingPage extends JFrame implements ActionListener {
+public class PaymentProcessingPage extends JPanel implements ActionListener {
 
-    private JLabel lblLogo, lblUser;
-    private JLabel lblPaymentProcessing;
-    private JLabel lblOrderSummary;
-    private JLabel lblSubtotal, lblTax, lblTotal;
-    private JLabel lblPaymentMethod;
-    private JLabel lblAmountTendered;
-    private JLabel lblPaid, lblChange;
+    private JLabel lblPaymentProcessing, lblOrderSummary, lblSubtotal, lblTax, lblTotal,
+    lblPaymentMethod, lblAmountTendered, lblPaid, lblChange;
 
-    private JButton btnCash, btnCard, btnGcash;
-    private JButton btn100, btn200, btn500, btn1000, btnExact;
-    private JButton btnProcessPayment, btnCancel;
+    private JButton btnCash, btnCard, btnGcash,
+            btn100, btn200, btn500, btn1000, btnExact,
+            btnProcessPayment, btnCancel;
 
     private JTextField txtAmountTendered;
-    private JTextField txtSearch;
+    Color colorCream   = new Color(0xFF, 0xF8, 0xE1);
+    Color colorRed     = new Color(0xB7, 0x1C, 0x1C);
+    Color colorSalmon  = new Color(0xF5, 0xCF, 0xBA);
+    Color colorTeal    = new Color(0x89, 0xB7, 0xB3);
+    Color colorGreen   = new Color(0x2E, 0x7D, 0x32);
+    Color colorWhite   = new Color(0xFF, 0xFF, 0xFF);
 
-    Color colorCream = new Color(0xFF, 0xF8, 0xE1);
-    Color colorTeal = new Color(0x36, 0x63, 0x79);
-    Color colorRed = new Color(0xB7, 0x1C, 0x1C);
-    Color colorGold = new Color(0xFF, 0xB3, 0x00);
-    Color colorSalmon = new Color(0xF5, 0xCF, 0xBA);
-    Color colorMutedTeal = new Color(0x89, 0xB7, 0xB3);
-    Color colorGreen = new Color(0x2E, 0x7D, 0x32);
-    Color colorWhite = new Color(0xFF, 0xFF, 0xFF);
-    Color colorBlack = new Color(0x00, 0x00, 0x00);
-
-    Font fontBold = new Font("Impact", Font.BOLD, 14);
-    Font fontHeader = new Font("Impact", Font.BOLD, 22);
-    Font fontLogo = new Font("Impact", Font.BOLD, 28);
-    Font fontSmall = new Font("Arial", Font.PLAIN, 12);
+    Font fontBold   = new Font("Arial", Font.BOLD, 14);
+    Font fontHeader = new Font("Arial", Font.BOLD, 22);
+    Font fontSmall  = new Font("Arial", Font.PLAIN, 12);
     Font fontNormal = new Font("Arial", Font.PLAIN, 14);
-    Font fontTotal = new Font("Arial", Font.BOLD, 16);
+    Font fontTotal  = new Font("Arial", Font.BOLD, 16);
 
-    Order order;
+    private Order order;
+    private ProductSummary summaryPanel;
 
-    PaymentProcessingPage(Order order) {
+    public PaymentProcessingPage(Order order, ProductSummary summaryPanel)
+    {
         this.order = order;
+        this.summaryPanel = summaryPanel;
 
-        setSize(1280, 800);
+        orderSummary();
+        paymentMethod();
+
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Pinoy Platters - Payment Processing");
-        setResizable(false);
+        setBackground(Color.decode("#FFF8E1"));
+    }
 
-        getContentPane().setBackground(colorCream);
-
-        JPanel pnlTopBar = new JPanel();
-        pnlTopBar.setLayout(null);
-        pnlTopBar.setBounds(0, 0, 1280, 70);
-        pnlTopBar.setBackground(colorCream);
-        add(pnlTopBar);
-
-        txtSearch = new JTextField("SEARCH");
-        txtSearch.setBounds(20, 15, 300, 35);
-        txtSearch.setFont(fontNormal);
-        txtSearch.setForeground(Color.GRAY);
-        pnlTopBar.add(txtSearch);
-
-        ImageIcon userIcon = new ImageIcon("icons/USER.png");
-        Image userImg = userIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        lblUser = new JLabel("USER", new ImageIcon(userImg), JLabel.LEFT);
-        lblUser.setBounds(1100, 20, 120, 30);
-        lblUser.setFont(fontBold);
-        pnlTopBar.add(lblUser);
-
-        JPanel pnlPaymentHeader = new JPanel();
-        pnlPaymentHeader.setLayout(null);
-        pnlPaymentHeader.setBounds(0, 70, 600, 55);
-        pnlPaymentHeader.setBackground(colorRed);
-        add(pnlPaymentHeader);
-
-        lblPaymentProcessing = new JLabel("PAYMENT PROCESSING");
-        lblPaymentProcessing.setBounds(10, 10, 580, 35);
-        lblPaymentProcessing.setFont(fontHeader);
-        lblPaymentProcessing.setForeground(colorCream);
-        pnlPaymentHeader.add(lblPaymentProcessing);
-
-        JPanel pnlOrderSummary = new JPanel();
-        pnlOrderSummary.setLayout(null);
-        pnlOrderSummary.setBounds(0, 125, 600, 610);
+    private void orderSummary()
+    {
+        //Order Summary Panel
+        JPanel pnlOrderSummary = new JPanel(null);
+        pnlOrderSummary.setBounds(0, 125, 580, 595);
         pnlOrderSummary.setBackground(colorCream);
         add(pnlOrderSummary);
 
+        //LABELS
+        ImageIcon paymentLogo = new ImageIcon(getClass().getResource("/src_pack/images/payment.png"));
+        Image paymentSize = paymentLogo.getImage().getScaledInstance(350, 78, Image.SCALE_DEFAULT);
+
+        lblPaymentProcessing = new JLabel(new ImageIcon(paymentSize));
+            lblPaymentProcessing.setBounds(30, 20, 350, 78);
+            add(lblPaymentProcessing);
+
         lblOrderSummary = new JLabel("ORDER SUMMARY");
-        lblOrderSummary.setBounds(20, 20, 300, 30);
-        lblOrderSummary.setFont(fontBold);
-        pnlOrderSummary.add(lblOrderSummary);
+            lblOrderSummary.setBounds(30, 20, 300, 30);
+            lblOrderSummary.setFont(fontHeader);
+            pnlOrderSummary.add(lblOrderSummary);
 
         int yPos = 60;
-        for (int i = 0; i < order.getItems().size(); i++) {
+        for (int i = 0; i < order.getItems().size(); i++)
+        {
             OrderItem item = order.getItems().get(i);
 
             JLabel lblName = new JLabel(item.getItemName() + " x" + item.getQuantity());
-            lblName.setBounds(20, yPos, 350, 25);
+            lblName.setBounds(30, yPos, 350, 25);
             lblName.setFont(fontNormal);
             pnlOrderSummary.add(lblName);
 
-            JLabel lblPrice = new JLabel("P" + String.format("%.0f", item.getTotalPrice()));
-            lblPrice.setBounds(480, yPos, 100, 25);
+            JLabel lblPrice = new JLabel("₱" + String.format("%.0f", item.getTotalPrice()));
+            lblPrice.setBounds(460, yPos, 100, 25);
             lblPrice.setFont(fontNormal);
             pnlOrderSummary.add(lblPrice);
 
-            yPos = yPos + 30;
+            yPos += 30;
         }
 
         JSeparator separator = new JSeparator();
-        separator.setBounds(20, 450, 560, 2);
+        separator.setBounds(30, 450, 540, 2);
         pnlOrderSummary.add(separator);
 
-        lblSubtotal = new JLabel("Subtotal: P" + String.format("%.2f", order.getSubtotal()));
-        lblSubtotal.setBounds(20, 460, 300, 25);
+        lblSubtotal = new JLabel("Subtotal: ₱" + String.format("%.2f", order.getSubtotal()));
+        lblSubtotal.setBounds(30, 460, 300, 25);
         lblSubtotal.setFont(fontSmall);
         pnlOrderSummary.add(lblSubtotal);
 
-        lblTax = new JLabel("Tax (12%): P" + String.format("%.2f", order.getTax()));
-        lblTax.setBounds(20, 485, 300, 25);
+        lblTax = new JLabel("Tax (12%): ₱" + String.format("%.2f", order.getTax()));
+        lblTax.setBounds(30, 485, 300, 25);
         lblTax.setFont(fontSmall);
         pnlOrderSummary.add(lblTax);
 
-        lblTotal = new JLabel("TOTAL: P" + String.format("%.2f", order.getTotal()));
-        lblTotal.setBounds(20, 515, 300, 30);
+        lblTotal = new JLabel("TOTAL: ₱" + String.format("%.2f", order.getTotal()));
+        lblTotal.setBounds(30, 515, 300, 30);
         lblTotal.setFont(fontTotal);
         pnlOrderSummary.add(lblTotal);
+    }
 
-        JPanel pnlPaymentMethod = new JPanel();
-        pnlPaymentMethod.setLayout(null);
-        pnlPaymentMethod.setBounds(620, 70, 660, 665);
+    private void paymentMethod()
+    {
+        JPanel pnlPaymentMethod = new JPanel(null);
+        pnlPaymentMethod.setBounds(590, 70, 390, 650);
         pnlPaymentMethod.setBackground(colorSalmon);
         add(pnlPaymentMethod);
 
-        JPanel pnlMethodHeader = new JPanel();
-        pnlMethodHeader.setLayout(null);
-        pnlMethodHeader.setBounds(0, 0, 660, 50);
-        pnlMethodHeader.setBackground(colorMutedTeal);
+        // Header
+        JPanel pnlMethodHeader = new JPanel(null);
+        pnlMethodHeader.setBounds(0, 0, 390, 50);
+        pnlMethodHeader.setBackground(colorTeal);
         pnlPaymentMethod.add(pnlMethodHeader);
 
         lblPaymentMethod = new JLabel("PAYMENT METHOD");
@@ -150,80 +124,87 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
         lblPaymentMethod.setForeground(colorWhite);
         pnlMethodHeader.add(lblPaymentMethod);
 
+        // Payment type buttons
         btnCash = new JButton("CASH");
-        btnCash.setBounds(20, 65, 180, 40);
+        btnCash.setBounds(20, 65, 160, 40);
         btnCash.setFont(fontBold);
         btnCash.setBackground(colorWhite);
-        btnCash.setBorderPainted(true);
         pnlPaymentMethod.add(btnCash);
 
         btnCard = new JButton("CARD");
-        btnCard.setBounds(220, 65, 180, 40);
+        btnCard.setBounds(200, 65, 160, 40);
         btnCard.setFont(fontBold);
         btnCard.setBackground(colorWhite);
-        btnCard.setBorderPainted(true);
         pnlPaymentMethod.add(btnCard);
 
         btnGcash = new JButton("GCASH");
-        btnGcash.setBounds(20, 120, 180, 40);
+        btnGcash.setBounds(20, 120, 160, 40);
         btnGcash.setFont(fontBold);
         btnGcash.setBackground(colorWhite);
-        btnGcash.setBorderPainted(true);
         pnlPaymentMethod.add(btnGcash);
 
-        btn100 = new JButton("P100");
-        btn100.setBounds(20, 185, 185, 40);
+        // Denomination buttons
+        btn100 = new JButton("₱100");
+        btn100.setBounds(20, 185, 160, 40);
         btn100.setFont(fontBold);
         btn100.setBackground(colorWhite);
         pnlPaymentMethod.add(btn100);
 
-        btn200 = new JButton("P200");
-        btn200.setBounds(220, 185, 185, 40);
+        btn200 = new JButton("₱200");
+        btn200.setBounds(200, 185, 160, 40);
         btn200.setFont(fontBold);
         btn200.setBackground(colorWhite);
         pnlPaymentMethod.add(btn200);
 
-        btn500 = new JButton("P500");
-        btn500.setBounds(420, 185, 185, 40);
+        btn500 = new JButton("₱500");
+        btn500.setBounds(20, 240, 160, 40);
         btn500.setFont(fontBold);
         btn500.setBackground(colorWhite);
         pnlPaymentMethod.add(btn500);
 
-        btn1000 = new JButton("P1000");
-        btn1000.setBounds(20, 240, 185, 40);
+        btn1000 = new JButton("₱1000");
+        btn1000.setBounds(200, 240, 160, 40);
         btn1000.setFont(fontBold);
         btn1000.setBackground(colorWhite);
         pnlPaymentMethod.add(btn1000);
 
         btnExact = new JButton("EXACT");
-        btnExact.setBounds(220, 240, 185, 40);
+        btnExact.setBounds(20, 295, 340, 40);
         btnExact.setFont(fontBold);
         btnExact.setBackground(colorWhite);
         pnlPaymentMethod.add(btnExact);
 
+        // Amount tendered
         lblAmountTendered = new JLabel("AMOUNT TENDERED");
-        lblAmountTendered.setBounds(20, 300, 250, 25);
+        lblAmountTendered.setBounds(20, 350, 250, 25);
         lblAmountTendered.setFont(fontBold);
         pnlPaymentMethod.add(lblAmountTendered);
 
         txtAmountTendered = new JTextField("0.00");
-        txtAmountTendered.setBounds(20, 330, 620, 45);
-        txtAmountTendered.setFont(new Font("Arial", Font.PLAIN, 20));
+        txtAmountTendered.setBounds(20, 380, 340, 40);
+        txtAmountTendered.setFont(new Font("Arial", Font.PLAIN, 18));
         pnlPaymentMethod.add(txtAmountTendered);
+        txtAmountTendered.getDocument().addDocumentListener(new javax.swing.event.DocumentListener()
+        {
+            public void insertUpdate(javax.swing.event.DocumentEvent e)  { computeChange(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e)  { computeChange(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { computeChange(); }
+        });
 
-        lblPaid = new JLabel("PAID: P" + String.format("%.2f", order.getTotal()));
-        lblPaid.setBounds(20, 390, 300, 25);
+        lblPaid = new JLabel("PAID: ₱" + String.format("%.2f", order.getTotal()));
+        lblPaid.setBounds(20, 430, 300, 25);
         lblPaid.setFont(fontSmall);
         lblPaid.setForeground(colorRed);
         pnlPaymentMethod.add(lblPaid);
 
-        lblChange = new JLabel("CHANGE: P0.00");
-        lblChange.setBounds(20, 415, 300, 30);
+        lblChange = new JLabel("CHANGE: ₱0.00");
+        lblChange.setBounds(20, 455, 300, 30);
         lblChange.setFont(fontTotal);
         pnlPaymentMethod.add(lblChange);
 
+        // Action buttons
         btnProcessPayment = new JButton("PROCESS PAYMENT");
-        btnProcessPayment.setBounds(20, 465, 620, 50);
+        btnProcessPayment.setBounds(20, 500, 340, 45);
         btnProcessPayment.setFont(fontBold);
         btnProcessPayment.setBackground(colorGreen);
         btnProcessPayment.setForeground(colorWhite);
@@ -231,12 +212,13 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
         pnlPaymentMethod.add(btnProcessPayment);
 
         btnCancel = new JButton("CANCEL");
-        btnCancel.setBounds(20, 530, 620, 40);
+        btnCancel.setBounds(20, 560, 340, 40);
         btnCancel.setFont(fontBold);
         btnCancel.setBackground(colorSalmon);
         btnCancel.setBorderPainted(false);
         pnlPaymentMethod.add(btnCancel);
 
+        // Register listeners
         btnCash.addActionListener(this);
         btnCard.addActionListener(this);
         btnGcash.addActionListener(this);
@@ -249,58 +231,61 @@ public class PaymentProcessingPage extends JFrame implements ActionListener {
         btnCancel.addActionListener(this);
     }
 
-    private void computeChange() {
+    private void computeChange()
+    {
         try {
             double tendered = Double.parseDouble(txtAmountTendered.getText().trim());
             double change = tendered - order.getTotal();
-            if (change >= 0) {
-                lblChange.setText("CHANGE: P" + String.format("%.2f", change));
-            } else {
+            if (change >= 0)
+                lblChange.setText("CHANGE: ₱" + String.format("%.2f", change));
+            else
                 lblChange.setText("CHANGE: Insufficient amount");
-            }
         } catch (NumberFormatException ex) {
             lblChange.setText("CHANGE: Invalid input");
         }
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btn100) {
-            txtAmountTendered.setText("100.00");
-            computeChange();
-        } else if (e.getSource() == btn200) {
-            txtAmountTendered.setText("200.00");
-            computeChange();
-        } else if (e.getSource() == btn500) {
-            txtAmountTendered.setText("500.00");
-            computeChange();
-        } else if (e.getSource() == btn1000) {
-            txtAmountTendered.setText("1000.00");
-            computeChange();
-        } else if (e.getSource() == btnExact) {
-            txtAmountTendered.setText(String.format("%.2f", order.getTotal()));
-            computeChange();
-        } else if (e.getSource() == btnCash) {
-            JOptionPane.showMessageDialog(this, "Cash selected!", "Payment Method", JOptionPane.INFORMATION_MESSAGE);
-        } else if (e.getSource() == btnCard) {
-            JOptionPane.showMessageDialog(this, "Card selected!", "Payment Method", JOptionPane.INFORMATION_MESSAGE);
-        } else if (e.getSource() == btnGcash) {
-            JOptionPane.showMessageDialog(this, "GCash selected!", "Payment Method", JOptionPane.INFORMATION_MESSAGE);
-        } else if (e.getSource() == btnProcessPayment) {
+    public void actionPerformed(ActionEvent e)
+    {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        if      (e.getSource() == btn100)   { txtAmountTendered.setText("100.00");  computeChange(); }
+        else if (e.getSource() == btn200)   { txtAmountTendered.setText("200.00");  computeChange(); }
+        else if (e.getSource() == btn500)   { txtAmountTendered.setText("500.00");  computeChange(); }
+        else if (e.getSource() == btn1000)  { txtAmountTendered.setText("1000.00"); computeChange(); }
+        else if (e.getSource() == btnExact) { txtAmountTendered.setText(String.format("%.2f", order.getTotal())); computeChange(); }
+        else if (e.getSource() == btnCash)  { JOptionPane.showMessageDialog(this, "Cash selected!",  "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
+        else if (e.getSource() == btnCard)  { JOptionPane.showMessageDialog(this, "Card selected!",  "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
+        else if (e.getSource() == btnGcash) { JOptionPane.showMessageDialog(this, "GCash selected!", "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
+        else if (e.getSource() == btnProcessPayment)
+        {
             computeChange();
             try {
                 double tendered = Double.parseDouble(txtAmountTendered.getText().trim());
-                if (tendered >= order.getTotal()) {
-                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(this, order);
+                if (tendered >= order.getTotal())
+                {
+                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(frame, order);
                     dialog.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Insufficient amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Insufficient amount!", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Please enter a valid amount!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Please enter a valid amount!", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-        } else if (e.getSource() == btnCancel) {
-            dispose();
+        }
+        else if (e.getSource() == btnCancel)
+        {
+            JPanel nextPanel = new Products(summaryPanel);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(nextPanel);
+            frame.revalidate();
+            frame.repaint();
+
+            if (frame instanceof userFrame)            { ((userFrame) frame).switchPanel(nextPanel); }
+            else if (frame instanceof adminFrame)      { ((adminFrame) frame).switchPanel(nextPanel); }
         }
     }
 }

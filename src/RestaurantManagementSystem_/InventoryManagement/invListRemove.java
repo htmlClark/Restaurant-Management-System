@@ -1,75 +1,31 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import javax.swing.*;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-public class invListRemove extends JFrame implements ActionListener{
+public class invListRemove extends JPanel implements ActionListener {
 
-    invListRemove(){
-    headerLogo();
-    dashboardMenu();
-    functionMenu();
-
-    setTitle ("Remove Item");
-    setSize (750,500);
-    setLayout(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setResizable(false);
-    setVisible(true);
-
-    }
-
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-    private JLabel lblLogo, lblID, lblName;
+    private JLabel lblID, lblName;
     private JTextField txtID, txtName;
     private JButton btnConfirm;
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
+    public invListRemove()
+    {
+        functionMenu();
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(logo);
-        lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
+        setBounds(300, 80, 980, 720);
+        setLayout(null);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void dashboardMenu() {
-
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-
-    }
-
-    private void functionMenu(){
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         lblID = new JLabel("ID:");
         lblID.setBounds(50, 80, 100, 25);
 
-
         txtID = new JTextField();
         txtID.setBounds(150, 80, 200, 25);
-
 
         lblName = new JLabel("NAME:");
         lblName.setBounds(50, 130, 100, 25);
@@ -82,17 +38,18 @@ public class invListRemove extends JFrame implements ActionListener{
         btnConfirm.setBackground(Color.decode("#B71C1C"));
         btnConfirm.setForeground(Color.WHITE);
         btnConfirm.setFocusPainted(false);
+        btnConfirm.addActionListener(this);
 
-        panelFunctionMenu.add(txtName);
-        panelFunctionMenu.add(btnConfirm);
-        panelFunctionMenu.add(lblName);
-        panelFunctionMenu.add(txtID);
-        panelFunctionMenu.add(lblID);
+        add(txtName);
+        add(btnConfirm);
+        add(lblName);
+        add(txtID);
+        add(lblID);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void actionPerformed(ActionEvent e)
+    {
 
+    }
 }
