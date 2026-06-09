@@ -25,7 +25,7 @@ public class Appetizer extends JPanel implements ActionListener {
     private void elements()
     {
         //For Appetizer Label
-        ImageIcon appLogo = new ImageIcon (getClass().getResource("/src_pack/images/beverage_bg.png"));
+        ImageIcon appLogo = new ImageIcon (getClass().getResource("/src_pack/images/appetizer_bg.png"));
         Image appSize = appLogo.getImage().getScaledInstance(350, 78, Image.SCALE_DEFAULT);
 
         lblAppetizer = new JLabel(new ImageIcon(appSize));

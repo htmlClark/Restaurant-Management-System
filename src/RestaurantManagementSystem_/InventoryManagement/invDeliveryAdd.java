@@ -1,66 +1,29 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class invDeliveryAdd extends JFrame implements ActionListener {
+public class invDeliveryAdd extends JPanel implements ActionListener {
 
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-    private JLabel lblLogo, lblDeliveryID, lblItemID, lblQuantity, lblMeasurement,
-                   lblExpirationDate, lblDate, lblTime, lblCourier, lblCategory;
-
-    private JTextField txtDeliveryID, txtItemID, txtQuantity, txtExpirationDate, txtDate, txtTime, txtCourier;
+    private JLabel lblDeliveryID, lblItemID, lblQuantity, lblMeasurement,
+            lblExpirationDate, lblDate, lblTime, lblCourier, lblCategory;
+    private JTextField txtDeliveryID, txtItemID, txtQuantity, txtExpirationDate,
+            txtDate, txtTime, txtCourier;
     private JComboBox cbMeasurement, cbCategory;
     private JButton btnAdd;
 
-    invDeliveryAdd() {
-
-        headerLogo();
-        dashboardMenu();
+    public invDeliveryAdd()
+    {
         functionMenu();
 
-        setTitle("Add Delivery");
-        setSize(750, 500);
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
-
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(250, 75, Image.SCALE_SMOOTH);
-        lblLogo = new JLabel(new ImageIcon(logo));
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
-    }
-
-    private void dashboardMenu() {
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-    }
-
-    private void functionMenu() {
-
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         lblDeliveryID = new JLabel("DELIVERY ID:");
         lblDeliveryID.setBounds(20, 20, 120, 25);
 
@@ -82,11 +45,7 @@ public class invDeliveryAdd extends JFrame implements ActionListener {
         lblCategory = new JLabel("CATEGORY:");
         lblCategory.setBounds(20, 140, 120, 25);
 
-        String[] categories = {
-            "MEAT", "VEGETABLE", "SEAFOOD",
-            "SEASONING", "CONDIMENT", "DAIRY"
-        };
-
+        String[] categories = {"MEAT", "VEGETABLE", "SEAFOOD", "SEASONING", "CONDIMENT", "DAIRY"};
         cbCategory = new JComboBox<>(categories);
         cbCategory.setBounds(150, 140, 150, 25);
 
@@ -122,33 +81,24 @@ public class invDeliveryAdd extends JFrame implements ActionListener {
         txtCourier.setBounds(150, 180, 150, 25);
 
         btnAdd = new JButton("ADD");
-        btnAdd.setBounds(250, 220, 200, 35);
+        btnAdd.setBounds(350, 250, 200, 35);
         btnAdd.setBackground(Color.decode("#B71C1C"));
         btnAdd.setForeground(Color.WHITE);
         btnAdd.setFocusPainted(false);
+        btnAdd.addActionListener(this);
 
-        panelFunctionMenu.add(lblDeliveryID);
-        panelFunctionMenu.add(txtDeliveryID);
-        panelFunctionMenu.add(lblItemID);
-        panelFunctionMenu.add(txtItemID);
-        panelFunctionMenu.add(lblQuantity);
-        panelFunctionMenu.add(txtQuantity);
-        panelFunctionMenu.add(lblCategory);
-        panelFunctionMenu.add(cbCategory);
-        panelFunctionMenu.add(lblMeasurement);
-        panelFunctionMenu.add(cbMeasurement);
-        panelFunctionMenu.add(lblExpirationDate);
-        panelFunctionMenu.add(txtExpirationDate);
-        panelFunctionMenu.add(lblDate);
-        panelFunctionMenu.add(txtDate);
-        panelFunctionMenu.add(lblTime);
-        panelFunctionMenu.add(txtTime);
-        panelFunctionMenu.add(lblCourier);
-        panelFunctionMenu.add(txtCourier);
-        panelFunctionMenu.add(btnAdd);
+        add(lblDeliveryID);   add(txtDeliveryID);
+        add(lblItemID);       add(txtItemID);
+        add(lblQuantity);     add(txtQuantity);
+        add(lblCategory);     add(cbCategory);
+        add(lblMeasurement);  add(cbMeasurement);
+        add(lblExpirationDate); add(txtExpirationDate);
+        add(lblDate);         add(txtDate);
+        add(lblTime);         add(txtTime);
+        add(lblCourier);      add(txtCourier);
+        add(btnAdd);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-    }
+    public void actionPerformed(ActionEvent e) { }
 }

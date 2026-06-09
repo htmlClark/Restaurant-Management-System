@@ -1,138 +1,95 @@
-package restaurantmanagementsystem;
+package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class invDeliveryEdit extends JFrame {
+public class invDeliveryEdit extends JPanel implements ActionListener {
 
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-
-    private JLabel lblLogo, lblDeliveryID, lblItemID, lblItemName, lblQty, lblCategory, lblMeasurement, lblExpDate, lblCourier;
-
-    private JTextField txtDeliveryID, txtItemID, txtItemName, txtQty, txtExpDate, txtCourier;
-
+    private JLabel lblDeliveryID, lblItemID, lblItemName, lblQty,
+            lblCategory, lblMeasurement, lblExpDate, lblCourier;
+    private JTextField txtDeliveryID, txtItemID, txtItemName, txtQty,
+            txtExpDate, txtCourier;
     private JComboBox cbCategory, cbMeasurement;
-
     private JButton btnEdit;
 
-    invDeliveryEdit() {
-
-        headerLogo();
-        dashboardMenu();
+    public invDeliveryEdit()
+    {
         functionMenu();
 
-        setTitle("Edit Delivery");
-        setSize(750, 500);
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
-
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(logo);
-
-        lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
-    }
-
-    private void dashboardMenu() {
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-    }
-
-    private void functionMenu() {
-
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-
+    private void functionMenu()
+    {
         lblDeliveryID = new JLabel("OLD DELIVERY ID:");
-        lblDeliveryID.setBounds(20, 20, 120, 25);
+        lblDeliveryID.setBounds(20, 20, 130, 25);
 
         txtDeliveryID = new JTextField();
-        txtDeliveryID.setBounds(150, 20, 150, 25);
+        txtDeliveryID.setBounds(160, 20, 150, 25);
 
         lblItemID = new JLabel("ITEM ID:");
         lblItemID.setBounds(20, 60, 120, 25);
 
         txtItemID = new JTextField();
-        txtItemID.setBounds(150, 60, 150, 25);
+        txtItemID.setBounds(160, 60, 150, 25);
 
         lblItemName = new JLabel("ITEM NAME:");
         lblItemName.setBounds(20, 100, 120, 25);
 
         txtItemName = new JTextField();
-        txtItemName.setBounds(150, 100, 150, 25);
+        txtItemName.setBounds(160, 100, 150, 25);
 
         lblQty = new JLabel("QUANTITY:");
         lblQty.setBounds(20, 140, 120, 25);
 
         txtQty = new JTextField();
-        txtQty.setBounds(150, 140, 150, 25);
+        txtQty.setBounds(160, 140, 150, 25);
 
         lblCategory = new JLabel("CATEGORY:");
         lblCategory.setBounds(350, 20, 120, 25);
 
         cbCategory = new JComboBox<>(new String[]{"MEAT", "VEGETABLE", "SEAFOOD", "SEASONING", "CONDIMENT", "DAIRY"});
-        cbCategory.setBounds(450, 20, 150, 25);
+        cbCategory.setBounds(460, 20, 150, 25);
 
         lblMeasurement = new JLabel("MEASUREMENT:");
         lblMeasurement.setBounds(350, 60, 120, 25);
 
         cbMeasurement = new JComboBox<>(new String[]{"KG", "GRAM", "PACK", "BOTTLE", "BOX", "PIECE"});
-        cbMeasurement.setBounds(470, 60, 130, 25);
+        cbMeasurement.setBounds(460, 60, 150, 25);
 
         lblExpDate = new JLabel("EXPIRATION:");
         lblExpDate.setBounds(350, 100, 120, 25);
 
         txtExpDate = new JTextField();
-        txtExpDate.setBounds(450, 100, 150, 25);
+        txtExpDate.setBounds(460, 100, 150, 25);
 
         lblCourier = new JLabel("COURIER:");
         lblCourier.setBounds(350, 140, 120, 25);
 
         txtCourier = new JTextField();
-        txtCourier.setBounds(450, 140, 150, 25);
+        txtCourier.setBounds(460, 140, 150, 25);
 
         btnEdit = new JButton("EDIT");
-        btnEdit.setBounds(300, 200, 120, 30);
+        btnEdit.setBounds(350, 220, 120, 30);
         btnEdit.setBackground(Color.decode("#B71C1C"));
         btnEdit.setForeground(Color.WHITE);
         btnEdit.setFocusPainted(false);
+        btnEdit.addActionListener(this);
 
-        panelFunctionMenu.add(lblDeliveryID);
-        panelFunctionMenu.add(txtDeliveryID);
-        panelFunctionMenu.add(lblItemID);
-        panelFunctionMenu.add(txtItemID);
-        panelFunctionMenu.add(lblItemName);
-        panelFunctionMenu.add(txtItemName);
-        panelFunctionMenu.add(lblQty);
-        panelFunctionMenu.add(txtQty);
-        panelFunctionMenu.add(lblCategory);
-        panelFunctionMenu.add(cbCategory);
-        panelFunctionMenu.add(lblMeasurement);
-        panelFunctionMenu.add(cbMeasurement);
-        panelFunctionMenu.add(lblExpDate);
-        panelFunctionMenu.add(txtExpDate);
-        panelFunctionMenu.add(lblCourier);
-        panelFunctionMenu.add(txtCourier);
-        panelFunctionMenu.add(btnEdit);
-        add(panelFunctionMenu);
+        add(lblDeliveryID);  add(txtDeliveryID);
+        add(lblItemID);      add(txtItemID);
+        add(lblItemName);    add(txtItemName);
+        add(lblQty);         add(txtQty);
+        add(lblCategory);    add(cbCategory);
+        add(lblMeasurement); add(cbMeasurement);
+        add(lblExpDate);     add(txtExpDate);
+        add(lblCourier);     add(txtCourier);
+        add(btnEdit);
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) { }
 }

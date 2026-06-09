@@ -1,63 +1,26 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class invDeliveryRemove extends JFrame implements ActionListener {
+public class invDeliveryRemove extends JPanel implements ActionListener {
 
-    private JPanel panelHeaderLogo, panelDashboard, panelFunctionMenu;
-    private JLabel lblLogo, lblDeliveryID, lblItemName;
+    private JLabel lblDeliveryID, lblItemName;
     private JTextField txtDeliveryID, txtItemName;
     private JButton btnDelete;
 
-    invDeliveryRemove() {
-
-        headerLogo();
-        dashboardMenu();
+    public invDeliveryRemove()
+    {
         functionMenu();
 
-        setTitle("Remove Delivery");
-        setSize(750, 500);
+        setBounds(300, 80, 980, 720);
         setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 250, 75);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
-
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(250, 75, Image.SCALE_SMOOTH);
-        lblLogo = new JLabel(new ImageIcon(logo));
-        lblLogo.setBounds(0, 0, 250, 75);
-
-        panelHeaderLogo.add(lblLogo);
-    }
-
-    private void dashboardMenu() {
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(250, 0, 500, 75);
-        panelDashboard.setBackground(Color.decode("#B71C1C"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-    }
-
-    private void functionMenu() {
-
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(0, 75, 750, 450);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         lblDeliveryID = new JLabel("DELIVERY ID:");
         lblDeliveryID.setBounds(50, 50, 120, 25);
 
@@ -71,20 +34,19 @@ public class invDeliveryRemove extends JFrame implements ActionListener {
         txtItemName.setBounds(180, 100, 200, 25);
 
         btnDelete = new JButton("CONFIRM DELETE");
-        btnDelete.setBounds(250, 180, 200, 40);
+        btnDelete.setBounds(300, 180, 200, 40);
         btnDelete.setBackground(Color.decode("#B71C1C"));
         btnDelete.setForeground(Color.WHITE);
         btnDelete.setFocusPainted(false);
+        btnDelete.addActionListener(this);
 
-        panelFunctionMenu.add(lblDeliveryID);
-        panelFunctionMenu.add(txtDeliveryID);
-        panelFunctionMenu.add(lblItemName);
-        panelFunctionMenu.add(txtItemName);
-        panelFunctionMenu.add(btnDelete);
+        add(lblDeliveryID);
+        add(txtDeliveryID);
+        add(lblItemName);
+        add(txtItemName);
+        add(btnDelete);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
+    public void actionPerformed(ActionEvent e) { }
 }

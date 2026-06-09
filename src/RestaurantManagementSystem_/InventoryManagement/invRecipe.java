@@ -1,126 +1,46 @@
 package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import javax.swing.*;
 
-public class invRecipe extends JFrame implements ActionListener{
-    private JPanel panelDashboard, panelHeaderLogo, panelHeaderBar, panelFunctionMenu, panelRecipe, panelTitle1;
-    private JLabel lblLogo, lblRecipe, lblTitle, lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl7;
-    private JTextField txtFieldSearch;
-    private JComboBox cbSwitchClass, cbBox;
-    private JScrollPane spAppetizer;
+public class invRecipe extends JPanel implements ActionListener {
 
-    invRecipe()
+    private JPanel panelRecipe, panelTitle1;
+    private JLabel lblRecipe, lblTitle, lbl1, lbl2, lbl3, lbl4, lbl5, lbl6, lbl7;
+    private JComboBox cbSwitchClass;
+
+    public invRecipe()
     {
+        functionMenu();
 
-    dashboardMenu();
-    headerLogo();
-    headerBar();
-    functionMenu();
-
-    setTitle ("Recipe");
-    setSize (1280,800);
-    setLayout(null);
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setLocationRelativeTo(null);
-    setResizable(true);
-    setVisible(true);
-
+        setBounds(300, 80, 980, 720);
+        setLayout(null);
+        setBackground(Color.decode("#FFF8E1"));
     }
 
-    private void headerLogo() {
-        panelHeaderLogo = new JPanel();
-        panelHeaderLogo.setBounds(0, 0, 300, 80);
-        panelHeaderLogo.setBackground(Color.decode("#B71C1C"));
-        panelHeaderLogo.setLayout(null);
-        add(panelHeaderLogo);
-
-        ImageIcon icon = new ImageIcon(getClass().getResource("logo.png"));
-        Image logo = icon.getImage().getScaledInstance(300, 100, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(logo);
-        lblLogo = new JLabel(resizedIcon);
-        lblLogo.setBounds(0, 0, 300, 80);
-
-        panelHeaderLogo.add(lblLogo);
-    }
-
-    private void headerBar(){
-        panelHeaderBar = new JPanel();
-        panelHeaderBar.setBounds(300, 0, 1030, 80);
-        panelHeaderBar.setBackground(Color.decode("#f5cfba"));
-        panelHeaderBar.setLayout(null);
-        add(panelHeaderBar);
-
-        txtFieldSearch = new JTextField();
-        txtFieldSearch.setBounds(25, 20, 500, 35);
-        txtFieldSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        txtFieldSearch.setFont(new Font("Arial", Font.PLAIN, 14));
-        txtFieldSearch.setBackground(Color.decode("#FFF8E1"));
-        txtFieldSearch.setBorder(null);
-        txtFieldSearch.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
-        panelHeaderBar.add(txtFieldSearch);
-    }
-
-    private void dashboardMenu() {
-
-        panelDashboard = new JPanel();
-        panelDashboard.setBounds(0, 80, 300, 700);
-        panelDashboard.setBackground(Color.decode("#366379"));
-        panelDashboard.setLayout(null);
-        add(panelDashboard);
-
-    }
-
-    private void functionMenu(){
-        panelFunctionMenu = new JPanel();
-        panelFunctionMenu.setBounds(250, 80, 1030, 700);
-        panelFunctionMenu.setBackground(Color.decode("#FFF8E1"));
-        panelFunctionMenu.setLayout(null);
-        add(panelFunctionMenu);
-
+    private void functionMenu()
+    {
         String[] pages = {"RECIPE", "INVENTORY", "DELIVERY"};
         cbSwitchClass = new JComboBox<>(pages);
-        cbSwitchClass.setBounds(745, 25, 250, 50);
+        cbSwitchClass.setBounds(650, 25, 250, 50);
         cbSwitchClass.addActionListener(e -> {
             String selected = (String) cbSwitchClass.getSelectedItem();
-
-            dispose();
-
-            if (selected.equals("INVENTORY")) {
-                //TO FIX:
-//                new invList();
-//                dispose();
-            }
-            else if (selected.equals("RECIPE")) {
-                new invRecipe();
-                dispose();
-
-            }
-            else if (selected.equals("DELIVERY")) {
-                //TO FIX:
-//                new invDelivery();
-//                dispose();
-            }
+            // TO FIX: switch panels
         });
 
         panelTitle1 = new JPanel();
-        panelTitle1.setBounds(75, 25, 300, 50);
+        panelTitle1.setBounds(25, 25, 200, 50);
         panelTitle1.setBackground(Color.decode("#B71C1C"));
-            lblRecipe = new JLabel("RECIPE");
-            lblRecipe.setBounds(75, 25, 200, 50);
-            lblRecipe.setFont(new Font("Open Sans", Font.BOLD, 30));
-            lblRecipe.setForeground(Color.WHITE);
+
+        lblRecipe = new JLabel("RECIPE");
+        lblRecipe.setFont(new Font("Arial", Font.BOLD, 25));
+        lblRecipe.setForeground(Color.WHITE);
         panelTitle1.add(lblRecipe);
 
-        panelRecipe = new JPanel();
-        panelRecipe.setBounds(75, 100, 600, 500);
+        panelRecipe = new JPanel(null);
+        panelRecipe.setBounds(25, 100, 600, 500);
         panelRecipe.setBackground(Color.decode("#B71C1C"));
-        panelRecipe.setLayout(null);
 
         lblTitle = new JLabel("ADOBO");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 25));
@@ -171,27 +91,16 @@ public class invRecipe extends JFrame implements ActionListener{
         panelRecipe.add(lbl6);
         panelRecipe.add(lbl7);
 
-                String[] foods = {
-                    "Adobo",
-                    "Shanghai",
-                    "Pansit",
-                    "Halo-Halo",
-                    "Gulaman"
-                    };
-
+        String[] foods = {"Adobo", "Shanghai", "Pansit", "Halo-Halo", "Gulaman"};
         JComboBox<String> cbFoods = new JComboBox<>(foods);
-        cbFoods.setBounds(745, 100, 250, 25);
+        cbFoods.setBounds(650, 100, 250, 25);
 
-        panelFunctionMenu.add(cbFoods);
-        panelFunctionMenu.add(panelTitle1);
-        panelFunctionMenu.add(panelRecipe);
-        panelFunctionMenu.add(cbSwitchClass);
+        add(cbSwitchClass);
+        add(panelTitle1);
+        add(panelRecipe);
+        add(cbFoods);
     }
-
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
+    public void actionPerformed(ActionEvent e) { }
 }
