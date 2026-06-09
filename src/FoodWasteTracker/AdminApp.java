@@ -25,10 +25,6 @@ public class AdminApp extends JFrame {
         {"DELIVERY","DELIVERY.png"},
     };
     
-public static void main(String[] args) {
-    SwingUtilities.invokeLater(
-        () -> new AdminApp(new ArrayList<>(), "Admin").setVisible(true));
-    }
 
 public AdminApp(List<WasteLog> sharedLogs, String username) {
     this.logs = sharedLogs;

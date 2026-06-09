@@ -22,11 +22,6 @@ public class StaffApp extends JFrame {
         {"DELIVERY","DELIVERY.png"},
     };
 
-public static void main(String[] args) {
-    SwingUtilities.invokeLater(
-        () -> new StaffApp(new ArrayList<>(), "Staff").setVisible(true));
-    }
-
 public StaffApp(List<WasteLog> sharedLogs, String username) {
     this.logs = sharedLogs;
     setSize(1000, 750);
