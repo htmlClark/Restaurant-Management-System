@@ -192,7 +192,7 @@ public void actionPerformed(ActionEvent e)
 
         panelAdd = new JPanel(new GridLayout(6, 2, 5, 5));
 
-        lblAddID = new JLabel("ID (e.g IT1001):");
+        lblAddID = new JLabel("ID (IT---):");
         txtAddID = new JTextField();
 
         lblAddName = new JLabel("Name:");

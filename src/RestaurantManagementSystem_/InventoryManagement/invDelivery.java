@@ -318,10 +318,10 @@ public class invDelivery extends JPanel implements ActionListener {
                 txtAddDeliveryTime = new JTextField(itemToModify.getItemDeliveryTime());
                 txtAddDeliveryCourier = new JTextField(itemToModify.getItemDeliveryCourier());
 
-                panelModify.add(new JLabel("Delivery ID:"));
+                panelModify.add(new JLabel("Delivery ID (DV---):"));
                 panelModify.add(txtAddDeliveryID);
 
-                panelModify.add(new JLabel("Item ID:"));
+                panelModify.add(new JLabel("Item ID (IT---):"));
                 panelModify.add(txtAddItemID);
 
                 panelModify.add(new JLabel("Item Name:"));
