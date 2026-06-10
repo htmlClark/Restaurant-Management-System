@@ -146,7 +146,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
             frame.switchPanel(WasteLogPanel.forSuperAdmin());
         }
         else if (e.getSource() == btnDelivery) {
-
+            frame.switchPanel(new invDelivery());
         }
         else if (e.getSource() == btnLogout) {
             int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);

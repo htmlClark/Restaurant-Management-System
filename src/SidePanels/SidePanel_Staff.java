@@ -129,7 +129,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
             frame.switchPanel(WasteLogPanel.forStaff());
         }
         else if (e.getSource() == btnDelivery) {
-
+            frame.switchPanel(new invDelivery());
         }
         else if (e.getSource() == btnLogout) {
             int confirmLogout = JOptionPane.showConfirmDialog(null,"Are you sure you want to logout?","LOGOUT",JOptionPane.YES_NO_OPTION);

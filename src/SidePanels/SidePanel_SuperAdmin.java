@@ -161,7 +161,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
             frame.switchPanel(WasteLogPanel.forSuperAdmin());
         }
         else if (e.getSource() == btnDelivery) {
-
+            frame.switchPanel(new invDelivery());
         }
         else if (e.getSource() == btnUsers) {
             frame.switchPanel(new ManageUsersSuperAdminPanel());

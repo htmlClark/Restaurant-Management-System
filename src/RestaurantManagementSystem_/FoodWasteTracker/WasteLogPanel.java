@@ -1,6 +1,5 @@
 package RestaurantManagementSystem_.FoodWasteTracker;
 
-import MainPlacementFrame.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
@@ -9,316 +8,279 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class WasteLogPanel extends JPanel {
-private static final List<WasteLog> SHARED_LOGS = new ArrayList<>();
+public class WasteLogPanel extends JPanel implements ActionListener {
 
-public static WasteLogPanel forStaff(){ 
-    return new WasteLogPanel(SHARED_LOGS, Role.STAFF); 
-}
-public static WasteLogPanel forAdmin(){ 
-    return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); 
-}
-public static WasteLogPanel forSuperAdmin(){ 
-    return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); 
-}
-    public enum Role{STAFF, ADMIN, SUPER_ADMIN}
-    private final List<WasteLog> logs;
-    private final Role role;
+    // ── Shared log list across all roles ────────────────────────
+    private static final List<WasteLog> SHARED_LOGS = new ArrayList<>();
+
+    // ── Role constants ───────────────────────────────────────────
+    public enum Role { STAFF, ADMIN, SUPER_ADMIN }
+
+    // ── Static factory methods ───────────────────────────────────
+    public static WasteLogPanel forStaff()      { return new WasteLogPanel(SHARED_LOGS, Role.STAFF); }
+    public static WasteLogPanel forAdmin()      { return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); }
+    public static WasteLogPanel forSuperAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); }
+
+    // ── Fields ───────────────────────────────────────────────────
+    private List<WasteLog> logs;
+    private Role role;
     private boolean editMode = false;
+
     private DefaultTableModel tableModel;
-    private JTable table;
+    private JTable tblWasteLog;
+    private JScrollPane scrollPane;
+
+    private JButton btnAddLog, btnEditLogs, btnConfirmEdit;
     private JPanel btnPanel;
-    private JButton addBtn;
-    private JButton editBtn;
-    private static final int W = 980;
-    private static final int H = 720;
 
-public WasteLogPanel(List<WasteLog> logs, Role role) {
-    this.logs = logs;
-    this.role = role;
+    // ── Colors ───────────────────────────────────────────────────
+    Color colorCream  = new Color(0xFF, 0xF8, 0xE1);
+    Color colorTeal   = new Color(0x36, 0x63, 0x79);
+    Color colorRed    = new Color(0xB7, 0x1C, 0x1C);
+    Color colorSalmon = new Color(0xF5, 0xCF, 0xBA);
+    Color colorSteel  = new Color(0x89, 0xB7, 0xB3);
+    Color colorDark   = new Color(0x22, 0x3A, 0x45);
+    Color colorWhite  = Color.WHITE;
+    Color colorRowAlt = new Color(0xFF, 0xF0, 0xD0);
 
-    setBounds(300, 80, W, H);
-    setLayout(null);
-    setBackground(new Color(0xC5, 0xD5, 0xD3));
+    // ── Fonts ────────────────────────────────────────────────────
+    Font fontBold   = new Font("Arial", Font.BOLD, 14);
+    Font fontNormal = new Font("Arial", Font.PLAIN, 13);
+    Font fontHeader = new Font("Arial", Font.BOLD, 22);
 
-    buildUI();
+    public WasteLogPanel(List<WasteLog> logs, Role role)
+    {
+        this.logs = logs;
+        this.role = role;
+
+        wasteLogTable();
+        buttons();
+
+        setBounds(300, 80, 980, 720);
+        setLayout(null);
+        setBackground(colorCream);
     }
 
-private void buildUI() {
+    private void wasteLogTable()
+    {
+        JLabel lblTitle = new JLabel("FOOD WASTE LOGS");
+        lblTitle.setBounds(30, 20, 400, 40);
+        lblTitle.setFont(fontHeader);
+        lblTitle.setForeground(colorDark);
+        add(lblTitle);
 
-    JLabel title = new JLabel("FOOD WASTE LOGS");
-    title.setFont(SharedUI.fTitle(28));
-    title.setForeground(SharedUI.C_DARK);
-    title.setBounds(30, 20, 400, 40);
-    add(title);
-        String[] cols = {"TIME", "ITEM", "QTY", "REASON", "STAFF", "REMARKS"};
-        tableModel = new DefaultTableModel(cols, 0) {
-     
+        String[] columns = {"TIME", "ITEM", "QTY", "REASON", "STAFF", "REMARKS"};
+        tableModel = new DefaultTableModel(columns, 0)
+        {
             @Override
-            public boolean isCellEditable(int r, int c) {
-                if (!editMode) return false;
-                return c != 0;
-            }
-            @Override
-            public void setValueAt(Object value, int row, int col) {
-                super.setValueAt(value, row, col);
-                if (!editMode || row < 0 || row >= logs.size()) return;
-                WasteLog log = logs.get(row);
-                String v = value == null ? "" : value.toString().trim();
-                switch (col) {
-                    case 1->log.time= v;
-                    case 2->log.item = v;
-                    case 3->log.qty = v;
-                    case 4->log.reason = v;
-                    case 5->log.staff = v;
-                    case 6->log.remarks = v;
-                }
-            }
+            public boolean isCellEditable(int r, int c) { return false; }
         };
-    table = SharedUI.styledTable(tableModel);
-    table.getTableHeader().setReorderingAllowed(false);
 
-    JScrollPane sp = new JScrollPane(table);
-    sp.getViewport().setBackground(SharedUI.C_CREAM);
-    sp.setBorder(BorderFactory.createLineBorder(SharedUI.C_TEAL, 1));
-    sp.setBounds(30, 75, 900, 520);
-    add(sp);
+        tblWasteLog = new JTable(tableModel);
+        tblWasteLog.setFont(fontNormal);
+        tblWasteLog.setRowHeight(36);
+        tblWasteLog.setShowGrid(false);
+        tblWasteLog.setBackground(colorWhite);
+        tblWasteLog.setForeground(colorDark);
+        tblWasteLog.setSelectionBackground(colorSteel);
+        tblWasteLog.setSelectionForeground(colorWhite);
+        tblWasteLog.getTableHeader().setBackground(colorTeal);
+        tblWasteLog.getTableHeader().setForeground(colorWhite);
+        tblWasteLog.getTableHeader().setFont(fontBold);
+        tblWasteLog.getTableHeader().setReorderingAllowed(false);
 
-    btnPanel = new JPanel(null);
-    btnPanel.setOpaque(false);
-    btnPanel.setBounds(30, 605, 580, 50);
-    add(btnPanel);
+        scrollPane = new JScrollPane(tblWasteLog);
+        scrollPane.setBounds(30, 75, 920, 520);
+        scrollPane.getViewport().setBackground(colorCream);
+        scrollPane.setBorder(BorderFactory.createLineBorder(colorTeal, 1));
+        add(scrollPane);
+    }
 
-    addBtn  = SharedUI.redButton("ADD LOG");
-    addBtn.setBounds(0, 5, 130, 38);
-    btnPanel.add(addBtn);
-    addBtn.addActionListener(e -> showAddLogDialog());
-        if (role == Role.ADMIN || role == Role.SUPER_ADMIN) {
-            editBtn = SharedUI.redButton("EDIT LOGS");
-            editBtn.setBounds(145, 5, 130, 38);
-            btnPanel.add(editBtn);
-            editBtn.addActionListener(e -> enterEditMode());
+    private void buttons()
+    {
+        btnPanel = new JPanel(null);
+        btnPanel.setBounds(30, 610, 600, 50);
+        btnPanel.setBackground(colorCream);
+        add(btnPanel);
+
+        btnAddLog = new JButton("ADD LOG");
+        btnAddLog.setBounds(0, 5, 130, 38);
+        btnAddLog.setBackground(colorRed);
+        btnAddLog.setForeground(colorWhite);
+        btnAddLog.setFont(fontBold);
+        btnAddLog.setFocusPainted(false);
+        btnAddLog.setBorderPainted(false);
+        btnAddLog.addActionListener(this);
+        btnPanel.add(btnAddLog);
+
+        if (role == Role.ADMIN || role == Role.SUPER_ADMIN)
+        {
+            btnEditLogs = new JButton("EDIT LOGS");
+            btnEditLogs.setBounds(145, 5, 130, 38);
+            btnEditLogs.setBackground(colorRed);
+            btnEditLogs.setForeground(colorWhite);
+            btnEditLogs.setFont(fontBold);
+            btnEditLogs.setFocusPainted(false);
+            btnEditLogs.setBorderPainted(false);
+            btnEditLogs.addActionListener(this);
+            btnPanel.add(btnEditLogs);
         }
 
-    refreshTable(false);
-    addComponentListener(new ComponentAdapter() {
+        refreshTable();
+    }
+
+    private void refreshTable()
+    {
+        tableModel.setRowCount(0);
+        for (WasteLog log : logs)
+        {
+            tableModel.addRow(new Object[]{
+                    log.time, log.item, log.qty,
+                    log.reason, log.staff, log.remarks
+            });
+        }
+    }
+
+    private void enterEditMode()
+    {
+        editMode = true;
+
+        btnPanel.removeAll();
+
+        btnConfirmEdit = new JButton("CONFIRM EDIT");
+        btnConfirmEdit.setBounds(0, 5, 160, 38);
+        btnConfirmEdit.setBackground(colorRed);
+        btnConfirmEdit.setForeground(colorWhite);
+        btnConfirmEdit.setFont(fontBold);
+        btnConfirmEdit.setFocusPainted(false);
+        btnConfirmEdit.setBorderPainted(false);
+        btnConfirmEdit.addActionListener(this);
+        btnPanel.add(btnConfirmEdit);
+
+        btnPanel.revalidate();
+        btnPanel.repaint();
+
+        // ── allow clicking rows to delete ────────────────────────
+        tblWasteLog.addMouseListener(new MouseAdapter()
+        {
             @Override
-            public void componentShown(ComponentEvent e) {
-                exitEditMode();   
-                refreshTable(false);
+            public void mouseClicked(MouseEvent e)
+            {
+                if (!editMode) return;
+                int selectedRow = tblWasteLog.getSelectedRow();
+                if (selectedRow == -1) return;
+                showDeleteDialog(selectedRow);
             }
         });
     }
 
-private void refreshTable(boolean withDeleteCol) {
-    tableModel.setRowCount(0);
-    for (WasteLog l : logs) {
-        if (withDeleteCol)
-        tableModel.addRow(new Object[]{"🗑", l.time, l.item, l.qty, l.reason, l.staff, l.remarks});
-        else
-        tableModel.addRow(new Object[]{l.time, l.item, l.qty, l.reason, l.staff, l.remarks});
+    private void exitEditMode()
+    {
+        editMode = false;
+
+        btnPanel.removeAll();
+
+        btnAddLog.setBounds(0, 5, 130, 38);
+        btnPanel.add(btnAddLog);
+
+        if (role == Role.ADMIN || role == Role.SUPER_ADMIN)
+        {
+            btnEditLogs.setBounds(145, 5, 130, 38);
+            btnPanel.add(btnEditLogs);
+        }
+
+        btnPanel.revalidate();
+        btnPanel.repaint();
+        refreshTable();
+    }
+
+    private void showDeleteDialog(int selectedRow)
+    {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+
+        int confirm = JOptionPane.showConfirmDialog(
+                frame,
+                "Are you sure you want to DELETE this log?",
+                "DELETE LOG",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm == JOptionPane.YES_OPTION)
+        {
+            logs.remove(selectedRow);
+            refreshTable();
         }
     }
 
-private void resetColumns() {
-    tableModel.setColumnCount(0);
-    for (String c : new String[]{"TIME", "ITEM", "QTY", "REASON", "STAFF", "REMARKS"})
-        tableModel.addColumn(c);
-    }
+    private void showAddLogDialog()
+    {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
-private void addDeleteColumn() {
-    tableModel.setColumnCount(0);
-    for (String c : new String[]{"", "TIME", "ITEM", "QTY", "REASON", "STAFF", "REMARKS"})
-        tableModel.addColumn(c);
+        JPanel panelAdd = new JPanel(new GridLayout(6, 2, 5, 10));
 
-    TableColumn delCol = table.getColumnModel().getColumn(0);
-    delCol.setMaxWidth(50);
-    delCol.setMinWidth(50);
-    delCol.setPreferredWidth(50);
-    delCol.setResizable(false);
+        String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
 
-    ImageIcon trashIcon = SharedUI.loadIcon(getClass(), "wastelog.png", 20, 20);
-    delCol.setCellRenderer((tbl, val, sel, foc, row, col) -> {
-        JButton btn = new JButton(trashIcon != null ? trashIcon : new ImageIcon());
-        btn.setToolTipText("Delete this log");
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setContentAreaFilled(false);
-        btn.setHorizontalAlignment(SwingConstants.CENTER);
-        btn.setOpaque(true);
-        btn.setBackground(row % 2 == 0 ? SharedUI.C_WHITE : SharedUI.C_ROW_ALT);
-        return btn;
-    });
+        JLabel lblTime    = new JLabel("TIME:");
+        JTextField txtTime = new JTextField(timeNow);
 
-    delCol.setCellEditor(null);
-    }
+        JLabel lblItem    = new JLabel("FOOD ITEM:");
+        JTextField txtItem = new JTextField();
 
-private MouseAdapter deleteMouseListener = null;
+        JLabel lblQty    = new JLabel("QUANTITY:");
+        JTextField txtQty = new JTextField();
 
-private void attachDeleteMouseListener() {
-    if (deleteMouseListener != null) return; 
-    deleteMouseListener = new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (!editMode) return;
-            int viewCol = table.columnAtPoint(e.getPoint());
-            if (viewCol != 0) return;
-            int viewRow = table.rowAtPoint(e.getPoint());
-            if (viewRow < 0) return;
-            int modelRow = table.convertRowIndexToModel(viewRow);
-            showDeleteDialog(modelRow);
-        }
-    };
-    table.addMouseListener(deleteMouseListener);
-    }
+        JLabel lblReason = new JLabel("REASON:");
+        String[] reasons = {"Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
+        JComboBox<String> cbReason = new JComboBox<>(reasons);
 
- private void enterEditMode() {
-    if (editMode) return;
-    editMode = true;
-    addDeleteColumn();
-    attachDeleteMouseListener();
-    refreshTable(true);
-    btnPanel.removeAll();
-    JButton confirmBtn = SharedUI.redButton("CONFIRM EDIT");
-    confirmBtn.setBounds(0, 5, 160, 38);
-    btnPanel.add(confirmBtn);
-    confirmBtn.addActionListener(ev -> exitEditMode());
-    btnPanel.revalidate();
-    btnPanel.repaint();
-    }
+        JLabel lblStaff   = new JLabel("STAFF:");
+        JTextField txtStaff = new JTextField();
 
-private void exitEditMode() {
-    editMode = false;
-    resetColumns();
-    refreshTable(false);
-    btnPanel.removeAll();
-    addBtn.setBounds(0, 5, 130, 38);
-    btnPanel.add(addBtn);
+        JLabel lblRemarks   = new JLabel("REMARKS:");
+        JTextField txtRemarks = new JTextField();
 
-    if (role == Role.ADMIN || role == Role.SUPER_ADMIN) {
-        editBtn.setBounds(145, 5, 130, 38);
-        btnPanel.add(editBtn);
-    }
-    btnPanel.revalidate();
-    btnPanel.repaint();
-    }
+        panelAdd.add(lblTime);    panelAdd.add(txtTime);
+        panelAdd.add(lblItem);    panelAdd.add(txtItem);
+        panelAdd.add(lblQty);     panelAdd.add(txtQty);
+        panelAdd.add(lblReason);  panelAdd.add(cbReason);
+        panelAdd.add(lblStaff);   panelAdd.add(txtStaff);
+        panelAdd.add(lblRemarks); panelAdd.add(txtRemarks);
 
-private void showDeleteDialog(int modelRow) {
-    JFrame owner = (JFrame) SwingUtilities.getWindowAncestor(this);
-    JDialog dlg  = new JDialog(owner, "Delete Log", true);
-    dlg.setSize(400, 220);
-    dlg.setLocationRelativeTo(owner);
-    dlg.setLayout(new BorderLayout());
-    JLabel hLbl = new JLabel("DELETE LOG?", SwingConstants.CENTER);
-    hLbl.setFont(SharedUI.fTitle(20));
-    hLbl.setForeground(SharedUI.C_WHITE);
-    hLbl.setBackground(SharedUI.C_RED);
-    hLbl.setOpaque(true);
-    hLbl.setPreferredSize(new Dimension(0, 52));
-    dlg.add(hLbl, BorderLayout.NORTH);
-        JLabel msg = new JLabel(
-                "<html><center>Are you sure you want to <b>DELETE</b> this log?</center></html>",
-                SwingConstants.CENTER);
-        msg.setFont(SharedUI.fBody(14));
-        msg.setBackground(SharedUI.C_CREAM);
-        msg.setOpaque(true);
-        dlg.add(msg, BorderLayout.CENTER);
-        JPanel btnRow  = new JPanel(new GridLayout(1, 2, 1, 0));
-        JButton confirm = new JButton("CONFIRM");
-        confirm.setFont(SharedUI.fTitle(14));
-        confirm.setBackground(SharedUI.C_CREAM);
-        confirm.setForeground(SharedUI.C_DARK);
-        confirm.setFocusPainted(false);
-        JButton cancel  = new JButton("CANCEL");
-        cancel.setFont(SharedUI.fTitle(14));
-        cancel.setBackground(SharedUI.C_CREAM);
-        cancel.setForeground(SharedUI.C_RED);
-        cancel.setFocusPainted(false);
-        btnRow.add(confirm);
-        btnRow.add(cancel);
-        dlg.add(btnRow, BorderLayout.SOUTH);
+        int userConfirm = JOptionPane.showConfirmDialog(
+                frame, panelAdd, "ADD WASTE LOG", JOptionPane.OK_CANCEL_OPTION
+        );
 
-        confirm.addActionListener(e -> {
-            if (modelRow >= 0 && modelRow < logs.size()) {
-                logs.remove(modelRow);
-                refreshTable(true);   
-            }
-            dlg.dispose();
-        });
-        cancel.addActionListener(e -> dlg.dispose());
-        dlg.setVisible(true);
-    }
+        if (userConfirm == JOptionPane.OK_OPTION)
+        {
+            String inputItem = txtItem.getText().trim();
+            String inputQty  = txtQty.getText().trim();
 
-private void showAddLogDialog() {
-    JFrame owner = (JFrame) SwingUtilities.getWindowAncestor(this);
-    JDialog dlg  = new JDialog(owner, "Add Waste Log", true);
-    dlg.setSize(480, 400);
-    dlg.setLocationRelativeTo(owner);
-    dlg.setLayout(new BorderLayout());
-    JLabel hLbl = new JLabel("  ADD WASTE LOG");
-    hLbl.setFont(SharedUI.fTitle(20));
-    hLbl.setForeground(SharedUI.C_WHITE);
-    hLbl.setBackground(SharedUI.C_TEAL);
-    hLbl.setOpaque(true);
-    hLbl.setPreferredSize(new Dimension(0, 52));
-    dlg.add(hLbl, BorderLayout.NORTH);
-    JPanel form = new JPanel(new GridBagLayout());
-    form.setBackground(SharedUI.C_CREAM);
-    form.setBorder(BorderFactory.createEmptyBorder(16, 28, 16, 28));
-    GridBagConstraints gc = new GridBagConstraints();
-    gc.insets = new Insets(6, 4, 6, 4);
-    gc.fill   = GridBagConstraints.HORIZONTAL;
-        String timeStr = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
-        JTextField fTime = SharedUI.styledField(); fTime.setText(timeStr);
-        JTextField  fItem = SharedUI.styledField();
-        JTextField fQty = SharedUI.styledField();
-        String[]reasons = {"Spoilage/Expired","Leftovers","Customer Returns","Contaminated","Staff Error","Other"};
-        JComboBox<String> fReason = new JComboBox<>(reasons); SharedUI.styleCombo(fReason);
-        JTextField fStaff   = SharedUI.styledField();
-        JTextField fRemarks = SharedUI.styledField();
-        String[]labels = {"Time","Food Item","Quantity","Reason","Staff","Remarks"};
-        JComponent[]flds = {fTime, fItem, fQty, fReason, fStaff, fRemarks};
-
-        for (int i = 0; i < labels.length; i++) {
-            gc.gridx = 0; gc.gridy = i; gc.weightx = 0;
-            JLabel l = new JLabel(labels[i]); l.setFont(SharedUI.fNav(13));
-            form.add(l, gc);
-            gc.gridx = 1; gc.weightx = 1;
-            flds[i].setPreferredSize(new Dimension(240, 32));
-            form.add(flds[i], gc);
-        }
-        dlg.add(form, BorderLayout.CENTER);
-        JPanel  bRow   = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 8));
-        bRow.setBackground(SharedUI.C_CREAM);
-        JButton cancel = new JButton("CANCEL");
-        cancel.setFont(SharedUI.fNav(13));
-        cancel.setBackground(SharedUI.C_STEEL);
-        cancel.setForeground(SharedUI.C_WHITE);
-        cancel.setFocusPainted(false);
-        cancel.setBorderPainted(false);
-        cancel.setOpaque(true);
-        JButton save = SharedUI.redButton("SAVE LOG");
-        bRow.add(cancel); bRow.add(save);
-        dlg.add(bRow, BorderLayout.SOUTH);
-
-        save.addActionListener(e -> {
-            String item = fItem.getText().trim();
-            String qty  = fQty.getText().trim();
-            if (item.isEmpty() || qty.isEmpty()) {
-                JOptionPane.showMessageDialog(dlg,
-                        "Food Item and Quantity are required.",
-                        "Missing Fields", JOptionPane.WARNING_MESSAGE);
+            if (inputItem.isEmpty() || inputQty.isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame, "Food Item and Quantity are required.", "Missing Fields", JOptionPane.WARNING_MESSAGE);
                 return;
             }
+
             logs.add(new WasteLog(
-                    fTime.getText().trim(), item, qty,
-                    (String) fReason.getSelectedItem(),
-                    fStaff.getText().trim(),
-                    fRemarks.getText().trim()));
-            refreshTable(editMode);
-            dlg.dispose();
-        });
-        cancel.addActionListener(e -> dlg.dispose());
-        dlg.setVisible(true);
+                    txtTime.getText().trim(),
+                    inputItem,
+                    inputQty,
+                    (String) cbReason.getSelectedItem(),
+                    txtStaff.getText().trim(),
+                    txtRemarks.getText().trim()
+            ));
+
+            refreshTable();
+            JOptionPane.showMessageDialog(frame, "Waste log added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        if (e.getSource() == btnAddLog)      { showAddLogDialog(); }
+        else if (e.getSource() == btnEditLogs)    { enterEditMode(); }
+        else if (e.getSource() == btnConfirmEdit) { exitEditMode(); }
     }
 }

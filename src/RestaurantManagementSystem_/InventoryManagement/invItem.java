@@ -63,10 +63,6 @@ public class invItem {
         return itemMeasurement;
     }
     
-    public String getDeliveryID() {
-        return itemDeliveryID;
-    }
-    
     public String getItemExpirationDate() {
         return itemExpirationDate;
     }

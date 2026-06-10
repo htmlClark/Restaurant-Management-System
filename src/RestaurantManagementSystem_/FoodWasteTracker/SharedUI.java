@@ -18,17 +18,8 @@ public class SharedUI {
     public static Font fNav  (int size) { return new Font("SansSerif", Font.BOLD, size); }
     public static Font fBody (int size) { return new Font("SansSerif", Font.PLAIN, size); }
 
-public static ImageIcon loadIcon(Class<?> ctx, String filename, int w, int h) {
-    try{
-        java.net.URL url = ctx.getResource("/src_pack/images/" + filename);
-        if (url == null) return null;
-        ImageIcon raw = new ImageIcon(url);
-        Image scaled = raw.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaled);
-        } catch (Exception e) {
-            return null;
-        }
-    }
+    ImageIcon wasteLogo = new ImageIcon(getClass().getResource("/src_pack/images/wastelog.png"));
+    Image wasteSize = wasteLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 
 public static JTextField styledField() {
     JTextField f = new JTextField();
