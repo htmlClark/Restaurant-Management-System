@@ -4,7 +4,7 @@ package RestaurantManagementSystem_.InventoryManagement;
 public class invItem {
     private String itemID;
     private String itemName;
-    private int itemQuantity;
+    private double itemQuantity;
     private String itemCategory;
     private String itemMeasurement;
     private String itemDeliveryID;
@@ -17,7 +17,7 @@ public class invItem {
     public invItem(
             String itemID,
             String itemName,
-            int itemQuantity,
+            double  itemQuantity,
             String itemCategory,
             String itemMeasurement,
             String itemDeliveryID,
@@ -51,7 +51,7 @@ public class invItem {
         return itemName;
     }
     
-    public int getItemQuantity() {
+    public double getItemQuantity() {
         return itemQuantity;
     }
 
@@ -87,7 +87,7 @@ public class invItem {
         this.itemName = itemName;
     }
     
-    public void setItemQuantity(int itemQuantity) {
+    public void setItemQuantity(double itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
     public String getDeliveryID() { return itemDeliveryID; }
