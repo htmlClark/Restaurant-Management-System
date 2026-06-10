@@ -2,18 +2,27 @@ package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class invList extends JPanel implements ActionListener {
-
+    //SYSTEM OBJECTS
     private JTable itemTable;
     private DefaultTableModel model;
-    private JPanel panelItemTable, panelStock, panelDelivery;
-    private JLabel lblStock1, lblStock2, lblDelivery1, lblDelivery2;
-    private JComboBox cbSwitchClass;
+    private JPanel panelItemTable, panelStock, panelDelivery, panelAdd;
+    private JLabel lblStock1, lblStock2, lblDelivery1, lblDelivery2, lblAddID, lblAddName, lblAddQuantity, lblAddCategory, lblAddMeasurement, lblModify1;
+    private JComboBox cbSwitchClass, cbAddCategory, cbAddMeasurement;
     private JButton btnAdd, btnModify, btnRemove;
-
+    private JTextField txtAddID, txtAddName, txtAddQuantity;
+    
+    
+    
+    
+    //ITEM INFOS
+    private ArrayList<invItem> deliveryList = new ArrayList<>();
+    
+    
     public invList()
     {
         functionMenu();
@@ -57,11 +66,7 @@ public class invList extends JPanel implements ActionListener {
 
         String[] pages = {"INVENTORY", "RECIPE", "DELIVERY"};
         cbSwitchClass = new JComboBox<>(pages);
-        cbSwitchClass.setBounds(650, 25, 250, 50);
-        cbSwitchClass.addActionListener(e -> {
-            String selected = (String) cbSwitchClass.getSelectedItem();
-            // TO FIX: switch panels
-        });
+        cbSwitchClass.setBounds(690, 25, 250, 50);        
 
         panelItemTable = new JPanel(new BorderLayout());
         panelItemTable.setBounds(25, 130, 830, 450);
@@ -82,55 +87,6 @@ public class invList extends JPanel implements ActionListener {
         itemTable.getTableHeader().setForeground(Color.WHITE);
 
         panelItemTable.add(new JScrollPane(itemTable), BorderLayout.CENTER);
-
-        //meat models goes here
-        model.addRow(new Object[]{"IT001", "GROUND PORK", "10", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT002", "PORK BELLY", "6", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT003", "CHICKEN PIECES", "12", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT004", "PORK INTESTINES", "5", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT005", "FRIED TOFU CUBES", "8", "MEAT", "KG"});
-
-        //vegetable models goes here
-        model.addRow(new Object[]{"IT006", "CARROTS", "15", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT007", "ONIONS", "20", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT008", "GARLIC", "25", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT009", "EGGPLANT", "10", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT010", "AMPALAYA", "8", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT011", "OKRA", "12", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT012", "SQUASH", "10", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT013", "STRING BEANS", "14", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT014", "TOMATOES", "18", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT015", "CHILI PEPPERS", "5", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT016", "GINGER", "7", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT017", "TARO LEAVES", "6", "VEGETABLES", "KG"});
-
-        //seasoning models goes here
-        model.addRow(new Object[]{"IT018", "SALT", "50", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT019", "PEPPER", "40", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT020", "BAY LEAVES", "8", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT021", "PEPPERCORN", "6", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT022", "SUGAR", "35", "SEASONINGS", "KG"});
-        model.addRow(new Object[]{"IT023", "BROWN SUGAR", "20", "SEASONINGS", "KG"});
-        model.addRow(new Object[]{"IT024", "GINGER POWDER", "10", "SEASONINGS", "KG"});
-
-        //condiments models goes here
-        model.addRow(new Object[]{"IT025", "SOY SAUCE", "30", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT026", "VINEGAR", "25", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT027", "FISH SAUCE", "12", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT028", "BAGOONG (SHRIMP PASTE)", "10", "CONDIMENTS", "JAR"});
-        model.addRow(new Object[]{"IT029", "MAYONNAISE", "8", "CONDIMENTS", "JAR"});
-        model.addRow(new Object[]{"IT030", "CALAMANSI JUICE", "15", "CONDIMENTS", "KG"});
-
-        //other models goes here
-        model.addRow(new Object[]{"IT031", "LUMPIA WRAPPERS", "50", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT032", "COOKING OIL", "20", "OTHERS", "BOTTLE"});
-        model.addRow(new Object[]{"IT033", "TAPIOCA PEARLS (SAGO)", "10", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT034", "GULAMAN", "12", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT035", "ICE", "30", "OTHERS", "KG"});
-        model.addRow(new Object[]{"IT036", "TEA BAGS", "25", "OTHERS", "BOX"});
-        model.addRow(new Object[]{"IT037", "LEMON / CALAMANSI", "15", "OTHERS", "KG"});
-        model.addRow(new Object[]{"IT038", "BROWN SUGAR SYRUP (ARNIBAL)", "10", "OTHERS", "BOTTLE"});
-        model.addRow(new Object[]{"IT039", "SHAVED ICE", "20", "OTHERS", "KG"});
 
         btnAdd = new JButton("ADD");
         btnAdd.setBounds(200, 610, 150, 30);
@@ -171,10 +127,210 @@ public class invList extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        if (e.getSource() == btnAdd) { }
-        else if (e.getSource() == btnModify) { }
-        else if (e.getSource() == btnRemove) { }
+public void actionPerformed(ActionEvent e)
+{
+    if (e.getSource() == btnAdd) {
+
+        panelAdd = new JPanel(new GridLayout(5, 2, 5, 5));
+
+        lblAddID = new JLabel("ID:");
+        txtAddID = new JTextField();
+
+        lblAddName = new JLabel("Name:");
+        txtAddName = new JTextField();
+
+        lblAddQuantity = new JLabel("Quantity:");
+        txtAddQuantity = new JTextField();
+
+        lblAddCategory = new JLabel("Category:");
+        String[] categories = {"MEAT", "SEASONING", "VEGETABLE", "CONDIMENTS", "OTHERS"};
+        cbAddCategory = new JComboBox<>(categories);
+
+        lblAddMeasurement = new JLabel("Measurement:");
+        String[] measurements = {"KG", "LITER", "PACK"};
+        cbAddMeasurement = new JComboBox<>(measurements);
+
+        panelAdd.add(lblAddID);
+        panelAdd.add(txtAddID);
+
+        panelAdd.add(lblAddName);
+        panelAdd.add(txtAddName);
+
+        panelAdd.add(lblAddQuantity);
+        panelAdd.add(txtAddQuantity);
+
+        panelAdd.add(lblAddCategory);
+        panelAdd.add(cbAddCategory);
+
+        panelAdd.add(lblAddMeasurement);
+        panelAdd.add(cbAddMeasurement);
+
+        int userConfirm = JOptionPane.showConfirmDialog(this, panelAdd, "Add Item", JOptionPane.OK_CANCEL_OPTION);
+
+        if (userConfirm == JOptionPane.OK_OPTION) {
+
+            String inputItemID = txtAddID.getText().trim();
+            String inputItemName = txtAddName.getText().trim();
+            String inputItemQuantity = txtAddQuantity.getText().trim();
+            String inputItemCategory = cbAddCategory.getSelectedItem().toString();
+            String inputItemMeasurement = cbAddMeasurement.getSelectedItem().toString();
+
+            if (!inputItemID.isEmpty() && !inputItemName.isEmpty() && !inputItemQuantity.isEmpty()) {
+                
+                int inputItemINTQuantity;
+                try {
+                    inputItemINTQuantity = Integer.parseInt(inputItemQuantity);
+                }
+                
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Quantity must be a number", "Add Item | Error", JOptionPane.ERROR_MESSAGE); 
+                    return; 
+                }
+                
+                if (inputItemINTQuantity > 0) {
+
+                        for (invItem item : deliveryList) {
+                        if (item.getItemID().equalsIgnoreCase(inputItemID) || item.getItemName().equalsIgnoreCase(inputItemName)) {
+                            JOptionPane.showMessageDialog(this,"Item already exists","Add Item | Error",JOptionPane.ERROR_MESSAGE);
+                        return;
+                        }
+                        }
+
+                    invItem item = new invItem(inputItemID,inputItemName,inputItemINTQuantity,inputItemCategory,inputItemMeasurement,"", "", "", "", "");
+
+                    deliveryList.add(item);
+                    
+                    model.addRow(new Object[]{
+                            inputItemID,
+                            inputItemName,
+                            inputItemINTQuantity,
+                            inputItemCategory,
+                            inputItemMeasurement
+                    });
+
+                    JOptionPane.showMessageDialog(this,"Item added sucessfully","Add Item",JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+                else {
+                JOptionPane.showMessageDialog(this,"Item quantity must be greater than ","Add Item | Error",JOptionPane.ERROR_MESSAGE);
+            }
+            } 
+            
+            else {
+                 JOptionPane.showMessageDialog(this, "Please enter all fields", "Add Item | Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+            
+        }
+        
+        else {
+            JOptionPane.showMessageDialog(this,"It seems like you cancelled this function. Try again","Add Item | Error",JOptionPane.ERROR_MESSAGE);
+            }
     }
+    
+    //modify
+
+   else if (e.getSource() == btnModify) {
+
+    int userSelectedItem = itemTable.getSelectedRow();
+
+    if (userSelectedItem == -1) {
+        JOptionPane.showMessageDialog(this,"Please select an Item to Modify","Modify Item",JOptionPane.ERROR_MESSAGE);
+        
+        return;
+    }
+
+    else {
+
+        String selectedItemID = (String) model.getValueAt(userSelectedItem, 0);
+
+            invItem item = null;
+
+            for (invItem indexItem : deliveryList) {
+                if (indexItem.getItemID().equalsIgnoreCase(selectedItemID)) {
+                    item = indexItem;
+                    break;
+                }
+            }
+             if (item == null) {
+                JOptionPane.showMessageDialog(this,"Item not found in inventory","Modify Item",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        
+            String selectedItemName = item.getItemName();
+            int selectedItemQuantity = item.getItemQuantity();
+
+            String newItemName = JOptionPane.showInputDialog(this, "Edit Name:", selectedItemName);
+            String newItemQuantity = JOptionPane.showInputDialog(this, "Edit Quantity:", selectedItemQuantity);
+
+            if (newItemName == null || newItemQuantity == null) {
+                return;
+            }
+
+            int inputItemINTQuantity;
+
+            try {
+                inputItemINTQuantity = Integer.parseInt(newItemQuantity);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this,"Quantity must be a valid number!","Modify Item | Error",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (inputItemINTQuantity <= 0) {
+                JOptionPane.showMessageDialog(this,"Invalid input","Modify Item | Error",JOptionPane.ERROR_MESSAGE);
+                return;
+
+            }
+
+            else {
+                item.setItemName(newItemName.trim());
+                item.setItemQuantity(inputItemINTQuantity);
+
+                model.setValueAt(newItemName, userSelectedItem, 1);
+                model.setValueAt(inputItemINTQuantity, userSelectedItem, 2);
+
+                JOptionPane.showMessageDialog(this,"Item modified successfully","Modify Item",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+}
+
+    else if (e.getSource() == btnRemove) {
+
+        int userSelectedItem = itemTable.getSelectedRow();
+
+        if (userSelectedItem == -1) {
+            JOptionPane.showMessageDialog(this,"Please select an Item to Remove","Remove | Error",JOptionPane.ERROR_MESSAGE);
+        }
+
+        else {
+            int userConfirmation = JOptionPane.showConfirmDialog(this,"Are you sure you want to delete this item?","Remove Item",JOptionPane.YES_NO_OPTION);
+
+            if (userConfirmation == JOptionPane.YES_OPTION) {
+                
+                String selectedID = (String) model.getValueAt(userSelectedItem,0);
+                
+                invItem itemToRemove = null;
+                
+                for (invItem itemIndex : deliveryList) {
+                if (itemIndex.getItemID().equalsIgnoreCase(selectedID)){
+                    itemToRemove = itemIndex;
+                    break;
+                }
+            }
+                if (itemToRemove != null) {
+                deliveryList.remove(itemToRemove);
+                model.removeRow(userSelectedItem);
+
+                JOptionPane.showMessageDialog(this,"Item removed successfully","Remove Item",JOptionPane.INFORMATION_MESSAGE);
+            }
+            }
+
+            else {
+                JOptionPane.showMessageDialog(this,
+                        "It seems like you cancelled to remove item","Remove Item",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+}
 }

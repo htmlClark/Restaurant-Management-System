@@ -6,7 +6,7 @@ public class mainClass {
     {
         superAdminFrame prod = new superAdminFrame();
         prod.setVisible(true);
-
+        
 //        homePage HomePage = new homePage();
 //        HomePage.setVisible(true);
 }}
