@@ -4,7 +4,7 @@ import MainPlacementFrame.*;
 public class mainClass {
     public static void main(String[] args) 
     {
-        adminFrame prod = new adminFrame();
+        LoginPage prod = new LoginPage();
         prod.setVisible(true);
         
 //        homePage HomePage = new homePage();

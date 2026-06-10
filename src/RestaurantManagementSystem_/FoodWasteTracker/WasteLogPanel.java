@@ -223,16 +223,18 @@ public class WasteLogPanel extends JPanel implements ActionListener {
 
         JLabel lblTime    = new JLabel("TIME:");
         JTextField txtTime = new JTextField(timeNow);
+        txtTime.setEditable(false);
 
-        JLabel lblItem    = new JLabel("FOOD ITEM:");
+        JLabel lblItem    = new JLabel("* FOOD ITEM:");
         JTextField txtItem = new JTextField();
 
-        JLabel lblQty    = new JLabel("QUANTITY:");
+        JLabel lblQty    = new JLabel("* QUANTITY:");
         JTextField txtQty = new JTextField();
 
-        JLabel lblReason = new JLabel("REASON:");
-        String[] reasons = {"Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
+        JLabel lblReason = new JLabel("* REASON:");
+        String[] reasons = {"-Select Reason-","Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
         JComboBox<String> cbReason = new JComboBox<>(reasons);
+
 
         JLabel lblStaff   = new JLabel("STAFF:");
         JTextField txtStaff = new JTextField();
@@ -256,9 +258,43 @@ public class WasteLogPanel extends JPanel implements ActionListener {
             String inputItem = txtItem.getText().trim();
             String inputQty  = txtQty.getText().trim();
 
+            //tis for validating that required fields should not be empty
             if (inputItem.isEmpty() || inputQty.isEmpty())
             {
-                JOptionPane.showMessageDialog(frame, "Food Item and Quantity are required.", "Missing Fields", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Food Item and Quantity are required.", "Missing Fields", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            //tis is for checking if input quantity is a number and must be greater than 0
+            try
+            {
+                double parsedInputQty = Double.parseDouble(inputQty);
+                if (parsedInputQty <= 0)
+                {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Quantity must be greater than 0. Please add a valid quantity.",
+                            "ERROR",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Quantity must be a valid number.",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            //tis is for making sure user selects a valid reason
+            if (cbReason.getSelectedItem().equals("-Select Reason-"))
+            {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Please Select a Valid Reason.",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

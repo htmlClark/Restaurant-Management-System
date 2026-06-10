@@ -143,7 +143,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
             frame.switchPanel(new ReportsGenerator());
         }
         else if (e.getSource() == btnWasteLogs) {
-            frame.switchPanel(WasteLogPanel.forSuperAdmin());
+            frame.switchPanel(WasteLogPanel.forAdmin());
         }
         else if (e.getSource() == btnDelivery) {
             frame.switchPanel(new invDelivery());
