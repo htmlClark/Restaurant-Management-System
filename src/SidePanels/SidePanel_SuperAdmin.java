@@ -3,7 +3,7 @@ import MainClasses.*;
 import MainPlacementFrame.*;
 import RestaurantManagementSystem_.FoodWasteTracker.*;
 import RestaurantManagementSystem_.InventoryManagement.*;
-import RestaurantManagementSystem_.ManageUsers.ManageUsersSuperAdminPanel;
+import RestaurantManagementSystem_.ManageUsers.*;
 import RestaurantManagementSystem_.Products.*;
 import RestaurantManagementSystem_.ReportsGenerator.*;
 
@@ -33,22 +33,12 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
     }
     
     public void panelButtons() {
-        //Dashboard
-        ImageIcon dashboard = new ImageIcon (getClass().getResource("/src_pack/images/dashboard.png"));
-        Image dashboardSize = dashboard.getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT);
-        btnDashboard = new JButton(new ImageIcon(dashboardSize));
-            btnDashboard.setBounds(0, 80, 300, 80);
-            btnDashboard.setBorderPainted(false);
-            btnDashboard.addActionListener(this);
-            btnDashboard.setBackground(Color.decode("#366379"));
-            add(btnDashboard);
-        
         //RestaurantManagementSystem_.Products
         ImageIcon prodLogo = new ImageIcon (getClass().getResource("/src_pack/images/product.png"));
         Image prodSize = prodLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnProducts = new JButton("   PRODUCTS",new ImageIcon(prodSize));
-            btnProducts.setBounds(0, 160, 300, 80);
+            btnProducts.setBounds(0, 80, 300, 80);
             btnProducts.setForeground(Color.WHITE);
             btnProducts.setBackground(Color.decode("#366379"));
             btnProducts.setFont(new Font("Arial", Font.BOLD, 20));
@@ -62,7 +52,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         Image invSize = invLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnInventory = new JButton("   INVENTORY",new ImageIcon(invSize));
-            btnInventory.setBounds(0, 240, 300, 80);
+            btnInventory.setBounds(0, 160, 300, 80);
             btnInventory.setForeground(Color.WHITE);
             btnInventory.setBackground(Color.decode("#366379"));
             btnInventory.setFont(new Font("Arial", Font.BOLD, 20));
@@ -76,7 +66,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         Image reportSize = reportLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnReport = new JButton("   SUMMARY REPORT",new ImageIcon(reportSize));
-            btnReport.setBounds(0, 320, 300, 80);
+            btnReport.setBounds(0, 240, 300, 80);
             btnReport.setForeground(Color.WHITE);
             btnReport.setBackground(Color.decode("#366379"));
             btnReport.setFont(new Font("Arial", Font.BOLD, 20));
@@ -90,7 +80,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         Image wasteSize = wasteLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnWasteLogs = new JButton("   WASTE LOGS",new ImageIcon(wasteSize));
-            btnWasteLogs.setBounds(0, 400, 300, 80);
+            btnWasteLogs.setBounds(0, 320, 300, 80);
             btnWasteLogs.setForeground(Color.WHITE);
             btnWasteLogs.setBackground(Color.decode("#366379"));
             btnWasteLogs.setFont(new Font("Arial", Font.BOLD, 20));
@@ -104,7 +94,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         Image deliSize = deliLogo.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
         
         btnDelivery = new JButton("  DELIVERY",new ImageIcon(deliSize));
-            btnDelivery.setBounds(0, 480, 300, 80);
+            btnDelivery.setBounds(0, 400, 300, 80);
             btnDelivery.setForeground(Color.WHITE);
             btnDelivery.setBackground(Color.decode("#366379"));
             btnDelivery.setFont(new Font("Arial", Font.BOLD, 20));
@@ -118,7 +108,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         Image userSize = userLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnUsers = new JButton("    MANAGE USERS",new ImageIcon(userSize));
-            btnUsers.setBounds(0, 560, 300, 80);
+            btnUsers.setBounds(0, 480, 300, 80);
             btnUsers.setForeground(Color.WHITE);
             btnUsers.setBackground(Color.decode("#366379"));
             btnUsers.setFont(new Font("Arial", Font.BOLD, 20));
@@ -145,10 +135,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         superAdminFrame frame = (superAdminFrame) getParent().getParent().getParent().getParent();
-        if (e.getSource() == btnDashboard) {
-
-        }
-        else if (e.getSource() == btnProducts) {
+        if (e.getSource() == btnProducts) {
             frame.switchPanel(new Products());
         }
         else if (e.getSource() == btnInventory) {
@@ -161,7 +148,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
             frame.switchPanel(WasteLogPanel.forSuperAdmin());
         }
         else if (e.getSource() == btnDelivery) {
-
+            frame.switchPanel(new invDelivery());
         }
         else if (e.getSource() == btnUsers) {
             frame.switchPanel(new ManageUsersSuperAdminPanel());

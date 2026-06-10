@@ -28,6 +28,11 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
     Font fontHeader = new Font("Impact", Font.BOLD, 35);
     Font fontNormal = new Font("Arial", Font.PLAIN, 14);
 
+    java.time.LocalDateTime now = java.time.LocalDateTime.now();
+    private String dateTime = now.getMonthValue() + "/" + now.getDayOfMonth() + "/" + now.getYear()
+            + "   " + String.format("%02d", now.getHour()) + ":" + String.format("%02d", now.getMinute());
+
+
     public PaymentConfirmationDialog(JFrame parent, Order order) {
         super(parent, true);
         this.parentFrame = parent;
@@ -50,10 +55,6 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
         lblPaymentProcessed.setFont(fontHeader);
         lblPaymentProcessed.setForeground(colorCream);
         pnlHeader.add(lblPaymentProcessed);
-
-        java.time.LocalDateTime now = java.time.LocalDateTime.now();
-        String dateTime = now.getMonthValue() + "/" + now.getDayOfMonth() + "/" + now.getYear()
-                + "   " + String.format("%02d", now.getHour()) + ":" + String.format("%02d", now.getMinute());
 
         lblDateTime = new JLabel(dateTime);
         lblDateTime.setBounds(190, 95, 200, 25);
@@ -89,19 +90,24 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
         btnConfirm.addActionListener(this);
     }
 
+    private void confirmBtn()
+    {
+        JPanel nextPanel = new Products();
+        parentFrame.getContentPane().removeAll();
+        parentFrame.getContentPane().add(nextPanel);
+        parentFrame.revalidate();
+        parentFrame.repaint();
+
+        if (parentFrame instanceof userFrame)            { ((userFrame) parentFrame).switchPanel(nextPanel); }
+        else if (parentFrame instanceof adminFrame)      { ((adminFrame) parentFrame).switchPanel(nextPanel); }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnConfirm)
         {
             dispose();
-            JPanel nextPanel = new Products();
-            parentFrame.getContentPane().removeAll();
-            parentFrame.getContentPane().add(nextPanel);
-            parentFrame.revalidate();
-            parentFrame.repaint();
-
-            if (parentFrame instanceof userFrame)            { ((userFrame) parentFrame).switchPanel(nextPanel); }
-            else if (parentFrame instanceof adminFrame)      { ((adminFrame) parentFrame).switchPanel(nextPanel); }
+            confirmBtn();
         }
         else if (e.getSource() == btnPrintReceipt)
         {

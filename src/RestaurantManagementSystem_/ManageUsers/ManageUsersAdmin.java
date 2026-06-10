@@ -1,12 +1,10 @@
 package RestaurantManagementSystem_.ManageUsers;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 public class ManageUsersAdmin extends JPanel {
 
-    // ── Colors ──────────────────────────────────────────────────
     Color colorCream       = new Color(0xFF, 0xF8, 0xE1);
     Color colorRed         = new Color(0xB7, 0x1C, 0x1C);
     Color colorGold        = new Color(0xFF, 0xB3, 0x00);
@@ -17,25 +15,19 @@ public class ManageUsersAdmin extends JPanel {
     Color colorRowEven     = new Color(0xC9, 0xD4, 0xD8);
     Color colorWhite       = Color.WHITE;
 
-    // ── Fonts ───────────────────────────────────────────────────
     Font fontHeader = new Font("Arial", Font.BOLD, 22);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
     Font fontBold   = new Font("Arial", Font.BOLD, 14);
 
-    // ── Sample Data ─────────────────────────────────────────────
-    String[][] userData = {
-            {"08:00 AM", "05:00 PM", "EMP-001", "Juan dela Cruz",   "Active"},
-            {"09:00 AM", "06:00 PM", "EMP-002", "Maria Santos",     "Active"},
-            {"07:30 AM", "04:30 PM", "EMP-003", "Pedro Reyes",      "Inactive"},
-            {"08:30 AM", "05:30 PM", "EMP-004", "Ana Gonzales",     "Active"},
-            {"10:00 AM", "07:00 PM", "EMP-005", "Carlo Villanueva", "Active"},
-    };
+    private UserManager userManager = UserManager.getInstance();
+    String[][] userData;
 
-    String[] colHeaders = {"TIME LOGGED IN", "TIME LOGGED OUT", "EMPLOYEE NUMBER", "NAME", "STATUS"};
+    String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE"};
     int[]    colWidths  = {150, 150, 160, 260, 130};
 
     public ManageUsersAdmin()
     {
+        userData = userManager.getUsersAsArray();
         buildTableCard();
 
         setBounds(300, 80, 980, 720);
@@ -43,7 +35,6 @@ public class ManageUsersAdmin extends JPanel {
         setBackground(colorCream);
     }
 
-    // ── TABLE CARD ──────────────────────────────────────────────
     private void buildTableCard()
     {
         JPanel pnlTableCard = new JPanel(null);
@@ -61,7 +52,6 @@ public class ManageUsersAdmin extends JPanel {
         buildTableRows(pnlTableCard);
     }
 
-    // ── ROWS (pure JPanel + JLabel) ─────────────────────────────
     private void buildTableRows(JPanel pnlTableCard)
     {
         JPanel pnlRows = new JPanel(null);
@@ -69,7 +59,6 @@ public class ManageUsersAdmin extends JPanel {
         pnlRows.setBackground(colorMutedTeal);
         pnlTableCard.add(pnlRows);
 
-        // Header
         JPanel pnlHeader = new JPanel(null);
         pnlHeader.setBounds(0, 0, 900, 50);
         pnlHeader.setBackground(colorTableHeader);
@@ -87,7 +76,6 @@ public class ManageUsersAdmin extends JPanel {
             xCol += w;
         }
 
-        // Data rows
         int ROW_H = 58;
         for (int r = 0; r < userData.length; r++)
         {
@@ -100,7 +88,7 @@ public class ManageUsersAdmin extends JPanel {
             pnlRows.add(pnlRow);
 
             xCol = 0;
-            for (int c = 0; c < userData[r].length; c++)
+            for (int c = 0; c < colHeaders.length; c++)
             {
                 int w = (900 * colWidths[c]) / 850;
                 JLabel lblCell = new JLabel(userData[r][c], SwingConstants.CENTER);
@@ -108,7 +96,7 @@ public class ManageUsersAdmin extends JPanel {
                 if (c == 4)
                 {
                     lblCell.setFont(new Font("Arial", Font.BOLD, 12));
-                    lblCell.setForeground("Active".equals(userData[r][c]) ? new Color(0x1B, 0x5E, 0x20) : colorRed);
+                    lblCell.setForeground(new Color(0x1B, 0x5E, 0x20));
                 }
                 else
                 {
