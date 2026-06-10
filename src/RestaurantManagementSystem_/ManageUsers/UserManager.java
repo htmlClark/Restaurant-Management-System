@@ -11,9 +11,9 @@ public class UserManager
 
     private UserManager()
     {
-        userList.add(new String[]{"--", "--", "SA-001", "Angelie Iranzo",   "Super Admin", "superadmin123"});
-        userList.add(new String[]{"--", "--", "AD-001", "Alexa Reyes",   "Admin", "admin123"});
-        userList.add(new String[]{"--", "--", "EMP-001", "Marcuss Trinidad",   "Staff", "user123"});
+        userList.add(new String[]{"--", "SA-001", "Angelie Iranzo",   "Super Admin", "superadmin123"});
+        userList.add(new String[]{"--", "AD-001", "Alexa Reyes",   "Admin", "admin123"});
+        userList.add(new String[]{"--", "EMP-001", "Marcuss Trinidad",   "Staff", "user123"});
     }
 
     public static UserManager getInstance()
@@ -29,7 +29,7 @@ public class UserManager
     {
         for (String[] user : userList)
         {
-            if (user[2].equalsIgnoreCase(empNo) && user[5].equals(password))
+            if (user[1].equalsIgnoreCase(empNo) && user[4].equals(password))
                 return user;
         }
         return null;
@@ -39,7 +39,7 @@ public class UserManager
     {
         for (String[] user : userList)
         {
-            if (user[2].equalsIgnoreCase(empNo))
+            if (user[1].equalsIgnoreCase(empNo))
             {
                 user[0] = new java.text.SimpleDateFormat("hh:mm a").format(new java.util.Date());
                 user[1] = "--";
@@ -50,7 +50,7 @@ public class UserManager
 
     public boolean addUser(String empNo, String name, String password, String role)
     {
-        userList.add(new String[]{"--", "--", empNo, name, role,password});
+        userList.add(new String[]{"--", empNo, name, role,password});
         return true;
     }
 
@@ -63,10 +63,10 @@ public class UserManager
     {
         for (String[] user : userList)
         {
-            if (user[2].equals(empNo))
+            if (user[1].equals(empNo))
             {
-                user[3] = name;
-                user[4] = role;
+                user[2] = name;
+                user[3] = role;
                 return true;
             }
         }
@@ -76,7 +76,7 @@ public class UserManager
     public boolean userExists(String empNo)
     {
         for (String[] user : userList)
-            if (user[2].equalsIgnoreCase(empNo)) return true;
+            if (user[1].equalsIgnoreCase(empNo)) return true;
         return false;
     }
 

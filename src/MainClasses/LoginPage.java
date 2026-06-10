@@ -179,7 +179,7 @@ public class LoginPage extends JFrame implements ActionListener
             }
             userManager.recordLogin(usernameInput);
 
-            String role = user[4];
+            String role = user[3];
             dispose();
             if(role.equals("Staff"))
             {
