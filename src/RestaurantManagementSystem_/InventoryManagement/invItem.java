@@ -12,6 +12,7 @@ public class invItem {
     private String itemDeliveryDate;
     private String itemDeliveryTime;
     private String itemDeliveryCourier;
+    private String itemCurrentStatus;
     
     public invItem(
             String itemID,
@@ -23,7 +24,9 @@ public class invItem {
             String itemExpirationDate,
             String itemDeliveryDate,
             String itemDeliveryTime,
-            String itemDeliveryCourier) {
+            String itemDeliveryCourier,
+            String itemCurrentStatus
+            ) {
 
             this.itemID = itemID;
             this.itemName = itemName;
@@ -36,6 +39,8 @@ public class invItem {
             this.itemDeliveryDate = itemDeliveryDate;
             this.itemDeliveryTime = itemDeliveryTime;
             this.itemDeliveryCourier = itemDeliveryCourier;
+            
+            this.itemCurrentStatus = itemCurrentStatus;
     }
     
     public String getItemID() {
@@ -58,14 +63,75 @@ public class invItem {
         return itemMeasurement;
     }
     
+    public String getDeliveryID() {
+        return itemDeliveryID;
+    }
+    
+    public String getItemExpirationDate() {
+        return itemExpirationDate;
+    }
+    
+    public String getItemDeliveryDate() {
+        return itemDeliveryDate;
+    }
+    public String getItemDeliveryTime() {
+        return itemDeliveryTime;
+    }
+    
+    public String getItemDeliveryCourier() {
+        return itemDeliveryCourier;
+    }
+    
+    public String getItemCurrentStatus() { 
+        return itemCurrentStatus; 
+    }
+
+    
     public void setItemName(String itemName) {
-    this.itemName = itemName;
-}
+        this.itemName = itemName;
+    }
     
     public void setItemQuantity(int itemQuantity) {
-    this.itemQuantity = itemQuantity;
+        this.itemQuantity = itemQuantity;
     }
     public String getDeliveryID() { return itemDeliveryID; }
+    
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
+
+    public void setItemCategory(String itemCategory) {
+        this.itemCategory = itemCategory;
+    }
+
+    public void setItemMeasurement(String itemMeasurement) {
+        this.itemMeasurement = itemMeasurement;
+    }
+
+    public void setDeliveryID(String deliveryID) {
+        this.itemDeliveryID = deliveryID;
+    }
+
+    public void setExpirationDate(String expirationDate) {
+        this.itemExpirationDate = expirationDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        this.itemDeliveryDate = deliveryDate;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        this.itemDeliveryTime = deliveryTime;
+    }
+
+    public void setDeliveryCourier(String deliveryCourier) {
+        this.itemDeliveryCourier = deliveryCourier;
+    }
+    
+    public void setItemCurrentStatus(String itemCurrentStatus) { 
+        this.itemCurrentStatus = itemCurrentStatus; 
+    }
+
     
 }
 
