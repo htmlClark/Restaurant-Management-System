@@ -3,6 +3,7 @@ import MainClasses.*;
 import MainPlacementFrame.*;
 import RestaurantManagementSystem_.InventoryManagement.*;
 import RestaurantManagementSystem_.Products.*;
+import RestaurantManagementSystem_.FoodWasteTracker.*;
 
 import java.awt.*;
 import javax.swing.*;
@@ -125,7 +126,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
             frame.switchPanel(new invList());
         }
         else if (e.getSource() == btnWasteLogs) {
-
+            frame.switchPanel(WasteLogPanel.forStaff());
         }
         else if (e.getSource() == btnDelivery) {
 
