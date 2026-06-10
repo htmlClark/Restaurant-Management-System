@@ -46,27 +46,27 @@ public class invDelivery extends JPanel implements ActionListener {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
 
         panelDate = new JPanel();
-        panelDate.setBounds(75, 25, 300, 50);
+        panelDate.setBounds(25, 25, 400, 50);
         panelDate.setBackground(Color.decode("#1b4a62"));
 
         lblDate = new JLabel("Date: " + now.format(dateFormat));
         lblDate.setForeground(Color.WHITE);
-        lblDate.setFont(new Font("Arial", Font.BOLD, 20));
+        lblDate.setFont(new Font("Arial", Font.BOLD, 35));
 
         panelDate.add(lblDate);
 
         panelTime = new JPanel();
-        panelTime.setBounds(400, 25, 315, 50);
+        panelTime.setBounds(521, 25, 400, 50);
         panelTime.setBackground(Color.decode("#1b4a62"));
 
         lblTime = new JLabel("Time: " + now.format(timeFormat));
         lblTime.setForeground(Color.WHITE);
-        lblTime.setFont(new Font("Arial", Font.BOLD, 20));
+        lblTime.setFont(new Font("Arial", Font.BOLD, 35));
 
         panelTime.add(lblTime);
 
         panelDeliveryTable = new JPanel(new BorderLayout());
-        panelDeliveryTable.setBounds(130, 100, 805, 350);
+        panelDeliveryTable.setBounds(25, 100, 900, 400);
         panelDeliveryTable.setBackground(Color.decode("#f5cfba"));
 
         model = new DefaultTableModel();
@@ -91,11 +91,11 @@ public class invDelivery extends JPanel implements ActionListener {
         panelDeliveryTable.add(scrollPane, BorderLayout.CENTER);
 
         btnAdd = new JButton("ADD");
-        btnAdd.setBounds(250, 600, 150, 30);
+        btnAdd.setBounds(215, 550, 150, 30);
         btnModify = new JButton("MODIFY");
-        btnModify.setBounds(450, 600, 150, 30);
+        btnModify.setBounds(415, 550, 150, 30);
         btnRemove = new JButton("REMOVE");
-        btnRemove.setBounds(650, 600, 150, 30);
+        btnRemove.setBounds(615, 550, 150, 30);
 
         stylebtnFunction(btnAdd);
         stylebtnFunction(btnModify);
@@ -219,7 +219,10 @@ public class invDelivery extends JPanel implements ActionListener {
                 
                     try {
                     int inputItemINTQuantity = Integer.parseInt(inputItemQuantity);
-                    
+                    int inputItemINTExpiration = Integer.parseInt(inputItemExpiration);
+                    int inputDeliveryINTDate = Integer.parseInt(inputDeliveryDate);
+                    int inputDeliveryINTTime = Integer.parseInt(inputDeliveryTime);
+
                     if (inputItemINTQuantity <= 0) {
                     JOptionPane.showMessageDialog(this,"Quantity must be over 0","Add Delivery | Error",JOptionPane.ERROR_MESSAGE);
                     return;
@@ -238,9 +241,9 @@ public class invDelivery extends JPanel implements ActionListener {
                             inputItemINTQuantity,
                             inputItemCategory,
                             inputItemMeasurement,
-                            inputItemExpiration,
-                            inputDeliveryDate,
-                            inputDeliveryTime,
+                            inputItemINTExpiration,
+                            inputDeliveryINTDate,
+                            inputDeliveryINTTime,
                             inputDeliveryCourier
                     });
 
@@ -369,53 +372,55 @@ public class invDelivery extends JPanel implements ActionListener {
                     String newDeliveryTime = txtAddDeliveryTime.getText().trim();
                     String newDeliveryCourier = txtAddDeliveryCourier.getText().trim();
 
-                    int newINTItemQuantity;
-
+                    
+                    
                     try {
-                        newINTItemQuantity = Integer.parseInt(newQuantity);
+                        int inputItemINTQuantity = Integer.parseInt(newQuantity);
+                        int inputItemINTExpiration = Integer.parseInt(newItemExpiration);
+                        int inputDeliveryINTDate = Integer.parseInt(newDeliveryDate);
+                        int inputDeliveryINTTime = Integer.parseInt(newDeliveryTime); // FIXED
+
+                        if (inputItemINTQuantity <= 0) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Quantity must be greater than 0",
+                                    "Modify Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        itemToModify.setDeliveryID(newDeliveryID);
+                        itemToModify.setItemID(newItemID);
+                        itemToModify.setItemName(newItemName);
+                        itemToModify.setItemQuantity(inputItemINTQuantity);
+                        itemToModify.setItemCategory(newItemCategory);
+                        itemToModify.setItemMeasurement(newItemMeasurement);
+                        itemToModify.setExpirationDate(newItemExpiration);
+                        itemToModify.setDeliveryDate(newDeliveryDate);
+                        itemToModify.setDeliveryTime(newDeliveryTime);
+                        itemToModify.setDeliveryCourier(newDeliveryCourier);
+
+                        model.setValueAt(newDeliveryID, selectedRow, 0);
+                        model.setValueAt(newItemID, selectedRow, 1);
+                        model.setValueAt(newItemName, selectedRow, 2);
+                        model.setValueAt(inputItemINTQuantity, selectedRow, 3);
+                        model.setValueAt(newItemCategory, selectedRow, 4);
+                        model.setValueAt(newItemMeasurement, selectedRow, 5);
+                        model.setValueAt(newItemExpiration, selectedRow, 6);
+                        model.setValueAt(newDeliveryDate, selectedRow, 7);
+                        model.setValueAt(newDeliveryTime, selectedRow, 8);
+                        model.setValueAt(newDeliveryCourier, selectedRow, 9);
+
+                        JOptionPane.showMessageDialog(this,
+                                "Delivery modified successfully",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(this,
                                 "Quantity must be a valid number",
                                 "Modify Error",
                                 JOptionPane.ERROR_MESSAGE);
-                        return;
                     }
-
-                    if (newINTItemQuantity <= 0) {
-                        JOptionPane.showMessageDialog(this,
-                                "Quantity must be greater than 0",
-                                "Modify Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    else {
-                    itemToModify.setDeliveryID(newDeliveryID);
-                    itemToModify.setItemID(newItemID);
-                    itemToModify.setItemName(newItemName);
-                    itemToModify.setItemQuantity(newINTItemQuantity);
-                    itemToModify.setItemCategory(newItemCategory);
-                    itemToModify.setItemMeasurement(newItemMeasurement);
-                    itemToModify.setExpirationDate(newItemExpiration);
-                    itemToModify.setDeliveryDate(newDeliveryDate);
-                    itemToModify.setDeliveryTime(newDeliveryTime);
-                    itemToModify.setDeliveryCourier(newDeliveryCourier);
-
-                    model.setValueAt(newDeliveryID, selectedRow, 0);
-                    model.setValueAt(newItemID, selectedRow, 1);
-                    model.setValueAt(newItemName, selectedRow, 2);
-                    model.setValueAt(newQuantity, selectedRow, 3);
-                    model.setValueAt(newItemCategory, selectedRow, 4);
-                    model.setValueAt(newItemMeasurement, selectedRow, 5);
-                    model.setValueAt(newItemExpiration, selectedRow, 6);
-                    model.setValueAt(newDeliveryDate, selectedRow, 7);
-                    model.setValueAt(newDeliveryTime, selectedRow, 8);
-                    model.setValueAt(newDeliveryCourier, selectedRow, 9);
-
-                    JOptionPane.showMessageDialog(this,
-                            "Delivery modified successfully",
-                            "Success",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
         }
             }
         }
@@ -460,8 +465,17 @@ public class invDelivery extends JPanel implements ActionListener {
             
             else {
                 JOptionPane.showMessageDialog(this,"Item not found in list","Remove Delivery | Error",JOptionPane.ERROR_MESSAGE);
-            }
-            }
-}
-}
-}
+                    }
+        }
+        }
+        }
+        }
+        
+    
+        
+        
+        
+
+
+
+
