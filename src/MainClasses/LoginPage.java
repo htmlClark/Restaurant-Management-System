@@ -1,6 +1,8 @@
 package MainClasses;
 
 import MainPlacementFrame.*;
+import RestaurantManagementSystem_.ManageUsers.UserManager;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -103,7 +105,7 @@ public class LoginPage extends JFrame implements ActionListener
             lblLoginSub.setBounds(870, 210, 500, 30);
             add(lblLoginSub);
 
-        lblUsername = new JLabel ("USERNAME");
+        lblUsername = new JLabel ("EMPLOYEE NUMBER");
             lblUsername.setFont(new Font("Arial", Font.PLAIN, 22));
             lblUsername.setForeground(Color.WHITE);
             lblUsername.setBounds(800, 310, 500, 30);
@@ -150,26 +152,49 @@ public class LoginPage extends JFrame implements ActionListener
         String passwordInput = new String(pwdPass.getPassword());
 
         if (e.getSource() == btnLogin) {
-            if ((usernameInput.equals("user123")) && (passwordInput.equals("user123"))) {
-                dispose();
-                userFrame UserFrame = new userFrame();
-                UserFrame.setVisible(true);
-            }
-            else if ((usernameInput.equals("admin123")) && (passwordInput.equals("admin123"))) {
-                dispose();
-                adminFrame AdminFrame = new adminFrame();
-                AdminFrame.setVisible(true);
-            }
-            else if ((usernameInput.equals("superadmin123")) && (passwordInput.equals("superadmin123"))) {
-                dispose();
-                superAdminFrame SuperAdminFrame = new superAdminFrame();
-                SuperAdminFrame.setVisible(true);
-            }
-            else
+            if(usernameInput.isEmpty() || passwordInput.isEmpty())
             {
-                JOptionPane.showMessageDialog(null,"Invalid username or password. Please try again.","LOGIN FAILED",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Please enter your Employee Number and Password to Log In",
+                        "LOGIN ERROR",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                return;
+            }
+            UserManager userManager = UserManager.getInstance();
+            String[] user = userManager.login(usernameInput,passwordInput);
+
+            if (user == null)
+            {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Invalid Employee Number or Password. Please Login again.",
+                        "LOGIN ERROR",
+                        JOptionPane.ERROR_MESSAGE
+                );
                 txtUsername.setText("");
                 pwdPass.setText("");
+                return;
+            }
+            userManager.recordLogin(usernameInput);
+
+            String role = user[4];
+            dispose();
+            if(role.equals("Staff"))
+            {
+                userFrame staff = new userFrame();
+                staff.setVisible(true);
+            }
+            else if(role.equals("Admin"))
+            {
+                adminFrame admin = new adminFrame();
+                admin.setVisible(true);
+            }
+            else if(role.equals("Super Admin"))
+            {
+                superAdminFrame super_admin = new superAdminFrame();
+                super_admin.setVisible(true);
             }
         }
 }}
