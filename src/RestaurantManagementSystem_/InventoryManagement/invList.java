@@ -94,14 +94,42 @@ public class invList extends JPanel implements ActionListener {
         add(btnRemove);
     }
     
-    private String currentStatus (int quantity){
-               
-        if (quantity <=10){
+        private String currentStatus(double quantity, String category) {
 
-            return "Low";
-        }
-        
-        return "Good";   
+            double measurementLow;
+
+            switch (category.toUpperCase()) {
+
+                case "MEAT":
+                    measurementLow = 15;
+                    break;
+
+                case "SEASONING":
+                    measurementLow = 1;
+                    break;
+
+                case "VEGETABLE":
+                    measurementLow = 2;
+                    break;
+
+                case "CONDIMENTS":
+                    measurementLow = 5;
+                    break;
+
+                case "OTHERS":
+                    measurementLow = 2;
+                    break;
+
+                default:
+                    measurementLow = 10;
+                    break;
+            }
+
+            if (quantity <= measurementLow) {
+                return "Low";
+            }
+
+            return "Good";
     }
 
     private void updateStockStatus() {
@@ -120,9 +148,8 @@ public class invList extends JPanel implements ActionListener {
 
         for (invItem item : inventoryList) {
 
-            if (item.getItemQuantity() <= 10) {
+            if (currentStatus(item.getItemQuantity(), item.getItemCategory()).equals("Low")) {
                 hasLowStock = true;
-                
                 if (item.getItemQuantity() < lowest.getItemQuantity()) {
                 lowest = item;
                 
@@ -135,15 +162,14 @@ public class invList extends JPanel implements ActionListener {
                 lblStock2.setText("All stocks are sufficient");
             } 
 
-    }
+            }
 
-    // 3️⃣ DECIDE WHAT TO SHOW
-    if (!hasLowStock) {
-        lblStock2.setText("All stocks are sufficient");
-    } else {
-        lblStock2.setText(lowest.getItemName() + " (" + lowest.getItemQuantity() + ")");
-    }
-}
+                if (!hasLowStock) {
+                lblStock2.setText("All stocks are sufficient");
+            } else {
+                lblStock2.setText(lowest.getItemName() + " (" + lowest.getItemQuantity() + ")");
+            }
+        }
 
     
     private void btnFunction(JButton btn)
@@ -166,7 +192,7 @@ public void actionPerformed(ActionEvent e)
 
         panelAdd = new JPanel(new GridLayout(6, 2, 5, 5));
 
-        lblAddID = new JLabel("ID:");
+        lblAddID = new JLabel("ID (e.g IT1001):");
         txtAddID = new JTextField();
 
         lblAddName = new JLabel("Name:");
@@ -210,17 +236,17 @@ public void actionPerformed(ActionEvent e)
 
             if (!inputItemID.isEmpty() && !inputItemName.isEmpty() && !inputItemQuantity.isEmpty()) {
                 
-                int inputItemINTQuantity;
-                try {
-                    inputItemINTQuantity = Integer.parseInt(inputItemQuantity);
-                }
+        double inputItemQuantityDouble;
+        
+        try {
+                inputItemQuantityDouble = Double.parseDouble(inputItemQuantity);                }
                 
                 catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Quantity must be a number", "Add Item | Error", JOptionPane.ERROR_MESSAGE); 
                     return; 
                 }
                 
-                if (inputItemINTQuantity > 0) {
+                if (inputItemQuantityDouble > 0) {
 
                     for (invItem item : inventoryList) {
                         if (item.getItemID().equalsIgnoreCase(inputItemID) || item.getItemName().equalsIgnoreCase(inputItemName)) {
@@ -230,9 +256,9 @@ public void actionPerformed(ActionEvent e)
                         
                     }
                     
-                    String status = currentStatus(inputItemINTQuantity);
+                    String status = currentStatus(inputItemQuantityDouble, inputItemCategory);
                     
-                    invItem item = new invItem(inputItemID,inputItemName,inputItemINTQuantity,inputItemCategory,inputItemMeasurement,"", "", "", "", "",status);
+                    invItem item = new invItem(inputItemID,inputItemName,inputItemQuantityDouble,inputItemCategory,inputItemMeasurement,"", "", "", "", "",status);
 
                     inventoryList.add(item);
                     updateStockStatus();
@@ -240,7 +266,7 @@ public void actionPerformed(ActionEvent e)
                     model.addRow(new Object[]{
                             inputItemID,
                             inputItemName,
-                            inputItemINTQuantity,
+                            inputItemQuantityDouble,
                             inputItemCategory,
                             inputItemMeasurement,
                             status 
@@ -296,7 +322,7 @@ public void actionPerformed(ActionEvent e)
             }
         
             String selectedItemName = item.getItemName();
-            int selectedItemQuantity = item.getItemQuantity();
+            double selectedItemQuantity = item.getItemQuantity();
 
             String newItemName = JOptionPane.showInputDialog(this, "Edit Name:", selectedItemName);
             String newItemQuantity = JOptionPane.showInputDialog(this, "Edit Quantity:", selectedItemQuantity);
@@ -305,17 +331,16 @@ public void actionPerformed(ActionEvent e)
                 return;
             }
 
-            int inputItemINTQuantity;
+            double inputItemQuantityDouble;
 
             try {
-                inputItemINTQuantity = Integer.parseInt(newItemQuantity);
-            }
+                inputItemQuantityDouble = Double.parseDouble(newItemQuantity);            }
             catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this,"Quantity must be a valid number!","Modify Item | Error",JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            if (inputItemINTQuantity <= 0) {
+            if (inputItemQuantityDouble <= 0) {
                 JOptionPane.showMessageDialog(this,"Invalid input","Modify Item | Error",JOptionPane.ERROR_MESSAGE);
                 return;
 
@@ -324,12 +349,12 @@ public void actionPerformed(ActionEvent e)
             else {
                 
                 item.setItemName(newItemName.trim());
-                item.setItemQuantity(inputItemINTQuantity);
+                item.setItemQuantity(inputItemQuantityDouble);
 
-                String status = currentStatus(inputItemINTQuantity);
+                String status = currentStatus(inputItemQuantityDouble, item.getItemCategory());
 
                 model.setValueAt(newItemName, userSelectedItem, 1);
-                model.setValueAt(inputItemINTQuantity, userSelectedItem, 2);
+                model.setValueAt(inputItemQuantityDouble, userSelectedItem, 2);
                 model.setValueAt(status, userSelectedItem, 5);
     
                 updateStockStatus();

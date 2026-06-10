@@ -142,7 +142,7 @@ public class invDelivery extends JPanel implements ActionListener {
             lblAddDeliveryID = new JLabel("Delivery ID:");
             txtAddDeliveryID = new JTextField();
 
-            lblAddItemID = new JLabel("Item ID:");
+            lblAddItemID = new JLabel("Item ID (e.g DV1001):");
             txtAddItemID = new JTextField();
 
             lblAddName = new JLabel("Item Name:");
@@ -218,19 +218,20 @@ public class invDelivery extends JPanel implements ActionListener {
                 if (!inputDeliveryID.isEmpty() && !inputItemID.isEmpty() && !inputItemName.isEmpty() && !inputItemQuantity.isEmpty()){
                 
                     try {
-                    int inputItemINTQuantity = Integer.parseInt(inputItemQuantity);
+                        
+                    double inputItemQuantityDouble = Double.parseDouble(inputItemQuantity);
                     int inputItemINTExpiration = Integer.parseInt(inputItemExpiration);
                     int inputDeliveryINTDate = Integer.parseInt(inputDeliveryDate);
                     int inputDeliveryINTTime = Integer.parseInt(inputDeliveryTime);
 
-                    if (inputItemINTQuantity <= 0) {
+                    if (inputItemQuantityDouble <= 0) {
                     JOptionPane.showMessageDialog(this,"Quantity must be over 0","Add Delivery | Error",JOptionPane.ERROR_MESSAGE);
                     return;
                     }
                     
                     else {
                         
-                    invItem item = new invItem(inputItemID,inputItemName,inputItemINTQuantity,inputItemCategory,inputItemMeasurement,inputDeliveryID,inputItemExpiration,inputDeliveryDate,inputDeliveryTime,inputDeliveryCourier, "");
+                    invItem item = new invItem(inputItemID,inputItemName,inputItemQuantityDouble,inputItemCategory,inputItemMeasurement,inputDeliveryID,inputItemExpiration,inputDeliveryDate,inputDeliveryTime,inputDeliveryCourier, "");
 
                     deliveryList.add(item);
                     
@@ -238,7 +239,7 @@ public class invDelivery extends JPanel implements ActionListener {
                             inputDeliveryID,
                             inputItemID,
                             inputItemName,
-                            inputItemINTQuantity,
+                            inputItemQuantityDouble,
                             inputItemCategory,
                             inputItemMeasurement,
                             inputItemINTExpiration,
@@ -347,11 +348,7 @@ public class invDelivery extends JPanel implements ActionListener {
                 panelModify.add(new JLabel("Courier:"));
                 panelModify.add(txtAddDeliveryCourier);
 
-                int result = JOptionPane.showConfirmDialog(
-                        this,
-                        panelModify,
-                        "Modify Delivery",
-                        JOptionPane.OK_CANCEL_OPTION
+                int result = JOptionPane.showConfirmDialog(this,panelModify,"Modify Delivery",JOptionPane.OK_CANCEL_OPTION
                 );
 
                 if (result != JOptionPane.OK_OPTION) {
@@ -375,12 +372,12 @@ public class invDelivery extends JPanel implements ActionListener {
                     
                     
                     try {
-                        int inputItemINTQuantity = Integer.parseInt(newQuantity);
+                        double inputItemQuantityDouble = Double.parseDouble(newQuantity);
                         int inputItemINTExpiration = Integer.parseInt(newItemExpiration);
                         int inputDeliveryINTDate = Integer.parseInt(newDeliveryDate);
                         int inputDeliveryINTTime = Integer.parseInt(newDeliveryTime); // FIXED
 
-                        if (inputItemINTQuantity <= 0) {
+                        if (inputItemQuantityDouble <= 0) {
                             JOptionPane.showMessageDialog(this,
                                     "Quantity must be greater than 0",
                                     "Modify Error",
@@ -391,7 +388,7 @@ public class invDelivery extends JPanel implements ActionListener {
                         itemToModify.setDeliveryID(newDeliveryID);
                         itemToModify.setItemID(newItemID);
                         itemToModify.setItemName(newItemName);
-                        itemToModify.setItemQuantity(inputItemINTQuantity);
+                        itemToModify.setItemQuantity(inputItemQuantityDouble);
                         itemToModify.setItemCategory(newItemCategory);
                         itemToModify.setItemMeasurement(newItemMeasurement);
                         itemToModify.setExpirationDate(newItemExpiration);
@@ -402,7 +399,7 @@ public class invDelivery extends JPanel implements ActionListener {
                         model.setValueAt(newDeliveryID, selectedRow, 0);
                         model.setValueAt(newItemID, selectedRow, 1);
                         model.setValueAt(newItemName, selectedRow, 2);
-                        model.setValueAt(inputItemINTQuantity, selectedRow, 3);
+                        model.setValueAt(inputItemQuantityDouble, selectedRow, 3);
                         model.setValueAt(newItemCategory, selectedRow, 4);
                         model.setValueAt(newItemMeasurement, selectedRow, 5);
                         model.setValueAt(newItemExpiration, selectedRow, 6);
