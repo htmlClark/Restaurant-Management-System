@@ -65,6 +65,7 @@ public class invItem {
     public void setItemQuantity(int itemQuantity) {
     this.itemQuantity = itemQuantity;
     }
+    public String getDeliveryID() { return itemDeliveryID; }
     
 }
 
