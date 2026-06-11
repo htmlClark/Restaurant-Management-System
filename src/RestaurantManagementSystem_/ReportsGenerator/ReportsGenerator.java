@@ -1,318 +1,532 @@
 package RestaurantManagementSystem_.ReportsGenerator;
-
+ 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.sql.*;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
-
+ 
 public class ReportsGenerator extends JPanel {
-
-    public ReportsGenerator()
-    {
-        //color conversion
+ 
+    private Connection conn;
+    private JPanel salesPanel;
+    private JPanel inventoryPanel;
+    private JPanel wastePanel;
+ 
+    
+    public ReportsGenerator() {
+        this(null);
+    }
+ 
+    
+    public ReportsGenerator(Connection databaseConnection) {
+        this.conn = databaseConnection;
+ 
         Color whitemain = Color.decode("#FFF8E1");
         Color darkblue  = Color.decode("#366379");
         Color red       = Color.decode("#B71C1C");
         Color snude     = Color.decode("#F5CFBA");
         Color steal     = Color.decode("#89B7B3");
-
+ 
         setBounds(300, 80, 980, 720);
         setLayout(null);
         setBackground(whitemain);
-
-        //panel sa sales
-        JPanel salesPanel = new JPanel();
+ 
+        
+        salesPanel = new JPanel();
         salesPanel.setLayout(null);
         salesPanel.setBackground(steal);
         salesPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         salesPanel.setBounds(10, 10, 560, 700);
-
-        //TITLE sa big panel
+        add(salesPanel);
+ 
         JLabel salesTitle = new JLabel("WEEKLY SALES REPORT");
         salesTitle.setFont(new Font("Arial", Font.BOLD, 22));
         salesTitle.setForeground(Color.BLACK);
         salesTitle.setHorizontalAlignment(JLabel.CENTER);
         salesTitle.setBounds(0, 5, 560, 40);
         salesPanel.add(salesTitle);
-
-        //data ng sales panels placeholder only
-        add(salesPanel);
-        salesPanel.add(createSalesCard("METRIC", "VALUE", 60, darkblue, Color.WHITE));
-        salesPanel.add(createSalesCard("Total Weekly Sales", "₱0.00", 115, Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Average Daily Sales", "₱0.00", 165, Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Highest Daily Sales", "₱0.00", 215, Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Lowest Daily Sales", "₱0.00", 265, Color.WHITE, Color.BLACK));
-
-        //part paren ng sales panel pero ito sa best seller na
-        JLabel bestSellerTitle = new JLabel("BEST SELLERS");
-        bestSellerTitle.setFont(new Font("Arial", Font.BOLD, 22));
-        bestSellerTitle.setForeground(Color.BLACK);
-        bestSellerTitle.setHorizontalAlignment(JLabel.CENTER);
-        bestSellerTitle.setBounds(0, 360, 560, 40);
-        salesPanel.add(bestSellerTitle);
-
-        //placeholder data for the best seller
-        salesPanel.add(createBestSellerRow("DISH", "UNIT SOLD", "REVENUE", 410, darkblue, Color.WHITE));
-        salesPanel.add(createBestSellerRow("Chicken Adobo", "150", "₱50,000", 465, Color.WHITE, Color.BLACK));
-        salesPanel.add(createBestSellerRow("Pork Sisig", "100", "₱80,000", 520, Color.WHITE, Color.BLACK));
-        salesPanel.add(createBestSellerRow("Dinakdakan", "120", "₱70,000", 575, Color.WHITE, Color.BLACK));
-
-        //inventory panel na po to
-        JPanel inventoryPanel = new JPanel();
+ 
+        
+        inventoryPanel = new JPanel();
         inventoryPanel.setLayout(null);
         inventoryPanel.setBackground(steal);
         inventoryPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         inventoryPanel.setBounds(590, 10, 375, 350);
-
-        //title lang
+        add(inventoryPanel);
+ 
         JLabel invTitle = new JLabel("INVENTORY", JLabel.CENTER);
         invTitle.setFont(new Font("Arial", Font.BOLD, 22));
         invTitle.setForeground(Color.BLACK);
-        invTitle.setHorizontalAlignment(JLabel.CENTER);
-        invTitle.setBounds(50, 10, 275, 30);
+        invTitle.setBounds(0, 10, 375, 30);
         inventoryPanel.add(invTitle);
-
-        add(inventoryPanel);
-
-        //placeholder data sa inventory panel
-        inventoryPanel.add(createInventoryRow("CATEGORY", "TOTAL", 60, darkblue, Color.WHITE));
-        inventoryPanel.add(createInventoryRow("Pork", "50 kg", 105, Color.WHITE, Color.BLACK));
-        inventoryPanel.add(createInventoryRow("Beef", "30 kg", 150, Color.WHITE, Color.BLACK));
-        inventoryPanel.add(createInventoryRow("Vegetables", "25 kg", 195, Color.WHITE, Color.BLACK));
-        inventoryPanel.add(createInventoryRow("Seafood", "15 kg", 240, Color.WHITE, Color.BLACK));
-        inventoryPanel.add(createInventoryRow("Rice", "100 kg", 285, Color.WHITE, Color.BLACK));
-
-        //waste panel na
-        JPanel wastePanel = new JPanel();
+ 
+        
+        wastePanel = new JPanel();
         wastePanel.setLayout(null);
         wastePanel.setBackground(steal);
         wastePanel.setBounds(590, 370, 375, 340);
-
-        //title
+        add(wastePanel);
+ 
         JLabel wasteTitle = new JLabel("WASTE DISTRIBUTION");
         wasteTitle.setFont(new Font("Arial", Font.BOLD, 22));
         wasteTitle.setForeground(Color.BLACK);
         wasteTitle.setHorizontalAlignment(JLabel.CENTER);
         wasteTitle.setBounds(0, 10, 375, 30);
         wastePanel.add(wasteTitle);
-
-        // placeholder po
-        String[] wasteItems  = {"Pork", "Beef", "Vegetables", "Seafood", "Rice"};
-        double[] wasteValues = {45, 25, 15, 10, 5};
-        Color[] wasteColors  = {red, darkblue, snude, Color.WHITE, Color.GRAY};
-
-        // piecharts
-        PieChartPanel pieChart = new PieChartPanel(wasteValues, wasteColors, wasteItems);
-        pieChart.setBounds(0, 40, 375, 280);
-        wastePanel.add(pieChart);
-        add(wastePanel);
+ 
+        if (conn != null) {
+            loadSalesData(darkblue);
+            loadBestSellers(darkblue);
+            loadInventoryData(darkblue);
+            loadWasteData(red, darkblue, snude);
+        } else {
+            insertDefaultPlaceholders(darkblue, red, snude);
+        }
     }
-
-    private JPanel createSalesCard(String metric, String value, int y, Color cardColor, Color textColor)
-    {
-        JPanel container = new JPanel();
-        container.setLayout(null);
+ 
+    
+    
+    
+ 
+    
+    private void loadSalesData(Color darkblue) {
+        double totalSales = 0, maxDaily = 0, minDaily = 0, avgSales = 0;
+ 
+        
+        String query =
+            "SELECT o.order_date, SUM(oi.price * oi.quantity) AS daily_total " +
+            "FROM order_items oi " +
+            "JOIN orders o ON oi.order_id = o.order_id " +
+            "GROUP BY o.order_date " +
+            "ORDER BY o.order_date";
+ 
+        int daysCount = 0;
+        boolean first = true;
+ 
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs   = stmt.executeQuery(query)) {
+ 
+            while (rs.next()) {
+                double dailyTotal = rs.getDouble("daily_total");
+                totalSales += dailyTotal;
+ 
+                if (first) {
+                    maxDaily = dailyTotal;
+                    minDaily = dailyTotal;
+                    first = false;
+                } else {
+                    if (dailyTotal > maxDaily) maxDaily = dailyTotal;
+                    if (dailyTotal < minDaily) minDaily = dailyTotal;
+                }
+                daysCount++;
+            }
+ 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+ 
+        avgSales = daysCount > 0 ? totalSales / daysCount : 0;
+ 
+        
+        salesPanel.add(createSalesCard("METRIC",               "VALUE",                                    60,  darkblue,    Color.WHITE));
+        salesPanel.add(createSalesCard("Total Weekly Sales",   String.format("₱%,.2f", totalSales),       115,  Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Average Daily Sales",  String.format("₱%,.2f", avgSales),         170,  Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Highest Daily Sales",  String.format("₱%,.2f", maxDaily),         225,  Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Lowest Daily Sales",   String.format("₱%,.2f", minDaily),         280,  Color.WHITE, Color.BLACK));
+    }
+ 
+    
+    private void loadBestSellers(Color darkblue) {
+        JLabel bestSellerTitle = new JLabel("BEST SELLERS");
+        bestSellerTitle.setFont(new Font("Arial", Font.BOLD, 22));
+        bestSellerTitle.setForeground(Color.BLACK);
+        bestSellerTitle.setHorizontalAlignment(JLabel.CENTER);
+        bestSellerTitle.setBounds(0, 340, 560, 40);
+        salesPanel.add(bestSellerTitle);
+ 
+        
+        salesPanel.add(createBestSellerRow("DISH", "UNITS SOLD", "REVENUE", 390, darkblue, Color.WHITE));
+ 
+        String query =
+            "SELECT d.dish_name, " +
+            "       SUM(oi.quantity)              AS units_sold, " +
+            "       SUM(oi.price * oi.quantity)   AS total_revenue " +
+            "FROM order_items oi " +
+            "JOIN dish_list d ON oi.dish_id = d.dish_id " +
+            "GROUP BY oi.dish_id, d.dish_name " +
+            "ORDER BY units_sold DESC " +
+            "LIMIT 5";   
+ 
+        int yOffset  = 445;
+        int maxY     = 690; 
+ 
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs   = stmt.executeQuery(query)) {
+ 
+            while (rs.next() && yOffset + 50 <= maxY) {
+                String dishName = rs.getString("dish_name");
+                int    sold     = rs.getInt("units_sold");
+                double revenue  = rs.getDouble("total_revenue");
+ 
+                salesPanel.add(createBestSellerRow(
+                        dishName,
+                        String.valueOf(sold),
+                        String.format("₱%,.2f", revenue),
+                        yOffset,
+                        Color.WHITE,
+                        Color.BLACK));
+                yOffset += 50;
+            }
+ 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    
+    private void loadInventoryData(Color darkblue) {
+        
+        inventoryPanel.add(createInventoryRow("CATEGORY", "QTY (units)", 55, darkblue, Color.WHITE));
+ 
+        String query =
+            "SELECT dish_category, SUM(quantity) AS total_qty " +
+            "FROM inventory " +
+            "GROUP BY dish_category " +
+            "ORDER BY dish_category";
+ 
+        int yOffset = 100;
+ 
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs   = stmt.executeQuery(query)) {
+ 
+            while (rs.next()) {
+                String category = rs.getString("dish_category");
+                double qty      = rs.getDouble("total_qty");
+ 
+                inventoryPanel.add(createInventoryRow(
+                        category,
+                        String.format("%.2f", qty),
+                        yOffset,
+                        Color.WHITE,
+                        Color.BLACK));
+                yOffset += 45;
+ 
+                
+                if (yOffset + 45 > 340) break;
+            }
+ 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    
+    private void loadWasteData(Color red, Color darkblue, Color snude) {
+        String query =
+            "SELECT i.dish_category, SUM(w.quantity) AS total_waste " +
+            "FROM wastelogs w " +
+            "JOIN inventory i ON w.inv_id = i.inv_id " +
+            "GROUP BY i.dish_category " +
+            "ORDER BY total_waste DESC";
+ 
+        ArrayList<String> itemsList   = new ArrayList<>();
+        ArrayList<Double> valuesList  = new ArrayList<>();
+ 
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs   = stmt.executeQuery(query)) {
+ 
+            while (rs.next()) {
+                double waste = rs.getDouble("total_waste");
+                if (waste > 0) {                          
+                    itemsList.add(rs.getString("dish_category"));
+                    valuesList.add(waste);
+                }
+            }
+ 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+ 
+        if (itemsList.isEmpty()) {
+            itemsList.add("No Waste Recorded");
+            valuesList.add(100.0);
+        }
+ 
+        String[] wasteItems  = itemsList.toArray(new String[0]);
+        double[] wasteValues = valuesList.stream().mapToDouble(Double::doubleValue).toArray();
+        Color[]  wasteColors = { red, darkblue, snude, Color.ORANGE, Color.PINK, Color.CYAN, Color.GRAY };
+ 
+        PieChartPanel pieChart = new PieChartPanel(wasteValues, wasteColors, wasteItems);
+        pieChart.setBounds(0, 45, 375, 285);
+        wastePanel.add(pieChart);
+    }
+ 
+    
+    
+    
+ 
+    
+    private void insertDefaultPlaceholders(Color darkblue, Color red, Color snude) {
+        
+        salesPanel.add(createSalesCard("METRIC",              "VALUE",  60,  darkblue,    Color.WHITE));
+        salesPanel.add(createSalesCard("Total Weekly Sales",  "₱0.00",  115, Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Average Daily Sales", "₱0.00",  170, Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Highest Daily Sales", "₱0.00",  225, Color.WHITE, Color.BLACK));
+        salesPanel.add(createSalesCard("Lowest Daily Sales",  "₱0.00",  280, Color.WHITE, Color.BLACK));
+ 
+        JLabel bestSellerTitle = new JLabel("BEST SELLERS");
+        bestSellerTitle.setFont(new Font("Arial", Font.BOLD, 22));
+        bestSellerTitle.setForeground(Color.BLACK);
+        bestSellerTitle.setHorizontalAlignment(JLabel.CENTER);
+        bestSellerTitle.setBounds(0, 340, 560, 40);
+        salesPanel.add(bestSellerTitle);
+ 
+        salesPanel.add(createBestSellerRow("DISH", "UNITS SOLD", "REVENUE", 390, darkblue, Color.WHITE));
+        salesPanel.add(createBestSellerRow("N/A",  "—",          "₱0.00",   445, Color.WHITE, Color.BLACK));
+ 
+        
+        inventoryPanel.add(createInventoryRow("CATEGORY", "QTY (units)", 55,  darkblue,    Color.WHITE));
+        inventoryPanel.add(createInventoryRow("No Data",  "—",           100, Color.WHITE,  Color.BLACK));
+ 
+        
+        String[] wasteItems  = { "No Connection" };
+        double[] wasteValues = { 100 };
+        Color[]  wasteColors = { Color.GRAY };
+        PieChartPanel pieChart = new PieChartPanel(wasteValues, wasteColors, wasteItems);
+        pieChart.setBounds(0, 45, 375, 285);
+        wastePanel.add(pieChart);
+    }
+ 
+    
+    
+    
+ 
+    
+    JPanel createSalesCard(String metric, String value, int y, Color cardColor, Color textColor) {
+        JPanel container = new JPanel(null);
         container.setOpaque(false);
-        container.setBounds(20, y, 550, 45);
-
-        // LEFT CARD
+        container.setBounds(10, y, 540, 45);   
+ 
         JPanel leftCard = new JPanel(null);
         leftCard.setBackground(cardColor);
         leftCard.setBounds(0, 0, 260, 45);
-
+ 
         JLabel metricLabel = new JLabel(metric);
         metricLabel.setFont(new Font("Arial", Font.BOLD, 14));
         metricLabel.setForeground(textColor);
         metricLabel.setHorizontalAlignment(JLabel.CENTER);
         metricLabel.setBounds(0, 0, 260, 45);
         leftCard.add(metricLabel);
-
-        // RIGHT CARD
+ 
         JPanel rightCard = new JPanel(null);
         rightCard.setBackground(cardColor);
-        rightCard.setBounds(270, 0, 260, 45);
-
+        rightCard.setBounds(270, 0, 260, 45);   
+ 
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(new Font("Arial", Font.BOLD, 14));
         valueLabel.setForeground(textColor);
         valueLabel.setHorizontalAlignment(JLabel.CENTER);
         valueLabel.setBounds(0, 0, 260, 45);
         rightCard.add(valueLabel);
-
+ 
         container.add(leftCard);
         container.add(rightCard);
-
         return container;
     }
-
-    private JPanel createBestSellerRow(String dish, String units, String revenue, int y, Color cardColor, Color textColor)
-    {
-        JPanel container = new JPanel();
-        container.setLayout(null);
+ 
+    JPanel createBestSellerRow(String dish, String units, String revenue,
+                               int y, Color cardColor, Color textColor) {
+        JPanel container = new JPanel(null);
         container.setOpaque(false);
-        container.setBounds(20, y, 550, 60);
-
-        // LEFT CARD (DISH)
-        JPanel leftCard = new JPanel();
-        leftCard.setLayout(null);
+        container.setBounds(10, y, 540, 50);
+ 
+        int cardH = 45;
+ 
+        JPanel leftCard = new JPanel(null);
         leftCard.setBackground(cardColor);
-        leftCard.setBounds(0, 0, 165, 45);
-
+        leftCard.setBounds(0, 0, 170, cardH);
+ 
         JLabel dishLabel = new JLabel(dish);
-        dishLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        dishLabel.setFont(new Font("Arial", Font.BOLD, 13));
         dishLabel.setForeground(textColor);
         dishLabel.setHorizontalAlignment(JLabel.CENTER);
-        dishLabel.setBounds(5, 12, 155, 20);
+        dishLabel.setBounds(5, 0, 160, cardH);
         leftCard.add(dishLabel);
-
-        // CENTER CARD (UNIT SOLD)
-        JPanel centerCard = new JPanel();
-        centerCard.setLayout(null);
+ 
+        JPanel centerCard = new JPanel(null);
         centerCard.setBackground(cardColor);
-        centerCard.setBounds(180, 0, 165, 45);
-
+        centerCard.setBounds(180, 0, 170, cardH);
+ 
         JLabel unitLabel = new JLabel(units);
-        unitLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        unitLabel.setFont(new Font("Arial", Font.BOLD, 13));
         unitLabel.setForeground(textColor);
         unitLabel.setHorizontalAlignment(JLabel.CENTER);
-        unitLabel.setBounds(5, 12, 155, 20);
+        unitLabel.setBounds(5, 0, 160, cardH);
         centerCard.add(unitLabel);
-
-        // RIGHT CARD (REVENUE)
-        JPanel rightCard = new JPanel();
-        rightCard.setLayout(null);
+ 
+        JPanel rightCard = new JPanel(null);
         rightCard.setBackground(cardColor);
-        rightCard.setBounds(360, 0, 165, 45);
-
+        rightCard.setBounds(360, 0, 170, cardH);
+ 
         JLabel revenueLabel = new JLabel(revenue);
-        revenueLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        revenueLabel.setFont(new Font("Arial", Font.BOLD, 13));
         revenueLabel.setForeground(textColor);
         revenueLabel.setHorizontalAlignment(JLabel.CENTER);
-        revenueLabel.setBounds(5, 12, 155, 20);
+        revenueLabel.setBounds(5, 0, 160, cardH);
         rightCard.add(revenueLabel);
-
+ 
         container.add(leftCard);
         container.add(centerCard);
         container.add(rightCard);
-
         return container;
     }
-
-    private JPanel createInventoryRow(String item, String qty, int y, Color cardColor, Color textColor)
-    {
-        JPanel container = new JPanel();
-        container.setLayout(null);
+ 
+    JPanel createInventoryRow(String item, String qty,
+                              int y, Color cardColor, Color textColor) {
+        JPanel container = new JPanel(null);
         container.setOpaque(false);
-        container.setBounds(10, y, 355, 45);
-
-        // --- LEFT CARD (CATEGORY / ITEM NAME) ---
-        JPanel itemCard = new JPanel();
-        itemCard.setLayout(null);
+        container.setBounds(10, y, 350, 40);
+ 
+        JPanel itemCard = new JPanel(null);
         itemCard.setBackground(cardColor);
         itemCard.setBounds(0, 0, 200, 35);
-
+ 
         JLabel itemLabel = new JLabel(item);
         itemLabel.setFont(new Font("Arial", Font.BOLD, 12));
         itemLabel.setForeground(textColor);
         itemLabel.setHorizontalAlignment(JLabel.CENTER);
-        itemLabel.setBounds(5, 7, 190, 20);
+        itemLabel.setBounds(5, 0, 190, 35);
         itemCard.add(itemLabel);
-
-        // --- RIGHT CARD (TOTAL / VALUE) ---
-        JPanel qtyCard = new JPanel();
-        qtyCard.setLayout(null);
+ 
+        JPanel qtyCard = new JPanel(null);
         qtyCard.setBackground(cardColor);
-        qtyCard.setBounds(210, 0, 140, 35);
-
+        qtyCard.setBounds(210, 0, 135, 35);
+ 
         JLabel qtyLabel = new JLabel(qty);
         qtyLabel.setFont(new Font("Arial", Font.BOLD, 12));
         qtyLabel.setForeground(textColor);
         qtyLabel.setHorizontalAlignment(JLabel.CENTER);
-        qtyLabel.setBounds(5, 7, 130, 20);
+        qtyLabel.setBounds(5, 0, 125, 35);
         qtyCard.add(qtyLabel);
-
+ 
         container.add(itemCard);
         container.add(qtyCard);
-
         return container;
     }
-
+ 
+    
+    
+    
+ 
+    
     class PieChartPanel extends JPanel {
-        private double[] values;
-        private Color[] colors;
-        private String[] labels; // Added labels for the hover effect
-
-        public PieChartPanel(double[] values, Color[] colors, String[] labels)
-        {
+        private final double[] values;
+        private final Color[]  colors;
+        private final String[] labels;
+ 
+        private static final int PIE_SIZE   = 160;
+        private static final int LEGEND_H   = 16;
+        private static final int LEGEND_GAP = 4;
+ 
+        public PieChartPanel(double[] values, Color[] colors, String[] labels) {
             this.values = values;
             this.colors = colors;
             this.labels = labels;
             setOpaque(false);
-
-            //hover code
-            addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+ 
+            addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
-                public void mouseMoved(java.awt.event.MouseEvent e) {
-                    int size = 180;
-                    int centerX = getWidth() / 2;
-                    int centerY = getHeight() / 2;
-                    int mouseX = e.getX();
-                    int mouseY = e.getY();
-
-                    double distance = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
-
-                    if (distance <= size / 2)
-                    {
-                        double angle = Math.toDegrees(Math.atan2(centerY - mouseY, mouseX - centerX));
-                        if (angle < 0) angle += 360;
-
-                        double total = 0;
-                        for (double v : values) total += v;
-
-                        double currentAngle = 0;
-                        for (int i = 0; i < values.length; i++)
-                        {
-                            double sliceAngle = (values[i] / total) * 360;
-                            if (angle >= currentAngle && angle <= (currentAngle + sliceAngle))
-                            {
-                                double percent = (values[i] / total) * 100;
-                                setToolTipText(String.format("%s: %.1f%% (Value: %.0f kg)", labels[i], percent, values[i]));
-                                return;
-                            }
-                            currentAngle += sliceAngle;
+                public void mouseMoved(MouseEvent e) {
+                    int cx = getWidth()  / 2;
+                    int cy = PIE_SIZE    / 2 + 10;          
+ 
+                    double dx = e.getX() - cx;
+                    double dy = e.getY() - cy;
+                    double dist = Math.sqrt(dx * dx + dy * dy);
+ 
+                    if (dist > PIE_SIZE / 2.0) {
+                        setToolTipText(null);
+                        return;
+                    }
+ 
+                    
+                    
+                    double angle = Math.toDegrees(Math.atan2(-dy, dx)); 
+                    if (angle < 0) angle += 360;
+ 
+                    double total = 0;
+                    for (double v : values) total += v;
+ 
+                    double cursor = 0;
+                    for (int i = 0; i < values.length; i++) {
+                        double sweep = (values[i] / total) * 360.0;
+                        if (angle >= cursor && angle < cursor + sweep) {
+                            double pct = (values[i] / total) * 100.0;
+                            setToolTipText(String.format(
+                                    "%s: %.1f%%  (%.2f units)", labels[i], pct, values[i]));
+                            return;
                         }
+                        cursor += sweep;
                     }
-                    else
-                    {
-                        setToolTipText(null); // Hide tooltip if mouse is outside circle
-                    }
+                    setToolTipText(null);
                 }
             });
         }
-
-        //code for the pie chart creation
+ 
         @Override
-        protected void paintComponent(Graphics g)
-        {
+        protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int size = 180;
-            int x = (getWidth() - size) / 2;
-            int y = (getHeight() - size) / 2;
-
+ 
+            int w   = getWidth();
+            int px  = (w - PIE_SIZE) / 2;
+            int py  = 10;                   
+ 
             double total = 0;
             for (double val : values) total += val;
-
+ 
+            
+            
             double startAngle = 0;
-            for (int i = 0; i < values.length; i++)
-            {
+            for (int i = 0; i < values.length; i++) {
                 double arcAngle = (values[i] / total) * 360.0;
                 g2.setColor(colors[i % colors.length]);
-                g2.fillArc(x, y, size, size, (int) startAngle, (int) arcAngle);
+                g2.fillArc(px, py, PIE_SIZE, PIE_SIZE, (int) startAngle, (int) arcAngle);
+ 
+                
+                g2.setColor(Color.WHITE);
+                g2.setStroke(new BasicStroke(1.5f));
+                g2.drawArc(px, py, PIE_SIZE, PIE_SIZE, (int) startAngle, (int) arcAngle);
+ 
                 startAngle += arcAngle;
+            }
+ 
+            
+            int legendY = py + PIE_SIZE + 8;
+            g2.setFont(new Font("Arial", Font.PLAIN, 11));
+            FontMetrics fm = g2.getFontMetrics();
+ 
+            for (int i = 0; i < labels.length; i++) {
+                
+                double pct        = (values[i] / total) * 100.0;
+                String legendText = labels[i] + String.format(" (%.1f%%)", pct);
+                int    textW      = fm.stringWidth(legendText);
+                int    blockW     = LEGEND_H + 4 + textW;
+                int    lx         = (w - blockW) / 2;
+ 
+                g2.setColor(colors[i % colors.length]);
+                g2.fillRect(lx, legendY + 2, LEGEND_H, LEGEND_H);
+                g2.setColor(Color.BLACK);
+                g2.drawRect(lx, legendY + 2, LEGEND_H, LEGEND_H);
+                g2.drawString(legendText, lx + LEGEND_H + 4, legendY + LEGEND_H);
+ 
+                legendY += LEGEND_H + LEGEND_GAP + 2;
             }
         }
     }
 }
+ 
