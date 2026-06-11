@@ -13,8 +13,8 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
     private JButton btnDashboard, btnProducts, btnInventory, btnWasteLogs, btnDelivery, btnLogout;
     private JLabel lblLogo;
     private JPanel contentPanel;
-    
-    
+
+
     public SidePanel_Staff()
     {
         panelButtons();
@@ -32,22 +32,12 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
     }
     
     public void panelButtons() {
-        //Dashboard
-        ImageIcon dashboard = new ImageIcon (getClass().getResource("/src_pack/images/dashboard.png"));
-        Image dashboardSize = dashboard.getImage().getScaledInstance(300, 80, Image.SCALE_DEFAULT);
-        btnDashboard = new JButton(new ImageIcon(dashboardSize));
-            btnDashboard.setBounds(0, 80, 300, 80);
-            btnDashboard.setBorderPainted(false);
-            btnDashboard.addActionListener(this);
-            btnDashboard.setBackground(Color.decode("#366379"));
-            add(btnDashboard);
-        
         //RestaurantManagementSystem_.Products
         ImageIcon prodLogo = new ImageIcon (getClass().getResource("/src_pack/images/product.png"));
         Image prodSize = prodLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnProducts = new JButton("   PRODUCTS",new ImageIcon(prodSize));
-            btnProducts.setBounds(0, 160, 300, 80);
+            btnProducts.setBounds(0, 80, 300, 80);
             btnProducts.setForeground(Color.WHITE);
             btnProducts.setBackground(Color.decode("#366379"));
             btnProducts.setFont(new Font("Arial", Font.BOLD, 20));
@@ -61,7 +51,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
         Image invSize = invLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnInventory = new JButton("   INVENTORY",new ImageIcon(invSize));
-            btnInventory.setBounds(0, 240, 300, 80);
+            btnInventory.setBounds(0, 160, 300, 80);
             btnInventory.setForeground(Color.WHITE);
             btnInventory.setBackground(Color.decode("#366379"));
             btnInventory.setFont(new Font("Arial", Font.BOLD, 20));
@@ -75,7 +65,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
         Image wasteSize = wasteLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         
         btnWasteLogs = new JButton("   WASTE LOGS",new ImageIcon(wasteSize));
-            btnWasteLogs.setBounds(0, 320, 300, 80);
+            btnWasteLogs.setBounds(0, 240, 300, 80);
             btnWasteLogs.setForeground(Color.WHITE);
             btnWasteLogs.setBackground(Color.decode("#366379"));
             btnWasteLogs.setFont(new Font("Arial", Font.BOLD, 20));
@@ -89,7 +79,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
         Image deliSize = deliLogo.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
         
         btnDelivery = new JButton("  DELIVERY",new ImageIcon(deliSize));
-            btnDelivery.setBounds(0, 400, 300, 80);
+            btnDelivery.setBounds(0, 320, 300, 80);
             btnDelivery.setForeground(Color.WHITE);
             btnDelivery.setBackground(Color.decode("#366379"));
             btnDelivery.setFont(new Font("Arial", Font.BOLD, 20));
@@ -116,10 +106,7 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         userFrame frame = (userFrame) getParent().getParent().getParent().getParent();
-        if (e.getSource() == btnDashboard) {
-
-        }
-        else if (e.getSource() == btnProducts) {
+        if (e.getSource() == btnProducts) {
             frame.switchPanel(new Products());
         }
         else if (e.getSource() == btnInventory) {

@@ -1,5 +1,6 @@
 package MainPlacementFrame;
 import HeaderPanels.*;
+import RestaurantManagementSystem_.ManageUsers.ManageUsersSuperAdminPanel;
 import RestaurantManagementSystem_.Products.*;
 import SidePanels.*;
 
@@ -18,7 +19,7 @@ public class superAdminFrame extends JFrame implements ActionListener{
 
         add(new SidePanel_SuperAdmin());
         add(new Header_SuperAdmin("SUPER ADMIN"));
-        add (new Products());
+        add (new ManageUsersSuperAdminPanel());
 
         setVisible(true);
     }
