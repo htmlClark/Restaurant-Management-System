@@ -219,7 +219,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
             for (int i = 0; i < rowCheckboxes.length; i++)
             {
                 if (rowCheckboxes[i] != null && rowCheckboxes[i].isSelected())
-                    selected.add(userData[i][2]);
+                    selected.add(userData[i][1]);
             }
         }
         return selected;
