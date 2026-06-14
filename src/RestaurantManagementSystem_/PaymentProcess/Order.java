@@ -1,13 +1,20 @@
 package RestaurantManagementSystem_.PaymentProcess;
 import java.util.ArrayList;
 public class Order {
-    
+
+    private static int orderCounter = 1;
+
     private int orderNumber;
     private ArrayList<OrderItem> items;
-    
-    public Order(int OrderNumber) {
-        this.orderNumber = orderNumber;
+
+    public Order() {
+        this.orderNumber = orderCounter++;
         this.items = new ArrayList<OrderItem>();
+    }
+
+    /** Legacy constructor — kept for compatibility; counter still auto-increments. */
+    public Order(int ignoredOrderNumber) {
+        this();
     }
     
     public void addItem (OrderItem item) {
@@ -39,4 +46,3 @@ public class Order {
         return getSubtotal() + getTax();
     }
 }
-   
