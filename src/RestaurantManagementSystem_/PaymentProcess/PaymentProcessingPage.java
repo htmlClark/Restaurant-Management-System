@@ -11,7 +11,6 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
 
     private JLabel lblPaymentProcessing, lblOrderSummary, lblSubtotal, lblTax, lblTotal,
     lblPaymentMethod, lblAmountTendered, lblPaid, lblChange;
-
     private JButton btnCash, btnCard, btnGcash,
             btn100, btn200, btn500, btn1000, btnExact,
             btnProcessPayment, btnCancel;
@@ -30,6 +29,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
     Font fontNormal = new Font("Arial", Font.PLAIN, 14);
     Font fontTotal  = new Font("Arial", Font.BOLD, 16);
 
+    private String selectedPaymentMethod = null;
     private Order order;
     private ProductSummary summaryPanel;
 
@@ -245,47 +245,124 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         }
     }
 
+    private void selectPaymentMethod(JButton selectedBtn, String paymentMethod)
+    {
+        //tis is for un-selecting buttons
+        if (paymentMethod.equals(selectedPaymentMethod))
+        {
+            selectedBtn.setBackground(colorWhite);
+            selectedBtn.setForeground(Color.BLACK);
+            selectedPaymentMethod = null;
+            return;
+        }
+
+        //tis for unselected buttons setup
+        btnCard.setBackground(colorWhite);
+        btnCard.setForeground(Color.BLACK);
+
+        btnCash.setBackground(colorWhite);
+        btnCash.setForeground(Color.BLACK);
+
+        btnGcash.setBackground(colorWhite);
+        btnGcash.setForeground(Color.BLACK);
+
+        //tis for selected button
+        selectedBtn.setBackground(colorGreen);
+        selectedBtn.setForeground(colorWhite);
+        selectedPaymentMethod = paymentMethod;
+    }
+
+    private boolean validatePaymentMethod()
+    {
+        if (selectedPaymentMethod == null)
+        {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please select a payment method first.",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
+
+    private void validateAmtTendered()
+    {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        try {
+            double tendered = Double.parseDouble(txtAmountTendered.getText().trim());
+            double orderTotal = order.getTotal();
+            if (tendered >= orderTotal)
+            {
+                if (tendered >= (orderTotal*10))
+                {
+                    int cashNotice = JOptionPane.showConfirmDialog(
+                            null,
+                            "Oops. Amount Tendered exceed 10 times more than the Total Amount.\nDo you still want to continue?",
+                            "CASH AMOUNT NOTICE!",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if(cashNotice == JOptionPane.YES_OPTION)
+                    {
+                        PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(frame, order);
+                        dialog.setVisible(true);
+                    }
+                }
+                else
+                {
+                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(frame, order);
+                    dialog.setVisible(true);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Insufficient amount!",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Please enter a valid amount!",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cancelBtn()
+    {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        JPanel nextPanel = new Products(summaryPanel);
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(nextPanel);
+        frame.revalidate();
+        frame.repaint();
+
+        if (frame instanceof userFrame)            { ((userFrame) frame).switchPanel(nextPanel); }
+        else if (frame instanceof adminFrame)      { ((adminFrame) frame).switchPanel(nextPanel); }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-
         if      (e.getSource() == btn100)   { txtAmountTendered.setText("100.00");  computeChange(); }
         else if (e.getSource() == btn200)   { txtAmountTendered.setText("200.00");  computeChange(); }
         else if (e.getSource() == btn500)   { txtAmountTendered.setText("500.00");  computeChange(); }
         else if (e.getSource() == btn1000)  { txtAmountTendered.setText("1000.00"); computeChange(); }
         else if (e.getSource() == btnExact) { txtAmountTendered.setText(String.format("%.2f", order.getTotal())); computeChange(); }
-        else if (e.getSource() == btnCash)  { JOptionPane.showMessageDialog(this, "Cash selected!",  "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
-        else if (e.getSource() == btnCard)  { JOptionPane.showMessageDialog(this, "Card selected!",  "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
-        else if (e.getSource() == btnGcash) { JOptionPane.showMessageDialog(this, "GCash selected!", "Payment Method", JOptionPane.INFORMATION_MESSAGE); }
+        else if (e.getSource() == btnCash) { selectPaymentMethod(btnCash, "CASH"); }
+        else if (e.getSource() == btnCard) { selectPaymentMethod(btnCard, "CARD"); }
+        else if (e.getSource() == btnGcash) { selectPaymentMethod(btnGcash, "GCASH"); }
         else if (e.getSource() == btnProcessPayment)
         {
+            if (!validatePaymentMethod()) { return; }
             computeChange();
-            try {
-                double tendered = Double.parseDouble(txtAmountTendered.getText().trim());
-                if (tendered >= order.getTotal())
-                {
-                    PaymentConfirmationDialog dialog = new PaymentConfirmationDialog(frame, order);
-                    dialog.setVisible(true);
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "Insufficient amount!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Please enter a valid amount!", "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
+            validateAmtTendered();
         }
         else if (e.getSource() == btnCancel)
         {
-            JPanel nextPanel = new Products(summaryPanel);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(nextPanel);
-            frame.revalidate();
-            frame.repaint();
-
-            if (frame instanceof userFrame)            { ((userFrame) frame).switchPanel(nextPanel); }
-            else if (frame instanceof adminFrame)      { ((adminFrame) frame).switchPanel(nextPanel); }
+            cancelBtn();
         }
     }
 }

@@ -6,19 +6,24 @@ import SidePanels.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 public class userFrame extends JFrame implements ActionListener{
+    private SidePanel_Staff sidePanel;
+
     public userFrame()
     {
-        setSize (1280,800);
+        setSize(1280, 800);
         setTitle("PINOY PLATTERS  |  RMS");
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        add(new SidePanel_Staff());
+        sidePanel = new SidePanel_Staff();  // create ONCE
+        add(sidePanel);
         add(new Header_Staff("USER"));
-        add (new Products());
+        add(new Products());
 
         setVisible(true);
     }
@@ -26,7 +31,7 @@ public class userFrame extends JFrame implements ActionListener{
     public void switchPanel(JPanel thisPanel)
     {
         getContentPane().removeAll();
-        add(new SidePanel_Staff());
+        add(sidePanel);                     // reuse the SAME instance
         add(new Header_Staff("USER"));
         add(thisPanel);
         revalidate();
@@ -35,7 +40,5 @@ public class userFrame extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
     }
-    
 }

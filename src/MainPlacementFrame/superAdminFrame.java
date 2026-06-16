@@ -7,18 +7,21 @@ import javax.swing.*;
 import java.awt.event.*;
 
 public class superAdminFrame extends JFrame implements ActionListener{
+    private SidePanel_SuperAdmin sidePanel;
+
     public superAdminFrame()
     {
-        setSize (1280,800);
+        setSize(1280, 800);
         setTitle("PINOY PLATTERS  |  RMS");
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        add(new SidePanel_SuperAdmin());
+        sidePanel = new SidePanel_SuperAdmin();
+        add(sidePanel);
         add(new Header_SuperAdmin("SUPER ADMIN"));
-        add (new Products());
+        add(new Products());
 
         setVisible(true);
     }
@@ -26,7 +29,7 @@ public class superAdminFrame extends JFrame implements ActionListener{
     public void switchPanel(JPanel thisPanel)
     {
         getContentPane().removeAll();
-        add(new SidePanel_SuperAdmin());
+        add(sidePanel);
         add(new Header_SuperAdmin("SUPER ADMIN"));
         add(thisPanel);
         revalidate();
@@ -37,5 +40,4 @@ public class superAdminFrame extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 
     }
-
 }

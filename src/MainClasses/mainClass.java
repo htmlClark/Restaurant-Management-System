@@ -1,12 +1,12 @@
 package MainClasses;
-import MainPlacementFrame.*;
+import Database.DB_Connection;
 
 public class mainClass {
     public static void main(String[] args) 
     {
-        superAdminFrame prod = new superAdminFrame();
-        prod.setVisible(true);
-
-//        homePage HomePage = new homePage();
-//        HomePage.setVisible(true);
+        //checking db connection
+         DB_Connection.getConnection();
+        
+        homePage HomePage = new homePage();
+        HomePage.setVisible(true);
 }}

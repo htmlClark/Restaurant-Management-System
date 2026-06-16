@@ -2,66 +2,70 @@ package RestaurantManagementSystem_.InventoryManagement;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class invList extends JPanel implements ActionListener {
-
     private JTable itemTable;
     private DefaultTableModel model;
-    private JPanel panelItemTable, panelStock, panelDelivery;
-    private JLabel lblStock1, lblStock2, lblDelivery1, lblDelivery2;
-    private JComboBox cbSwitchClass;
-    private JButton btnAdd, btnModify, btnRemove;
+    private JPanel panelItemTable, panelStock, panelAdd;
+    private JLabel lblStock1, lblStock2, lblAddID, lblAddName, lblAddQuantity, lblAddCategory, lblAddMeasurement, lblModify1;
+    private JComboBox cbAddCategory, cbAddMeasurement;
+    private JButton btnAdd, btnModify, btnRemove, btnClear;
+    private JTextField txtAddName, txtAddQuantity;
+
+    private List<invItem> inventoryList;
 
     public invList()
     {
+        InventoryPopulatedData.loadData();
+        this.inventoryList = InventoryManager.getInstance().getInventoryList();
         functionMenu();
-
+        loadTableFromList();
         setBounds(300, 80, 980, 720);
         setLayout(null);
         setBackground(Color.decode("#FFF8E1"));
     }
 
+    private void loadTableFromList()
+    {
+        model.setRowCount(0);
+        for (invItem item : inventoryList)
+        {
+            model.addRow(new Object[]{
+                item.getItemID(),
+                item.getItemName(),
+                item.getItemQuantity(),
+                item.getItemCategory(),
+                item.getItemMeasurement(),
+                item.getItemCurrentStatus()
+            });
+        }
+    }
+
     private void functionMenu()
     {
         panelStock = new JPanel();
-        panelStock.setBounds(25, 25, 280, 80);
+        panelStock.setBounds(25, 25, 300, 100);
         panelStock.setBackground(Color.decode("#1b4a62"));
+        panelStock.setLayout(null);
 
-        lblStock1 = new JLabel("Warning: Low Stocks!");
-        lblStock1.setFont(new Font("Arial", Font.BOLD, 14));
+        lblStock1 = new JLabel("");
+        lblStock1.setFont(new Font("Arial", Font.BOLD, 25));
         lblStock1.setForeground(Color.WHITE);
+        lblStock1.setBounds(10, 10, 280, 30);
 
-        lblStock2 = new JLabel("[!] Pork");
-        lblStock2.setFont(new Font("Arial", Font.BOLD, 14));
+        lblStock2 = new JLabel("");
+        lblStock2.setFont(new Font("Arial", Font.BOLD, 25));
         lblStock2.setForeground(Color.WHITE);
+        lblStock2.setBounds(10, 50, 280, 30);
+
+        updateStockStatus();
 
         panelStock.add(lblStock1);
         panelStock.add(lblStock2);
-
-        panelDelivery = new JPanel();
-        panelDelivery.setBounds(325, 25, 280, 80);
-        panelDelivery.setBackground(Color.decode("#1b4a62"));
-
-        lblDelivery1 = new JLabel("Latest Delivery:");
-        lblDelivery1.setFont(new Font("Arial", Font.BOLD, 14));
-        lblDelivery1.setForeground(Color.WHITE);
-
-        lblDelivery2 = new JLabel("1/18/2026");
-        lblDelivery2.setFont(new Font("Arial", Font.BOLD, 14));
-        lblDelivery2.setForeground(Color.WHITE);
-
-        panelDelivery.add(lblDelivery1);
-        panelDelivery.add(lblDelivery2);
-
-        String[] pages = {"INVENTORY", "RECIPE", "DELIVERY"};
-        cbSwitchClass = new JComboBox<>(pages);
-        cbSwitchClass.setBounds(650, 25, 250, 50);
-        cbSwitchClass.addActionListener(e -> {
-            String selected = (String) cbSwitchClass.getSelectedItem();
-            // TO FIX: switch panels
-        });
 
         panelItemTable = new JPanel(new BorderLayout());
         panelItemTable.setBounds(25, 130, 830, 450);
@@ -73,6 +77,7 @@ public class invList extends JPanel implements ActionListener {
         model.addColumn("QUANTITY");
         model.addColumn("CATEGORY");
         model.addColumn("MEASUREMENT");
+        model.addColumn("STATUS");
 
         itemTable = new JTable(model);
         itemTable.setDefaultEditor(Object.class, null);
@@ -83,78 +88,87 @@ public class invList extends JPanel implements ActionListener {
 
         panelItemTable.add(new JScrollPane(itemTable), BorderLayout.CENTER);
 
-        //meat models goes here
-        model.addRow(new Object[]{"IT001", "GROUND PORK", "10", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT002", "PORK BELLY", "6", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT003", "CHICKEN PIECES", "12", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT004", "PORK INTESTINES", "5", "MEAT", "KG"});
-        model.addRow(new Object[]{"IT005", "FRIED TOFU CUBES", "8", "MEAT", "KG"});
-
-        //vegetable models goes here
-        model.addRow(new Object[]{"IT006", "CARROTS", "15", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT007", "ONIONS", "20", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT008", "GARLIC", "25", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT009", "EGGPLANT", "10", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT010", "AMPALAYA", "8", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT011", "OKRA", "12", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT012", "SQUASH", "10", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT013", "STRING BEANS", "14", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT014", "TOMATOES", "18", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT015", "CHILI PEPPERS", "5", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT016", "GINGER", "7", "VEGETABLES", "KG"});
-        model.addRow(new Object[]{"IT017", "TARO LEAVES", "6", "VEGETABLES", "KG"});
-
-        //seasoning models goes here
-        model.addRow(new Object[]{"IT018", "SALT", "50", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT019", "PEPPER", "40", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT020", "BAY LEAVES", "8", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT021", "PEPPERCORN", "6", "SEASONINGS", "PACK"});
-        model.addRow(new Object[]{"IT022", "SUGAR", "35", "SEASONINGS", "KG"});
-        model.addRow(new Object[]{"IT023", "BROWN SUGAR", "20", "SEASONINGS", "KG"});
-        model.addRow(new Object[]{"IT024", "GINGER POWDER", "10", "SEASONINGS", "KG"});
-
-        //condiments models goes here
-        model.addRow(new Object[]{"IT025", "SOY SAUCE", "30", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT026", "VINEGAR", "25", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT027", "FISH SAUCE", "12", "CONDIMENTS", "BOTTLE"});
-        model.addRow(new Object[]{"IT028", "BAGOONG (SHRIMP PASTE)", "10", "CONDIMENTS", "JAR"});
-        model.addRow(new Object[]{"IT029", "MAYONNAISE", "8", "CONDIMENTS", "JAR"});
-        model.addRow(new Object[]{"IT030", "CALAMANSI JUICE", "15", "CONDIMENTS", "KG"});
-
-        //other models goes here
-        model.addRow(new Object[]{"IT031", "LUMPIA WRAPPERS", "50", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT032", "COOKING OIL", "20", "OTHERS", "BOTTLE"});
-        model.addRow(new Object[]{"IT033", "TAPIOCA PEARLS (SAGO)", "10", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT034", "GULAMAN", "12", "OTHERS", "PACK"});
-        model.addRow(new Object[]{"IT035", "ICE", "30", "OTHERS", "KG"});
-        model.addRow(new Object[]{"IT036", "TEA BAGS", "25", "OTHERS", "BOX"});
-        model.addRow(new Object[]{"IT037", "LEMON / CALAMANSI", "15", "OTHERS", "KG"});
-        model.addRow(new Object[]{"IT038", "BROWN SUGAR SYRUP (ARNIBAL)", "10", "OTHERS", "BOTTLE"});
-        model.addRow(new Object[]{"IT039", "SHAVED ICE", "20", "OTHERS", "KG"});
-
         btnAdd = new JButton("ADD");
-        btnAdd.setBounds(200, 610, 150, 30);
+        btnAdd.setBounds(70, 610, 150, 30);
         btnFunction(btnAdd);
 
         btnModify = new JButton("MODIFY");
-        btnModify.setBounds(400, 610, 150, 30);
+        btnModify.setBounds(265, 610, 150, 30);
         btnFunction(btnModify);
 
         btnRemove = new JButton("REMOVE");
-        btnRemove.setBounds(600, 610, 150, 30);
+        btnRemove.setBounds(460, 610, 150, 30);
         btnFunction(btnRemove);
+
+        btnClear = new JButton("CLEAR");
+        btnClear.setBounds(655, 610, 150, 30);
+        btnFunction(btnClear);
 
         btnAdd.addActionListener(this);
         btnModify.addActionListener(this);
         btnRemove.addActionListener(this);
+        btnClear.addActionListener(this);
 
         add(panelStock);
-        add(panelDelivery);
-        add(cbSwitchClass);
         add(panelItemTable);
         add(btnAdd);
         add(btnModify);
         add(btnRemove);
+        add(btnClear);
+    }
+
+    private String currentStatus(double quantity, String category)
+    {
+        double measurementLow;
+
+        switch (category.toUpperCase())
+        {
+            case "MEAT":       measurementLow = 15; break;
+            case "SEASONING":  measurementLow = 1;  break;
+            case "VEGETABLE":  measurementLow = 2;  break;
+            case "CONDIMENTS": measurementLow = 5;  break;
+            case "OTHERS":     measurementLow = 2;  break;
+            default:           measurementLow = 10; break;
+        }
+
+        if (quantity <= measurementLow) return "Low";
+        return "Good";
+    }
+
+    private void updateStockStatus()
+    {
+        if (inventoryList.isEmpty())
+        {
+            lblStock1.setText("[!] No recorded items");
+            lblStock2.setText("");
+            return;
+        }
+
+        lblStock1.setText("[!] Stock Status:");
+
+        boolean hasLowStock = false;
+        invItem lowest = inventoryList.get(0);
+
+        for (invItem item : inventoryList)
+        {
+            if (currentStatus(item.getItemQuantity(), item.getItemCategory()).equals("Low"))
+            {
+                hasLowStock = true;
+                if (item.getItemQuantity() < lowest.getItemQuantity())
+                {
+                    lowest = item;
+                }
+            }
+        }
+
+        if (!hasLowStock)
+        {
+            lblStock2.setText("All stocks are sufficient");
+        }
+        else
+        {
+            lblStock2.setText(lowest.getItemName() + " (" + lowest.getItemQuantity() + ")");
+        }
     }
 
     private void btnFunction(JButton btn)
@@ -173,8 +187,257 @@ public class invList extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == btnAdd) { }
-        else if (e.getSource() == btnModify) { }
-        else if (e.getSource() == btnRemove) { }
+        if (e.getSource() == btnAdd)
+        {
+            String autoItemID = InventoryManager.generateItemID();
+
+            panelAdd = new JPanel(new GridLayout(6, 2, 5, 5));
+
+            lblAddID = new JLabel("ID (Auto-generated):");
+            JLabel lblAutoID = new JLabel(autoItemID);
+            lblAutoID.setFont(new Font("Arial", Font.BOLD, 13));
+
+            lblAddName = new JLabel("Name:");
+            txtAddName = new JTextField();
+
+            lblAddQuantity = new JLabel("Quantity:");
+            txtAddQuantity = new JTextField();
+
+            lblAddCategory = new JLabel("Category:");
+            String[] categories = {"MEAT", "SEASONING", "VEGETABLE", "CONDIMENTS", "OTHERS"};
+            cbAddCategory = new JComboBox<>(categories);
+
+            lblAddMeasurement = new JLabel("Measurement:");
+            String[] measurements = {"KG", "LITER", "PACK"};
+            cbAddMeasurement = new JComboBox<>(measurements);
+
+            panelAdd.add(lblAddID);
+            panelAdd.add(lblAutoID);
+            panelAdd.add(lblAddName);
+            panelAdd.add(txtAddName);
+            panelAdd.add(lblAddQuantity);
+            panelAdd.add(txtAddQuantity);
+            panelAdd.add(lblAddCategory);
+            panelAdd.add(cbAddCategory);
+            panelAdd.add(lblAddMeasurement);
+            panelAdd.add(cbAddMeasurement);
+
+            int userConfirm = JOptionPane.showConfirmDialog(this, panelAdd, "Add Item", JOptionPane.OK_CANCEL_OPTION);
+
+            if (userConfirm == JOptionPane.OK_OPTION)
+            {
+                String inputItemName       = txtAddName.getText().trim();
+                String inputItemQuantity   = txtAddQuantity.getText().trim();
+                String inputItemCategory   = cbAddCategory.getSelectedItem().toString();
+                String inputItemMeasurement= cbAddMeasurement.getSelectedItem().toString();
+
+                if (!inputItemName.isEmpty() && !inputItemQuantity.isEmpty())
+                {
+                    double inputItemQuantityDouble;
+
+                    try
+                    {
+                        inputItemQuantityDouble = Double.parseDouble(inputItemQuantity);
+                    }
+                    catch (NumberFormatException ex)
+                    {
+                        JOptionPane.showMessageDialog(this, "Quantity must be a number", "Add Item | Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (inputItemQuantityDouble > 0)
+                    {
+                        for (int i = 0; i < inventoryList.size(); i++)
+                        {
+                            invItem existing = inventoryList.get(i);
+                            if (existing.getItemName().equalsIgnoreCase(inputItemName))
+                            {
+                                InventoryManager.rollbackItemID(); 
+                                double newQty = existing.getItemQuantity() + inputItemQuantityDouble;
+                                existing.setItemQuantity(newQty);
+                                String newStatus = currentStatus(newQty, existing.getItemCategory());
+                                existing.setItemCurrentStatus(newStatus);
+
+                                model.setValueAt(newQty,      i, 2);
+                                model.setValueAt(newStatus,   i, 5);
+
+                                updateStockStatus();
+                                JOptionPane.showMessageDialog(this,
+                                    "\"" + existing.getItemName() + "\" already exists.\n"
+                                    + inputItemQuantityDouble + " " + existing.getItemMeasurement()
+                                    + " added. New quantity: " + newQty + " " + existing.getItemMeasurement() + ".",
+                                    "Quantity Updated", JOptionPane.INFORMATION_MESSAGE);
+                                return;
+                            }
+                        }
+
+                        String status = currentStatus(inputItemQuantityDouble, inputItemCategory);
+                        invItem item = new invItem(autoItemID, inputItemName, inputItemQuantityDouble, inputItemCategory, inputItemMeasurement, "", "", "", "", "", status);
+
+                        inventoryList.add(item);
+                        updateStockStatus();
+
+                        model.addRow(new Object[]{
+                            autoItemID,
+                            inputItemName,
+                            inputItemQuantityDouble,
+                            inputItemCategory,
+                            inputItemMeasurement,
+                            status
+                        });
+
+                        JOptionPane.showMessageDialog(this, "Item added successfully", "Add Item", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(this, "Item quantity must be greater than 0", "Add Item | Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this, "Please enter all fields", "Add Item | Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "It seems like you cancelled this function. Try again", "Add Item | Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        else if (e.getSource() == btnModify)
+        {
+            int userSelectedItem = itemTable.getSelectedRow();
+
+            if (userSelectedItem == -1)
+            {
+                JOptionPane.showMessageDialog(this, "Please select an Item to Modify", "Modify Item", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else
+            {
+                String selectedItemID = (String) model.getValueAt(userSelectedItem, 0);
+                invItem item = null;
+
+                for (invItem indexItem : inventoryList)
+                {
+                    if (indexItem.getItemID().equalsIgnoreCase(selectedItemID))
+                    {
+                        item = indexItem;
+                        break;
+                    }
+                }
+
+                if (item == null)
+                {
+                    JOptionPane.showMessageDialog(this, "Item not found in inventory", "Modify Item", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                String selectedItemName = item.getItemName();
+                double selectedItemQuantity = item.getItemQuantity();
+
+                String newItemName = JOptionPane.showInputDialog(this, "Edit Name:", selectedItemName);
+                String newItemQuantity = JOptionPane.showInputDialog(this, "Edit Quantity:", selectedItemQuantity);
+
+                if (newItemName == null || newItemQuantity == null) return;
+
+                double inputItemQuantityDouble;
+
+                try
+                {
+                    inputItemQuantityDouble = Double.parseDouble(newItemQuantity);
+                }
+                catch (NumberFormatException ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Quantity must be a valid number!", "Modify Item | Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (inputItemQuantityDouble <= 0)
+                {
+                    JOptionPane.showMessageDialog(this, "Invalid input", "Modify Item | Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                else
+                {
+                    item.setItemName(newItemName.trim());
+                    item.setItemQuantity(inputItemQuantityDouble);
+
+                    String status = currentStatus(inputItemQuantityDouble, item.getItemCategory());
+
+                    model.setValueAt(newItemName, userSelectedItem, 1);
+                    model.setValueAt(inputItemQuantityDouble, userSelectedItem, 2);
+                    model.setValueAt(status, userSelectedItem, 5);
+
+                    updateStockStatus();
+
+                    JOptionPane.showMessageDialog(this, "Item modified successfully", "Modify Item", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+
+        else if (e.getSource() == btnRemove)
+        {
+            int userSelectedItem = itemTable.getSelectedRow();
+
+            if (userSelectedItem == -1)
+            {
+                JOptionPane.showMessageDialog(this, "Please select an Item to Remove", "Remove | Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                int userConfirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this item?", "Remove Item", JOptionPane.YES_NO_OPTION);
+
+                if (userConfirmation == JOptionPane.YES_OPTION)
+                {
+                    String selectedID = (String) model.getValueAt(userSelectedItem, 0);
+                    invItem itemToRemove = null;
+
+                    for (invItem itemIndex : inventoryList)
+                    {
+                        if (itemIndex.getItemID().equalsIgnoreCase(selectedID))
+                        {
+                            itemToRemove = itemIndex;
+                            break;
+                        }
+                    }
+
+                    if (itemToRemove != null)
+                    {
+                        inventoryList.remove(itemToRemove);
+                        model.removeRow(userSelectedItem);
+                        updateStockStatus();
+                        JOptionPane.showMessageDialog(this, "Item removed successfully", "Remove Item", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this, "It seems like you cancelled to remove item", "Remove Item", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+
+        else if (e.getSource() == btnClear)
+        {
+            if (inventoryList.isEmpty())
+            {
+                JOptionPane.showMessageDialog(this, "Inventory is already empty", "Clear Inventory", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int userConfirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to clear all inventory items?", "Clear Inventory", JOptionPane.YES_NO_OPTION);
+
+            if (userConfirmation == JOptionPane.YES_OPTION)
+            {
+                inventoryList.clear();
+                model.setRowCount(0);
+                updateStockStatus();
+                JOptionPane.showMessageDialog(this, "Inventory cleared successfully", "Clear Inventory", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "It seems like you cancelled to clear inventory", "Clear Inventory", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

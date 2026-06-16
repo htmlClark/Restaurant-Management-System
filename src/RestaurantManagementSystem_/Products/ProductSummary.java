@@ -33,7 +33,7 @@ public class ProductSummary extends JPanel implements ActionListener {
 
         btnPlaceOrder = new JButton(new ImageIcon(placeSize));
         btnPlaceOrder.setBackground(Color.decode("#00BF63"));
-        btnPlaceOrder.setBounds(100,500,150,33);
+        btnPlaceOrder.setBounds(120,500,150,33);
         btnPlaceOrder.addActionListener(this);
         add(btnPlaceOrder);
 
@@ -43,7 +43,7 @@ public class ProductSummary extends JPanel implements ActionListener {
 
         btnDeleteItem = new JButton(new ImageIcon(deleteSize));
         btnDeleteItem.setBackground(Color.decode("#B71C1C"));
-        btnDeleteItem.setBounds(100,550,150,33);
+        btnDeleteItem.setBounds(120,550,150,33);
         btnDeleteItem.addActionListener(this);
         btnDeleteItem.setVisible(false);
         add(btnDeleteItem);
