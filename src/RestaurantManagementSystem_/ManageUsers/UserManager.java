@@ -3,6 +3,7 @@ package RestaurantManagementSystem_.ManageUsers;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import RestaurantManagementSystem_.FoodWasteTracker.WasteLogSession;
 
 public class UserManager
 {
@@ -42,7 +43,7 @@ public class UserManager
             if (user[1].equalsIgnoreCase(empNo))
             {
                 user[0] = new java.text.SimpleDateFormat("hh:mm a").format(new java.util.Date());
-                user[1] = "--";
+                WasteLogSession.getInstance().setEmployeeNo(empNo);
                 return;
             }
         }
@@ -56,7 +57,7 @@ public class UserManager
 
     public boolean deleteUser(String empNo)
     {
-        return userList.removeIf(user -> user[2].equals(empNo));
+        return userList.removeIf(user -> user[1].equals(empNo));
     }
 
     public boolean updateUser(String empNo, String name, String role)
