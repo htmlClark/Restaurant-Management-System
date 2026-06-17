@@ -94,7 +94,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         lblSubtotal.setFont(fontSmall);
         pnlOrderSummary.add(lblSubtotal);
 
-        lblTax = new JLabel("Tax (12%): ₱" + String.format("%.2f", order.getTax()));
+        lblTax = new JLabel("Tax (12%): ₱" + String.format("%.2f", order.getVAT()));
         lblTax.setBounds(30, 485, 300, 25);
         lblTax.setFont(fontSmall);
         pnlOrderSummary.add(lblTax);
@@ -366,3 +366,4 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         }
     }
 }
+

@@ -1,3 +1,5 @@
+package RestaurantManagementSystem_.PaymentProcess;
+
 import java.util.ArrayList;
 
 public class Order {
@@ -5,9 +7,9 @@ public class Order {
     private int orderNumber;
     private ArrayList<OrderItem> items;
 
-    Order(int orderNumber) {
+    public Order(int orderNumber) {
         this.orderNumber = orderNumber;
-        this.items = new ArrayList<OrderItem>();
+        this.items = new ArrayList<>();
     }
 
     public void addItem(OrderItem item) {
@@ -24,11 +26,9 @@ public class Order {
 
     public double getTotal() {
         double total = 0;
-
-        for (int i = 0; i < items.size(); i++) {
-            total += items.get(i).getTotalPrice();
+        for (OrderItem item : items) {
+            total += item.getTotalPrice();
         }
-
         return total;
     }
 
@@ -36,7 +36,9 @@ public class Order {
         return getTotal() / 1.12;
     }
 
-    public double getTax() {
+    public double getVAT() {
         return getTotal() - getSubtotal();
     }
 }
+
+
