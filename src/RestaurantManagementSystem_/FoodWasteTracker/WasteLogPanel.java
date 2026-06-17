@@ -294,7 +294,7 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                 return;
             }
             
-            RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadData();
+            RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadInventoryData();
             boolean deducted = InventoryManager.getInstance().deductStock(inputItem, parsedInputQty);
             if (!deducted)
             {

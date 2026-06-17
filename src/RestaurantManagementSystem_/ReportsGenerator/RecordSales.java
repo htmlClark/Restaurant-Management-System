@@ -28,7 +28,6 @@ public class RecordSales {
         return confirmedOrders;
     }
 
-    /** Total revenue across all confirmed orders. */
     public double getTotalSales() {
         double total = 0;
         for (Order order : confirmedOrders) {
@@ -37,7 +36,6 @@ public class RecordSales {
         return total;
     }
 
-    /** Maps order date -> total revenue for that date. */
     public Map<LocalDate, Double> getDailyTotals() {
         Map<LocalDate, Double> dailyTotals = new LinkedHashMap<>();
         for (int i = 0; i < confirmedOrders.size(); i++) {
@@ -74,10 +72,6 @@ public class RecordSales {
         return min;
     }
 
-    /**
-     * Aggregates units sold and revenue per dish name across all
-     * confirmed orders, used for the BEST SELLERS table.
-     */
     public List<BestSeller> getBestSellers(int limit) {
         Map<String, BestSeller> totals = new LinkedHashMap<>();
 
@@ -103,7 +97,6 @@ public class RecordSales {
         return sorted;
     }
 
-    /** Simple holder for a best-seller row. */
     public static class BestSeller {
         public final String dishName;
         public int unitsSold;
