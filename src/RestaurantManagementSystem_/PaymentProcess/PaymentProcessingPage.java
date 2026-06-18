@@ -48,11 +48,19 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
 
     private void orderSummary()
     {
+<<<<<<< HEAD
+      
+=======
+>>>>>>> master-rms
         JPanel pnlOrderSummary = new JPanel(null);
         pnlOrderSummary.setBounds(0, 125, 580, 595);
         pnlOrderSummary.setBackground(colorCream);
         add(pnlOrderSummary);
 
+<<<<<<< HEAD
+        
+=======
+>>>>>>> master-rms
         ImageIcon paymentLogo = new ImageIcon(getClass().getResource("/src_pack/images/payment.png"));
         Image paymentSize = paymentLogo.getImage().getScaledInstance(350, 78, Image.SCALE_DEFAULT);
 
@@ -92,7 +100,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         lblSubtotal.setFont(fontSmall);
         pnlOrderSummary.add(lblSubtotal);
 
-        lblTax = new JLabel("Tax (12%): ₱" + String.format("%.2f", order.getTax()));
+        lblTax = new JLabel("Tax (12%): ₱" + String.format("%.2f", order.getVAT()));
         lblTax.setBounds(30, 485, 300, 25);
         lblTax.setFont(fontSmall);
         pnlOrderSummary.add(lblTax);
@@ -121,6 +129,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         lblPaymentMethod.setForeground(colorWhite);
         pnlMethodHeader.add(lblPaymentMethod);
 
+<<<<<<< HEAD
+       
+=======
+>>>>>>> master-rms
         btnCash = new JButton("CASH");
         btnCash.setBounds(20, 65, 160, 40);
         btnCash.setFont(fontBold);
@@ -139,6 +151,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         btnGcash.setBackground(colorWhite);
         pnlPaymentMethod.add(btnGcash);
 
+<<<<<<< HEAD
+     
+=======
+>>>>>>> master-rms
         btn100 = new JButton("₱100");
         btn100.setBounds(20, 185, 160, 40);
         btn100.setFont(fontBold);
@@ -169,6 +185,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         btnExact.setBackground(colorWhite);
         pnlPaymentMethod.add(btnExact);
 
+<<<<<<< HEAD
+     
+=======
+>>>>>>> master-rms
         lblAmountTendered = new JLabel("AMOUNT TENDERED");
         lblAmountTendered.setBounds(20, 350, 250, 25);
         lblAmountTendered.setFont(fontBold);
@@ -196,6 +216,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         lblChange.setFont(fontTotal);
         pnlPaymentMethod.add(lblChange);
 
+<<<<<<< HEAD
+   
+=======
+>>>>>>> master-rms
         btnProcessPayment = new JButton("PROCESS PAYMENT");
         btnProcessPayment.setBounds(20, 500, 340, 45);
         btnProcessPayment.setFont(fontBold);
@@ -211,6 +235,10 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         btnCancel.setBorderPainted(false);
         pnlPaymentMethod.add(btnCancel);
 
+<<<<<<< HEAD
+       
+=======
+>>>>>>> master-rms
         btnCash.addActionListener(this);
         btnCard.addActionListener(this);
         btnGcash.addActionListener(this);
@@ -239,7 +267,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
 
     private void selectPaymentMethod(JButton selectedBtn, String paymentMethod)
     {
-        //tis is for un-selecting buttons
+        
         if (paymentMethod.equals(selectedPaymentMethod))
         {
             selectedBtn.setBackground(colorWhite);
@@ -248,7 +276,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
             return;
         }
 
-        //tis for unselected buttons setup
+       
         btnCard.setBackground(colorWhite);
         btnCard.setForeground(Color.BLACK);
 
@@ -258,7 +286,7 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         btnGcash.setBackground(colorWhite);
         btnGcash.setForeground(Color.BLACK);
 
-        //tis for selected button
+    
         selectedBtn.setBackground(colorGreen);
         selectedBtn.setForeground(colorWhite);
         selectedPaymentMethod = paymentMethod;
@@ -358,3 +386,4 @@ public class PaymentProcessingPage extends JPanel implements ActionListener {
         }
     }
 }
+
