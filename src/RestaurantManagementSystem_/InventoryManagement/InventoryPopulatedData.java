@@ -4,41 +4,38 @@ import java.util.List;
 
 public class InventoryPopulatedData {
 
-    public static void loadData()
+    public static void loadInventoryData()
     {
+        
+        
         List<invItem> inventoryList = InventoryManager.getInstance().getInventoryList();
 
         if (!inventoryList.isEmpty()) return;
-
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Pork Belly", 20, "MEAT", "KG", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Chicken", 18, "MEAT", "KG", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Soy Sauce", 2, "SEASONING", "LITER", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Garlic", 3, "VEGETABLE", "KG", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Onion", 4, "VEGETABLE", "KG", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Vinegar", 6, "CONDIMENTS", "LITER", "", "", "", "", "", "Good"));
-        inventoryList.add(new invItem(InventoryManager.generateItemID(), "Cooking Oil", 2, "OTHERS", "PACK", "", "", "", "", "", "Good"));
+            
+            //ingredients for chicharon bulaklak, chicken adobo, tortang talong, turon, iced tea and buko juice
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Pork Intestine", 20, "MEAT", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Chicken", 20, "MEAT", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Eggplant", 15, "VEGETABLE", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Garlic", 10, "VEGETABLE", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Onion", 10, "VEGETABLE", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Young Coconut", 30, "VEGETABLE", "PCS", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Soy Sauce", 10, "SEASONING", "LITER", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Vinegar", 10, "SEASONING", "LITER", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Salt", 5, "SEASONING", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Black Pepper", 2, "SEASONING", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Cooking Oil", 15, "CONDIMENTS", "LITER", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Sugar", 10, "CONDIMENTS", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Egg", 50, "OTHERS", "PCS", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Spring Roll Wrapper", 100, "OTHERS", "PCS", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Banana", 30, "OTHERS", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Tea Powder", 2, "OTHERS", "KG", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Water", 50, "OTHERS", "LITER", "", "", "", "", "", ""));
 
         for (invItem item : inventoryList)
         {
-            item.setItemCurrentStatus(computeStatus(item.getItemQuantity(), item.getItemCategory()));
+            item.setItemCurrentStatus(InventoryManager.computeStatus(item.getItemQuantity(),item.getItemCategory()));         
         }
     }
 
-    private static String computeStatus(double quantity, String category)
-    {
-        double threshold;
-
-        switch (category.toUpperCase())
-        {
-            case "MEAT":       threshold = 15; break;
-            case "SEASONING":  threshold = 1;  break;
-            case "VEGETABLE":  threshold = 2;  break;
-            case "CONDIMENTS": threshold = 5;  break;
-            case "OTHERS":     threshold = 2;  break;
-            default:           threshold = 10; break;
-        }
-
-        if (quantity <= threshold) return "Low";
-        return "Good";
-    }
+    
 }

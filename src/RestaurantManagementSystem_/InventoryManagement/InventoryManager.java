@@ -2,6 +2,7 @@ package RestaurantManagementSystem_.InventoryManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class InventoryManager {
 
@@ -12,7 +13,8 @@ public class InventoryManager {
     private static int itemCounter     = 1001;
     private static int deliveryCounter = 1001;
 
-    private InventoryManager() {}
+    private InventoryManager() {
+    }
 
     public static String generateItemID() {
         return String.format("IT%04d", itemCounter++);
@@ -35,14 +37,24 @@ public class InventoryManager {
     public List<invItem> getDeliveryList()  { return deliveryList;  }
 
     public void receiveDelivery(invItem delivered) {
+    
         for (invItem item : inventoryList) {
-            if (item.getItemID().equalsIgnoreCase(delivered.getItemID())) {
-                item.setItemQuantity(item.getItemQuantity() + delivered.getItemQuantity());
-                item.setItemCurrentStatus(computeStatus(item.getItemQuantity(), item.getItemCategory()));
-                return;
+            
+            if (item.getItemName().equalsIgnoreCase(delivered.getItemName())) {
+                if(!item.getItemCategory().equalsIgnoreCase(delivered.getItemCategory())){
+                    throw new IllegalArgumentException("Item found but category does not match.");
+                }
+                
+                else{
+                    item.setItemQuantity(item.getItemQuantity() + delivered.getItemQuantity());
+                    item.setItemCurrentStatus(computeStatus(item.getItemQuantity(), item.getItemCategory()));
+                    return;
+                }
             }
+            
         }
         inventoryList.add(delivered);
+        delivered.setItemCurrentStatus(computeStatus(delivered.getItemQuantity(),delivered.getItemCategory()));
     }
 
     public boolean deductStock(String itemName, double amount) {
@@ -67,15 +79,24 @@ public class InventoryManager {
         return lowItems;
     }
 
-    private String computeStatus(double quantity, String category) {
-        double threshold;
-        switch (category.toUpperCase()) {
-            case "MEAT":       threshold = 15; break;
-            case "SEASONING":  threshold = 1;  break;
-            case "VEGETABLE":  threshold = 2;  break;
-            case "CONDIMENTS": threshold = 5;  break;
-            default:           threshold = 2;  break;
+    public static String computeStatus(double quantity, String category)
+    {
+        double lowItemBasis;
+
+        switch (category.toUpperCase())
+        {
+            case "MEAT":       lowItemBasis = 15; break;
+            case "SEASONING":  lowItemBasis = 0.5;  break;
+            case "VEGETABLE":  lowItemBasis = 2;  break;
+            case "FRUIT":      lowItemBasis = 1; break;
+            case "CONDIMENTS": lowItemBasis = 5;  break;
+            case "OTHERS":     lowItemBasis = 1;  break;
+            default:           lowItemBasis = 10; break;
         }
-        return quantity <= threshold ? "Low" : "Good";
+
+        if (quantity <= lowItemBasis) return "Low";
+        return "Good";
     }
+    
+    
 }
