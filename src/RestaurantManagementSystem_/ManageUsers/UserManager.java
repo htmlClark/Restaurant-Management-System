@@ -9,12 +9,15 @@ public class UserManager
 {
     private static UserManager instance;
     private List<String[]> userList = new ArrayList<>();
-
+    
+    public static final String STATUS_ACTIVE = "Active";
+    public static final String STATUS_INACTIVE = "Inactive";
+    
     private UserManager()
     {
-        userList.add(new String[]{"--", "SA-001", "Angelie Iranzo",   "Super Admin", "superadmin123"});
-        userList.add(new String[]{"--", "AD-001", "Alexa Reyes",   "Admin", "admin123"});
-        userList.add(new String[]{"--", "EMP-001", "Marcuss Trinidad",   "Staff", "user123"});
+        userList.add(new String[]{"--", "SA-001", "Angelie Iranzo", "Super Admin", "2026-06-18", STATUS_ACTIVE, "superadmin123"});
+        userList.add(new String[]{"--", "AD-001", "Alexa Reyes", "Admin", "2026-06-18", STATUS_ACTIVE, "admin123"});
+        userList.add(new String[]{"--", "EMP-001", "Marcuss Trinidad", "Staff", "2026-06-18", STATUS_ACTIVE, "user123"});
     }
 
     public static UserManager getInstance()
@@ -30,8 +33,11 @@ public class UserManager
     {
         for (String[] user : userList)
         {
-            if (user[1].equalsIgnoreCase(empNo) && user[4].equals(password))
-                return user;
+            if (user[1].equalsIgnoreCase(empNo) && user[6].equals(password))
+            {
+                if(!STATUS_ACTIVE.equalsIgnoreCase(user[5])) return null;
+                return user;   
+            }
         }
         return null;
     }
@@ -49,15 +55,38 @@ public class UserManager
         }
     }
 
-    public boolean addUser(String empNo, String name, String password, String role)
+    public boolean addUser(String empNo, String name, String password, String role, String hireDate)
     {
-        userList.add(new String[]{"--", empNo, name, role,password});
+        userList.add(new String[]{"--", empNo, name, role, hireDate, STATUS_ACTIVE, password});
         return true;
     }
 
-    public boolean deleteUser(String empNo)
+    public boolean terminateUser(String empNo)
     {
-        return userList.removeIf(user -> user[1].equals(empNo));
+        for (String[] user : userList)
+        {
+            if (user[1].equalsIgnoreCase(empNo))
+            {
+                if(!STATUS_ACTIVE.equalsIgnoreCase(user[5])) return false; // user already inactive
+                user[5] = STATUS_INACTIVE;
+                return true;
+            }    
+        }
+        return false;
+    }
+    
+    public boolean reactivateUser(String empNo)
+    {
+        for (String[] user : userList)
+        {
+            if (user[1].equals(empNo))
+            {
+                if (STATUS_ACTIVE.equalsIgnoreCase(user[5])) return false; // user already active
+                user[5] = STATUS_ACTIVE;
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean updateUser(String empNo, String name, String role)
@@ -80,12 +109,32 @@ public class UserManager
             if (user[1].equalsIgnoreCase(empNo)) return true;
         return false;
     }
+    
+    public boolean isUserActive(String empNo)
+    {
+        for (String[] user : userList)
+            if (user[1].equalsIgnoreCase(empNo)) return STATUS_ACTIVE.equalsIgnoreCase(user[5]);
+        return false;
+    }
 
-    public boolean validateAddUser(JFrame frame, String empNo, String name, String password, String confirmPassword, String role)
+    public String getUserStatus(String empNo)
+    {
+        for (String[] user : userList)
+            if (user[1].equalsIgnoreCase(empNo)) return user[5];
+        return null;
+    }
+    
+    public boolean validateAddUser(JFrame frame, String empNo, String name, String password, String confirmPassword, String role, String hireDate)
     {
         if (empNo.isEmpty() || name.isEmpty() || password.isEmpty() || confirmPassword.isEmpty())
         {
             JOptionPane.showMessageDialog(frame, "All fields are required.", "Missing Fields", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (!hireDate.matches("\\d{2}/\\d{2}/\\d{4}"))
+        {
+            JOptionPane.showMessageDialog(frame, "Hire Date must follow the format: MM/DD/YYYY", "Invalid Hire Date", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -107,7 +156,14 @@ public class UserManager
 
         if (userExists(empNo))
         {
-            JOptionPane.showMessageDialog(frame, "Employee Number already exists.", "Duplicate Employee", JOptionPane.WARNING_MESSAGE);
+            if (!isUserActive(empNo))
+            {
+                JOptionPane.showMessageDialog(frame, "This Employee Number belongs to a terminated employee. \nUse the REACTIVATE function instead of adding a new user", "Terminated Employee", JOptionPane.WARNING_MESSAGE);
+            }
+            else 
+            {
+                JOptionPane.showMessageDialog(frame, "Employee Number already exists.", "Duplicate Employee", JOptionPane.WARNING_MESSAGE);
+            }
             return false;
         }
 
@@ -161,17 +217,46 @@ public class UserManager
         return true;
     }
 
-    public boolean validateDeleteUser(JFrame frame, String empNo)
+    public boolean validateTerminateUser(JFrame frame, String empNo)
     {
         if (empNo == null)
         {
-            JOptionPane.showMessageDialog(frame, "Please select a user to delete.", "No User Selected", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Please select a user to terminate.", "No User Selected", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         if (!userExists(empNo))
         {
             JOptionPane.showMessageDialog(frame, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        if (!isUserActive(empNo))
+        {
+            JOptionPane.showMessageDialog(frame, "Employee " + empNo + " is already marked as Inactive.", "Already Terminated", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+    
+    public boolean validateReactivateUser(JFrame frame, String empNo)
+    {
+        if (empNo == null)
+        {
+            JOptionPane.showMessageDialog(frame, "Please select a user to reactivate.", "No User Selected", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (!userExists(empNo))
+        {
+            JOptionPane.showMessageDialog(frame, "User not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (isUserActive(empNo))
+        {
+            JOptionPane.showMessageDialog(frame, "Employee " + empNo + " is already Active.", "Already Active", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
