@@ -1,5 +1,8 @@
 package RestaurantManagementSystem_.PaymentProcess;
+<<<<<<< HEAD
 
+=======
+>>>>>>> master-rms
 import java.util.ArrayList;
 
 public class Order {
