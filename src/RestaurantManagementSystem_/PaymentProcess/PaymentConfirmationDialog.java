@@ -115,3 +115,4 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
         }
     }
 }
+

@@ -14,6 +14,8 @@ public class ManageUsersAdmin extends JPanel {
     Color colorRowOdd      = new Color(0xFF, 0xF8, 0xE1);
     Color colorRowEven     = new Color(0xC9, 0xD4, 0xD8);
     Color colorWhite       = Color.WHITE;
+    Color colorActive   = new Color(0x1B, 0x5E, 0x20);
+    Color colorInactive = new Color(0xB7, 0x1C, 0x1C);
 
     Font fontHeader = new Font("Arial", Font.BOLD, 22);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
@@ -22,8 +24,8 @@ public class ManageUsersAdmin extends JPanel {
     private UserManager userManager = UserManager.getInstance();
     String[][] userData;
 
-    String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE"};
-    int[]    colWidths  = {150, 150, 160, 260, 130};
+    String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE", "HIRE DATE", "STATUS"};
+    int[]    colWidths  = {130, 150, 150, 120, 160, 150};
 
     public ManageUsersAdmin()
     {
@@ -93,10 +95,11 @@ public class ManageUsersAdmin extends JPanel {
                 int w = (900 * colWidths[c]) / 850;
                 JLabel lblCell = new JLabel(userData[r][c], SwingConstants.CENTER);
                 lblCell.setBounds(xCol, 0, w, ROW_H);
-                if (c == 4)
+                if (c == 5)
                 {
+                    boolean isInactive = userData[r][5].equalsIgnoreCase("Inactive");
                     lblCell.setFont(new Font("Arial", Font.BOLD, 12));
-                    lblCell.setForeground(new Color(0x1B, 0x5E, 0x20));
+                    lblCell.setForeground(isInactive ? colorInactive : colorActive);
                 }
                 else
                 {

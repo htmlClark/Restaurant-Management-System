@@ -5,10 +5,12 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener {
 
-    private JButton btnAddUser, btnEditUsers, btnDeleteUser, btnConfirmEdit;
+    private JButton btnAddUser, btnEditUsers, btnTerminateUser, btnReactivateUser, btnConfirmEdit;
     private JPanel pnlTableCard, pnlButtons, pnlRowsContainer;
     private JPanel pnlOverlay;
     private JCheckBox[] rowCheckboxes;
@@ -23,6 +25,8 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
     Color colorRowEven     = new Color(0xC9, 0xD4, 0xD8);
     Color colorWhite       = Color.WHITE;
     Color colorOverlayBg   = new Color(0xF5, 0xF0, 0xE8);
+    Color colorActive   = new Color(0x1B, 0x5E, 0x20);
+    Color colorInactive = new Color(0xB7, 0x1C, 0x1C);
 
     Font fontHeader = new Font("Arial", Font.BOLD, 22);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
@@ -35,8 +39,8 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
 
     String[][] userData;
 
-    String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE"};
-    int[]    colWidths  = {150, 150, 160, 260, 130};
+    String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE", "HIRE DATE", "STATUS"};
+    int[]    colWidths  = {130, 140, 150, 120, 160, 150};
 
     public ManageUsersSuperAdminPanel()
     {
@@ -136,10 +140,11 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
                 int w = (totalW * colWidths[c]) / 850;
                 JLabel lblCell = new JLabel(userData[r][c], SwingConstants.CENTER);
                 lblCell.setBounds(xCol, 0, w, ROW_H);
-                if (c == 4)
+                if (c == 5)
                 {
+                    boolean isInactive = userData[r][5].equalsIgnoreCase("Inactive");
                     lblCell.setFont(new Font("Arial", Font.BOLD, 12));
-                    lblCell.setForeground(new Color(0x1B, 0x5E, 0x20));
+                    lblCell.setForeground(isInactive ? colorInactive : colorActive);
                 }
                 else
                 {
@@ -184,10 +189,16 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         }
         else
         {
-            btnDeleteUser = makeRedButton("DELETE USER");
-            btnDeleteUser.setBounds(620, 0, 150, 42);
-            btnDeleteUser.addActionListener(this);
-            pnlButtons.add(btnDeleteUser);
+            btnTerminateUser = makeRedButton("TERMINATE USER");
+            btnTerminateUser.setBounds(460, 0, 150, 42);
+            btnTerminateUser.addActionListener(this);
+            pnlButtons.add(btnTerminateUser);
+            
+            btnReactivateUser = makeRedButton("REACTIVATE USER");
+            btnReactivateUser.setBackground(colorActive);
+            btnReactivateUser.setBounds(620, 0, 150, 42);
+            btnReactivateUser.addActionListener(this);
+            pnlButtons.add(btnReactivateUser);
 
             btnConfirmEdit = makeRedButton("CONFIRM EDIT");
             btnConfirmEdit.setBounds(780, 00, 150, 42);
@@ -219,7 +230,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
             for (int i = 0; i < rowCheckboxes.length; i++)
             {
                 if (rowCheckboxes[i] != null && rowCheckboxes[i].isSelected())
-                    selected.add(userData[i][2]);
+                    selected.add(userData[i][1]);
             }
         }
         return selected;
@@ -250,7 +261,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         pnlOverlay.setBounds(0, 0, 940, 680);
         pnlOverlay.setOpaque(false);
 
-        int cardW = 480, cardH = 440;
+        int cardW = 480, cardH = 484;
         int cardX = (940 - cardW) / 2;
         int cardY = (680 - cardH) / 2;
 
@@ -305,7 +316,17 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         cmbRole.setFont(fField);
         pnlCard.add(cmbRole);
         yForm += 44;
-
+        
+        JLabel lblHireDate = new JLabel("Hire Date:");
+        lblHireDate.setBounds(30, yForm, 120, 28);
+        lblHireDate.setFont(fLabel);
+        pnlCard.add(lblHireDate);
+        JTextField txtHireDate = new JTextField(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+        txtHireDate.setBounds(160, yForm, 300, 28);
+        txtHireDate.setFont(fField);
+        pnlCard.add(txtHireDate);
+        yForm += 44;
+        
         JLabel lblPwd = new JLabel("Password:");
         lblPwd.setBounds(30, yForm, 120, 28);
         lblPwd.setFont(fLabel);
@@ -343,12 +364,13 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
             String empNo    = txtEmpNo.getText().trim();
             String name     = txtName.getText().trim();
             String role     = (String) cmbRole.getSelectedItem();
+            String hireDate = txtHireDate.getText().trim();
             String password = new String(txtPwd.getPassword()).trim();
             String confirm  = new String(txtConfirm.getPassword()).trim();
 
-            if (!userManager.validateAddUser(null, empNo, name, password, confirm, role)) return;
+            if (!userManager.validateAddUser(null, empNo, name, password, confirm, role, hireDate)) return;
 
-            userManager.addUser(empNo, name, password, role);
+            userManager.addUser(empNo, name, password, role, hireDate);
             removeOverlay();
             refreshTable();
             JOptionPane.showMessageDialog(this, "User added successfully!", "Add User", JOptionPane.INFORMATION_MESSAGE);
@@ -361,7 +383,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         pnlTableCard.repaint();
     }
 
-    private void showDeleteOverlay()
+    private void showTerminateOverlay()
     {
         removeOverlay();
 
@@ -369,14 +391,19 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
 
         if (selectedEmpNos.isEmpty())
         {
-            JOptionPane.showMessageDialog(null, "Please select a user to delete.", "No User Selected", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please select a user to terminate.", "No User Selected", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+        
+        for (String empNo : selectedEmpNos)
+        {
+        if (!userManager.validateTerminateUser(null, empNo)) return;
         }
 
         boolean isMultiple   = selectedEmpNos.size() > 1;
         String  displayText  = isMultiple
-                ? "ARE YOU SURE YOU WANT TO <b>DELETE</b> THESE USERS?"
-                : "ARE YOU SURE YOU WANT TO <b>DELETE</b><br>USER " + selectedEmpNos.get(0) + "?";
+                ? "ARE YOU SURE YOU WANT TO <b>TERMINATE</b> THESE USERS?"
+                : "ARE YOU SURE YOU WANT TO <b>TERMINATE</b><br>USER " + selectedEmpNos.get(0) + "?";
 
         pnlOverlay = new JPanel(null) {
             protected void paintComponent(Graphics g) {
@@ -403,7 +430,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         pnlTitle.setBackground(colorRed);
         pnlCard.add(pnlTitle);
 
-        JLabel lblTitle = new JLabel("DELETE USER?", SwingConstants.CENTER);
+        JLabel lblTitle = new JLabel("TERMINATE USER?", SwingConstants.CENTER);
         lblTitle.setBounds(0, 10, cardW, 36);
         lblTitle.setFont(fontHeader);
         lblTitle.setForeground(colorWhite);
@@ -429,12 +456,12 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         btnConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnConfirm.addActionListener(ev ->
         {
-            for (String empNo : selectedEmpNos) userManager.deleteUser(empNo);
+            for (String empNo : selectedEmpNos) userManager.terminateUser(empNo);
             removeOverlay();
             editMode = false;
             refreshTable();
             refreshButtons();
-            JOptionPane.showMessageDialog(this, "User(s) deleted successfully.", "Deleted", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "User(s) terminated successfully.", "Terminated", JOptionPane.INFORMATION_MESSAGE);
         });
         pnlCard.add(btnConfirm);
 
@@ -459,6 +486,111 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         pnlTableCard.revalidate();
         pnlTableCard.repaint();
     }
+    
+    private void showReactivateOverlay()
+    {
+        removeOverlay();
+        
+        List<String> selectedEmpNos = getSelectedEmpNos();
+        
+        if (selectedEmpNos.isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Please select a user to reactivate.", "No User Selected", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        for (String empNo : selectedEmpNos)
+        {
+        if (!userManager.validateReactivateUser(null, empNo)) return;
+        }
+        
+        boolean isMultiple = selectedEmpNos.size() > 1;
+        String displayText = isMultiple
+                ? "ARE YOU SURE YOU WANT TO <b>REACTIVATE</b> THESE USERS?"
+                : "ARE YOU SURE YOU WANT TO <b>REACTIVATE</b><br>USER " + selectedEmpNos.get(0) + "?";
+        
+        pnlOverlay = new JPanel(null) {
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(new Color(0, 0, 0, 80));
+            g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        
+        pnlOverlay.setBounds(0, 0, 940, 680);
+        pnlOverlay.setOpaque(false);
+
+        int cardW = 560, cardH = 280;
+        int cardX = (940 - cardW) / 2;
+        int cardY = (680 - cardH) / 2;
+        
+        JPanel pnlCard = new JPanel(null);
+        pnlCard.setBounds(cardX, cardY, cardW, cardH);
+        pnlCard.setBackground(colorOverlayBg);
+        pnlCard.setBorder(BorderFactory.createLineBorder(new Color(0xCC, 0xCC, 0xCC), 1));
+        pnlOverlay.add(pnlCard);
+        
+        JPanel pnlTitle = new JPanel(null);
+        pnlTitle.setBounds(0, 0, cardW, 56);
+        pnlTitle.setBackground(colorActive);
+        pnlCard.add(pnlTitle);
+        
+        JLabel lblTitle = new JLabel("REACTIVATE USER?", SwingConstants.CENTER);
+        lblTitle.setBounds(0, 10, cardW, 36);
+        lblTitle.setFont(fontHeader);
+        lblTitle.setForeground(colorWhite);
+        pnlTitle.add(lblTitle);
+        
+        JLabel lblBody = new JLabel("<html><div style='text-align:center'>" + displayText + "</div></html>", SwingConstants.CENTER);
+        lblBody.setBounds(20, 66, cardW - 40, 80);
+        lblBody.setFont(new Font("Arial", Font.PLAIN, 15));
+        pnlCard.add(lblBody);
+        
+        JSeparator sep = new JSeparator();
+        sep.setBounds(0, 188, cardW, 2);
+        sep.setForeground(Color.LIGHT_GRAY);
+        pnlCard.add(sep);
+
+        JButton btnConfirm = new JButton("CONFIRM");
+        btnConfirm.setBounds(0, 190, cardW / 2, 90);
+        btnConfirm.setFont(fontBold);
+        btnConfirm.setBackground(colorOverlayBg);
+        btnConfirm.setForeground(colorActive);
+        btnConfirm.setFocusPainted(false);
+        btnConfirm.setBorderPainted(false);
+        btnConfirm.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnConfirm.addActionListener(ev ->
+        {
+            for (String empNo : selectedEmpNos) userManager.reactivateUser(empNo);
+            removeOverlay();
+            editMode = false;
+            refreshTable();
+            refreshButtons();
+            JOptionPane.showMessageDialog(this, "User(s) reactivated successfully.", "Reactivated", JOptionPane.INFORMATION_MESSAGE);
+        });
+        pnlCard.add(btnConfirm);
+        
+        JSeparator vertDiv = new JSeparator(SwingConstants.VERTICAL);
+        vertDiv.setBounds(cardW / 2, 190, 2, 90);
+        vertDiv.setForeground(Color.LIGHT_GRAY);
+        pnlCard.add(vertDiv);
+        
+        JButton btnCancel = new JButton("CANCEL");
+        btnCancel.setBounds(cardW / 2 + 2, 190, cardW / 2 - 2, 90);
+        btnCancel.setFont(fontBold);
+        btnCancel.setBackground(colorOverlayBg);
+        btnCancel.setForeground(colorRed);
+        btnCancel.setFocusPainted(false);
+        btnCancel.setBorderPainted(false);
+        btnCancel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCancel.addActionListener(ev -> removeOverlay());
+        pnlCard.add(btnCancel);
+        
+        pnlTableCard.add(pnlOverlay);
+        pnlTableCard.setComponentZOrder(pnlOverlay, 0);
+        pnlTableCard.revalidate();
+        pnlTableCard.repaint(); 
+    }
 
     @Override
     public void actionPerformed(ActionEvent e)
@@ -466,6 +598,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
         if      (e.getSource() == btnAddUser)      { showAddUserOverlay(); }
         else if (e.getSource() == btnEditUsers)    { editMode = true;  buildTableRows(); refreshButtons(); }
         else if (e.getSource() == btnConfirmEdit)  { editMode = false; buildTableRows(); refreshButtons(); JOptionPane.showMessageDialog(this, "Changes saved successfully!", "Confirm Edit", JOptionPane.INFORMATION_MESSAGE); }
-        else if (e.getSource() == btnDeleteUser)   { showDeleteOverlay(); }
+        else if (e.getSource() == btnTerminateUser)  { showTerminateOverlay(); }
+        else if (e.getSource() == btnReactivateUser) { showReactivateOverlay(); }
     }
 }

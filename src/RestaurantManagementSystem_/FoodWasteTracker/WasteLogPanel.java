@@ -1,4 +1,5 @@
 package RestaurantManagementSystem_.FoodWasteTracker;
+import RestaurantManagementSystem_.InventoryManagement.InventoryManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -9,42 +10,35 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class WasteLogPanel extends JPanel implements ActionListener {
-
-    // ── Shared log list across all roles ────────────────────────
     private static final List<WasteLog> SHARED_LOGS = new ArrayList<>();
+    public static List<WasteLog> getSharedLogs() { return SHARED_LOGS; }
+    
+public enum Role { STAFF, ADMIN, SUPER_ADMIN }
+  public static WasteLogPanel forStaff() { return new WasteLogPanel(SHARED_LOGS, Role.STAFF); }
+  public static WasteLogPanel forAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); }
+  public static WasteLogPanel forSuperAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); }
+  
+private List<WasteLog> logs;
+private Role role;
+private boolean editMode = false;
 
-    // ── Role constants ───────────────────────────────────────────
-    public enum Role { STAFF, ADMIN, SUPER_ADMIN }
+private DefaultTableModel tableModel;
+private JTable tblWasteLog;
+private JScrollPane scrollPane;
 
-    // ── Static factory methods ───────────────────────────────────
-    public static WasteLogPanel forStaff()      { return new WasteLogPanel(SHARED_LOGS, Role.STAFF); }
-    public static WasteLogPanel forAdmin()      { return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); }
-    public static WasteLogPanel forSuperAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); }
+private JButton btnAddLog, btnEditLogs, btnConfirmEdit;
+private JPanel btnPanel;
 
-    // ── Fields ───────────────────────────────────────────────────
-    private List<WasteLog> logs;
-    private Role role;
-    private boolean editMode = false;
-
-    private DefaultTableModel tableModel;
-    private JTable tblWasteLog;
-    private JScrollPane scrollPane;
-
-    private JButton btnAddLog, btnEditLogs, btnConfirmEdit;
-    private JPanel btnPanel;
-
-    // ── Colors ───────────────────────────────────────────────────
-    Color colorCream  = new Color(0xFF, 0xF8, 0xE1);
-    Color colorTeal   = new Color(0x36, 0x63, 0x79);
-    Color colorRed    = new Color(0xB7, 0x1C, 0x1C);
+    Color colorCream = new Color(0xFF, 0xF8, 0xE1);
+    Color colorTeal = new Color(0x36, 0x63, 0x79);
+    Color colorRed = new Color(0xB7, 0x1C, 0x1C);
     Color colorSalmon = new Color(0xF5, 0xCF, 0xBA);
-    Color colorSteel  = new Color(0x89, 0xB7, 0xB3);
-    Color colorDark   = new Color(0x22, 0x3A, 0x45);
-    Color colorWhite  = Color.WHITE;
+    Color colorSteel = new Color(0x89, 0xB7, 0xB3);
+    Color colorDark = new Color(0x22, 0x3A, 0x45);
+    Color colorWhite = Color.WHITE;
     Color colorRowAlt = new Color(0xFF, 0xF0, 0xD0);
 
-    // ── Fonts ────────────────────────────────────────────────────
-    Font fontBold   = new Font("Arial", Font.BOLD, 14);
+    Font fontBold = new Font("Arial", Font.BOLD, 14);
     Font fontNormal = new Font("Arial", Font.PLAIN, 13);
     Font fontHeader = new Font("Arial", Font.BOLD, 22);
 
@@ -88,7 +82,6 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         tblWasteLog.getTableHeader().setForeground(colorWhite);
         tblWasteLog.getTableHeader().setFont(fontBold);
         tblWasteLog.getTableHeader().setReorderingAllowed(false);
-
         scrollPane = new JScrollPane(tblWasteLog);
         scrollPane.setBounds(30, 75, 920, 520);
         scrollPane.getViewport().setBackground(colorCream);
@@ -103,18 +96,18 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         btnPanel.setBackground(colorCream);
         add(btnPanel);
 
-        btnAddLog = new JButton("ADD LOG");
-        btnAddLog.setBounds(0, 5, 130, 38);
-        btnAddLog.setBackground(colorRed);
-        btnAddLog.setForeground(colorWhite);
-        btnAddLog.setFont(fontBold);
-        btnAddLog.setFocusPainted(false);
-        btnAddLog.setBorderPainted(false);
-        btnAddLog.addActionListener(this);
-        btnPanel.add(btnAddLog);
-
-        if (role == Role.ADMIN || role == Role.SUPER_ADMIN)
+        if (role == Role.SUPER_ADMIN)
         {
+            btnAddLog = new JButton("ADD LOG");
+            btnAddLog.setBounds(0, 5, 130, 38);
+            btnAddLog.setBackground(colorRed);
+            btnAddLog.setForeground(colorWhite);
+            btnAddLog.setFont(fontBold);
+            btnAddLog.setFocusPainted(false);
+            btnAddLog.setBorderPainted(false);
+            btnAddLog.addActionListener(this);
+            btnPanel.add(btnAddLog);
+
             btnEditLogs = new JButton("EDIT LOGS");
             btnEditLogs.setBounds(145, 5, 130, 38);
             btnEditLogs.setBackground(colorRed);
@@ -144,9 +137,7 @@ public class WasteLogPanel extends JPanel implements ActionListener {
     private void enterEditMode()
     {
         editMode = true;
-
         btnPanel.removeAll();
-
         btnConfirmEdit = new JButton("CONFIRM EDIT");
         btnConfirmEdit.setBounds(0, 5, 160, 38);
         btnConfirmEdit.setBackground(colorRed);
@@ -156,11 +147,8 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         btnConfirmEdit.setBorderPainted(false);
         btnConfirmEdit.addActionListener(this);
         btnPanel.add(btnConfirmEdit);
-
         btnPanel.revalidate();
         btnPanel.repaint();
-
-        // ── allow clicking rows to delete ────────────────────────
         tblWasteLog.addMouseListener(new MouseAdapter()
         {
             @Override
@@ -180,11 +168,11 @@ public class WasteLogPanel extends JPanel implements ActionListener {
 
         btnPanel.removeAll();
 
-        btnAddLog.setBounds(0, 5, 130, 38);
-        btnPanel.add(btnAddLog);
-
-        if (role == Role.ADMIN || role == Role.SUPER_ADMIN)
+        if (role == Role.SUPER_ADMIN)
         {
+            btnAddLog.setBounds(0, 5, 130, 38);
+            btnPanel.add(btnAddLog);
+
             btnEditLogs.setBounds(145, 5, 130, 38);
             btnPanel.add(btnEditLogs);
         }
@@ -220,33 +208,36 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         JPanel panelAdd = new JPanel(new GridLayout(6, 2, 5, 10));
 
         String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        String currentEmp = WasteLogSession.getInstance().getEmployeeNo();
 
-        JLabel lblTime    = new JLabel("TIME:");
+        JLabel lblTime = new JLabel("TIME:");
         JTextField txtTime = new JTextField(timeNow);
         txtTime.setEditable(false);
 
-        JLabel lblItem    = new JLabel("* FOOD ITEM:");
+        JLabel lblItem = new JLabel("* FOOD ITEM:");
         JTextField txtItem = new JTextField();
 
-        JLabel lblQty    = new JLabel("* QUANTITY:");
-        JTextField txtQty = new JTextField();
+        JLabel lblQty = new JLabel("* QUANTITY:");
+        JTextField txtQty  = new JTextField();
 
         JLabel lblReason = new JLabel("* REASON:");
-        String[] reasons = {"-Select Reason-","Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
+        String[] reasons = {"-Select Reason-", "Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
         JComboBox<String> cbReason = new JComboBox<>(reasons);
 
+       
+        JLabel lblStaff = new JLabel("STAFF:");
+        JTextField txtStaff  = new JTextField(currentEmp);
+        txtStaff.setEditable(false);
+        txtStaff.setBackground(new Color(0xEE, 0xEE, 0xEE));
 
-        JLabel lblStaff   = new JLabel("STAFF:");
-        JTextField txtStaff = new JTextField();
-
-        JLabel lblRemarks   = new JLabel("REMARKS:");
+        JLabel lblRemarks = new JLabel("REMARKS:");
         JTextField txtRemarks = new JTextField();
 
-        panelAdd.add(lblTime);    panelAdd.add(txtTime);
-        panelAdd.add(lblItem);    panelAdd.add(txtItem);
-        panelAdd.add(lblQty);     panelAdd.add(txtQty);
-        panelAdd.add(lblReason);  panelAdd.add(cbReason);
-        panelAdd.add(lblStaff);   panelAdd.add(txtStaff);
+        panelAdd.add(lblTime); panelAdd.add(txtTime);
+        panelAdd.add(lblItem); panelAdd.add(txtItem);
+        panelAdd.add(lblQty); panelAdd.add(txtQty);
+        panelAdd.add(lblReason); panelAdd.add(cbReason);
+        panelAdd.add(lblStaff); panelAdd.add(txtStaff);
         panelAdd.add(lblRemarks); panelAdd.add(txtRemarks);
 
         int userConfirm = JOptionPane.showConfirmDialog(
@@ -256,46 +247,50 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         if (userConfirm == JOptionPane.OK_OPTION)
         {
             String inputItem = txtItem.getText().trim();
-            String inputQty  = txtQty.getText().trim();
+            String inputQty = txtQty.getText().trim();
 
-            //tis for validating that required fields should not be empty
             if (inputItem.isEmpty() || inputQty.isEmpty())
             {
                 JOptionPane.showMessageDialog(frame, "Food Item and Quantity are required.", "Missing Fields", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            //tis is for checking if input quantity is a number and must be greater than 0
+
+            double parsedInputQty;
             try
             {
-                double parsedInputQty = Double.parseDouble(inputQty);
+                parsedInputQty = Double.parseDouble(inputQty);
                 if (parsedInputQty <= 0)
                 {
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Quantity must be greater than 0. Please add a valid quantity.",
-                            "ERROR",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Quantity must be greater than 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
             catch (NumberFormatException e)
             {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Quantity must be a valid number.",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Quantity must be a valid number.", "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            //tis is for making sure user selects a valid reason
+
+      
             if (cbReason.getSelectedItem().equals("-Select Reason-"))
             {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Please Select a Valid Reason.",
-                        "ERROR",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Please select a valid reason.", "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
+            }
+            
+            RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadInventoryData();
+            boolean deducted = InventoryManager.getInstance().deductStock(inputItem, parsedInputQty);
+            if (!deducted)
+            {
+                int proceed = JOptionPane.showConfirmDialog(
+                        frame,
+                        "\"" + inputItem + "\" was not found in inventory or has insufficient stock.\n"
+                        + "Do you still want to log this waste entry?",
+                        "Inventory Warning",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+                if (proceed != JOptionPane.YES_OPTION) return;
             }
 
             logs.add(new WasteLog(
@@ -303,7 +298,7 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                     inputItem,
                     inputQty,
                     (String) cbReason.getSelectedItem(),
-                    txtStaff.getText().trim(),
+                    currentEmp,
                     txtRemarks.getText().trim()
             ));
 
@@ -315,8 +310,8 @@ public class WasteLogPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        if (e.getSource() == btnAddLog)      { showAddLogDialog(); }
-        else if (e.getSource() == btnEditLogs)    { enterEditMode(); }
+        if (e.getSource() == btnAddLog) { showAddLogDialog(); }
+        else if (e.getSource() == btnEditLogs) { enterEditMode(); }
         else if (e.getSource() == btnConfirmEdit) { exitEditMode(); }
     }
 }
