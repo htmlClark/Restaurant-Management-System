@@ -130,6 +130,7 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
                 JCheckBox chk = new JCheckBox();
                 chk.setBounds(8, (ROW_H - 20) / 2, 26, 20);
                 chk.setBackground(rowBg);
+                chk.addItemListener(ev -> updateActionButtonVisibility());
                 pnlRow.add(chk);
                 rowCheckboxes[r] = chk;
             }
@@ -204,12 +205,39 @@ public class ManageUsersSuperAdminPanel extends JPanel implements ActionListener
             btnConfirmEdit.setBounds(780, 00, 150, 42);
             btnConfirmEdit.addActionListener(this);
             pnlButtons.add(btnConfirmEdit);
+            
+            updateActionButtonVisibility();
         }
 
         pnlButtons.revalidate();
         pnlButtons.repaint();
     }
+    
+    private void updateActionButtonVisibility()
+    {
+        if (!editMode) return;
 
+        boolean hasActiveSelected   = false;
+        boolean hasInactiveSelected = false;
+
+        if (rowCheckboxes != null)
+        {
+            for (int i = 0; i < rowCheckboxes.length; i++)
+            {
+            if (rowCheckboxes[i] != null && rowCheckboxes[i].isSelected())
+                {
+                    if (UserManager.STATUS_ACTIVE.equalsIgnoreCase(userData[i][5]))
+                    hasActiveSelected = true;
+                    else
+                        hasInactiveSelected = true;
+                }
+            }
+        }
+
+    if (btnTerminateUser  != null) btnTerminateUser.setVisible(hasActiveSelected);
+    if (btnReactivateUser != null) btnReactivateUser.setVisible(hasInactiveSelected);
+}
+    
     private JButton makeRedButton(String text)
     {
         JButton btn = new JButton(text);
