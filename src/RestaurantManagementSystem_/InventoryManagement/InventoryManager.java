@@ -15,7 +15,7 @@ public class InventoryManager {
 
     private InventoryManager() {
     }
-
+    
     public static String generateItemID() {
         return String.format("IT%04d", itemCounter++);
     }
