@@ -4,13 +4,14 @@ import java.util.List;
 
 public class InventoryPopulatedData {
 
+    private static boolean isLoaded = false;
+    
     public static void loadInventoryData()
     {
-        
+        if (isLoaded) return;
+        isLoaded = true;
         
         List<invItem> inventoryList = InventoryManager.getInstance().getInventoryList();
-
-        if (!inventoryList.isEmpty()) return;
             
             //ingredients for chicharon bulaklak, chicken adobo, tortang talong, turon, iced tea and buko juice
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Pork Intestine", 20, "MEAT", "KG", "", "", "", "", "", ""));
