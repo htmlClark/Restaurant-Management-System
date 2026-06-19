@@ -23,7 +23,7 @@ public class InventoryManager {
     }
 
     public static String generateDeliveryID() {
-        return String.format("DV%04d", deliveryCounter++);
+        return String.format("ST%04d", deliveryCounter++);
     }
 
     public static InventoryManager getInstance() {

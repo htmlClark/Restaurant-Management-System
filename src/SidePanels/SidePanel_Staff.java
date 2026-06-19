@@ -89,20 +89,6 @@ public class SidePanel_Staff extends JPanel implements ActionListener{
             btnWasteLogs.addActionListener(this);
             add(btnWasteLogs);
 
-        ImageIcon deliLogo = new ImageIcon(getClass().getResource("/src_pack/images/delivery.png"));
-        Image deliSize = deliLogo.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-
-        btnDelivery = new JButton("  STOCKS", new ImageIcon(deliSize));
-            btnDelivery.setBounds(0, 320, 300, 80);
-            btnDelivery.setForeground(Color.WHITE);
-            btnDelivery.setBackground(DEFAULT_COLOR);
-            btnDelivery.setFont(new Font("Arial", Font.BOLD, 20));
-            btnDelivery.setHorizontalAlignment(SwingConstants.LEFT);
-            btnDelivery.setBorderPainted(false);
-            btnDelivery.setFocusPainted(false);
-            btnDelivery.addActionListener(this);
-            add(btnDelivery);
-
         ImageIcon logoutLogo = new ImageIcon(getClass().getResource("/src_pack/images/logout.png"));
         Image logoutSize = logoutLogo.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 

@@ -19,6 +19,8 @@ public class superAdminFrame extends JFrame implements ActionListener{
         setLocationRelativeTo(null);
         setResizable(false);
 
+        sidePanel = new SidePanel_SuperAdmin(); 
+
         add(sidePanel);
         add(new Header_SuperAdmin("SUPER ADMIN"));
         add(new Products());

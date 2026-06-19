@@ -300,20 +300,20 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                 return;
             }
 
-            // Deduct ingredients via recipe and log each one
-            deductDishIngredients(selectedDish, servings, timeNow, currentEmp, txtRemarks.getText().trim());
+            // 1. Dito natin babaguhin ang ipapasa nating format para sa loop ng ingredients
+            String customRemarks = "X" + servings + " " + selectedDish;
+            if (!txtRemarks.getText().trim().isEmpty()) {
+                customRemarks += " (" + txtRemarks.getText().trim() + ")";
+            }
 
-            // Add a single summary log entry for the dish itself
-            logs.add(new WasteLog(
-                    timeNow,
-                    selectedDish + " (x" + servings + ")",
-                    inputQty + " serving(s)",
-                    "Dish Waste",
-                    currentEmp,
-                    txtRemarks.getText().trim()
-            ));
+            // Deduct ingredients via recipe and log each one
+            deductDishIngredients(selectedDish, servings, timeNow, currentEmp, customRemarks);
+
+            // 2. TINANGGAL NATIN DITO YUNG SUMMARY ENTRY NG MISMONG DISH LOG PARA HINDI SYA SUMOBRA SA TABLE.
+
             refreshTable();
         }
+       
         else
         {
             // --- INGREDIENT path: pick inventory item + quantity ---
@@ -480,7 +480,6 @@ public class WasteLogPanel extends JPanel implements ActionListener {
         }
         return req;
     }
-
     // Deducts all ingredients for the dish and logs each one individually
     private void deductDishIngredients(String dishName, int servings, String timeNow, String emp, String remarks)
     {
@@ -492,9 +491,9 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                     timeNow,
                     entry.getKey(),
                     String.valueOf(entry.getValue()),
-                    "Dish Waste (" + dishName + ")",
+                    "dish waste",      
                     emp,
-                    remarks
+                    remarks           
             ));
         }
     }

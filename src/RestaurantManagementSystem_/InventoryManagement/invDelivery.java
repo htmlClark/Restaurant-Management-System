@@ -90,7 +90,7 @@ public class invDelivery extends JPanel implements ActionListener {
         panelDeliveryTable.setBackground(Color.decode("#f5cfba"));
 
         model = new DefaultTableModel();
-        model.addColumn("DELIVERY ID");
+        model.addColumn("STOCK ID");
         model.addColumn("ITEM ID");
         model.addColumn("ITEM NAME");
         model.addColumn("QUANTITY");
