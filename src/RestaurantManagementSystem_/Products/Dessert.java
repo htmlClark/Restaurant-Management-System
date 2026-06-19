@@ -60,7 +60,7 @@ public class Dessert extends JPanel implements ActionListener {
 
         btnHaloHalo = new JButton(new ImageIcon(haloSize));
             btnHaloHalo.setBounds(260,120,200,220);
-            btnHaloHalo.setBackground(Color.decode("#F2D0BD"));
+            btnHaloHalo.setBackground(Color.DARK_GRAY);
             btnHaloHalo.addActionListener(this);
             add(btnHaloHalo);
     }

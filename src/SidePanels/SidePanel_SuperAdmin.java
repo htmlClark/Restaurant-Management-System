@@ -108,7 +108,7 @@ public class SidePanel_SuperAdmin extends JPanel implements ActionListener{
         ImageIcon deliLogo = new ImageIcon(getClass().getResource("/src_pack/images/delivery.png"));
         Image deliSize = deliLogo.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 
-        btnDelivery = new JButton("  DELIVERY", new ImageIcon(deliSize));
+        btnDelivery = new JButton("  STOCKS", new ImageIcon(deliSize));
             btnDelivery.setBounds(0, 400, 300, 80);
             btnDelivery.setForeground(Color.WHITE);
             btnDelivery.setBackground(DEFAULT_COLOR);

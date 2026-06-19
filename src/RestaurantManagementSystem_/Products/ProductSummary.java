@@ -3,6 +3,7 @@ package RestaurantManagementSystem_.Products;
 import HeaderPanels.*;
 import MainPlacementFrame.*;
 import RestaurantManagementSystem_.PaymentProcess.*;
+import RestaurantManagementSystem_.InventoryManagement.invRecipe;
 import SidePanels.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -206,9 +207,22 @@ public class ProductSummary extends JPanel implements ActionListener {
         rowPanel.repaint();
     }
 
+    private void deductIngredients(String name, int quantity)
+    {
+        switch (name)
+        {
+            case "CHKN ADB": invRecipe.chickenAdobo(quantity); break;
+            case "CHRN BLK": invRecipe.chicharonBulaklak(quantity); break;
+            case "TRTA TLNG": invRecipe.tortangTalong(quantity); break;
+            case "TURON": invRecipe.turon(quantity); break;
+            case "ICD TEA": invRecipe.icedTea(quantity); break;
+            case "BK JC": invRecipe.bukoJuice(quantity); break;
+        }
+    }
+
     private Order processOrder()
     {
-        Order order = new Order(1);
+        Order order = new Order();
 
         for (Component component : rowPanel.getComponents())
         {
@@ -221,6 +235,7 @@ public class ProductSummary extends JPanel implements ActionListener {
             int quantity   = (int) rowSpinner.getValue();
             double price   = Double.parseDouble(rowPrice.getText().replace("₱", "")) / quantity;
 
+            deductIngredients(name, quantity);
             order.addItem(new OrderItem(name, price, quantity));
         }
         return order;

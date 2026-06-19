@@ -19,7 +19,7 @@ public class InventoryPopulatedData {
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Eggplant", 15, "VEGETABLE", "KG", "", "", "", "", "", ""));
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Garlic", 10, "VEGETABLE", "KG", "", "", "", "", "", ""));
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Onion", 10, "VEGETABLE", "KG", "", "", "", "", "", ""));
-            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Young Coconut", 30, "VEGETABLE", "PCS", "", "", "", "", "", ""));
+            inventoryList.add(new invItem(InventoryManager.generateItemID(), "Coconut", 30, "VEGETABLE", "PCS", "", "", "", "", "", ""));
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Soy Sauce", 10, "SEASONING", "LITER", "", "", "", "", "", ""));
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Vinegar", 10, "SEASONING", "LITER", "", "", "", "", "", ""));
             inventoryList.add(new invItem(InventoryManager.generateItemID(), "Salt", 5, "SEASONING", "KG", "", "", "", "", "", ""));

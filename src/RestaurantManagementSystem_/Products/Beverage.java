@@ -50,7 +50,7 @@ public class Beverage extends JPanel implements ActionListener {
 
         btnSago = new JButton(new ImageIcon(sagoSize));
             btnSago.setBounds(30,120,200,220);
-            btnSago.setBackground(Color.decode("#F2D0BD"));
+            btnSago.setBackground(Color.DARK_GRAY);
             btnSago.addActionListener(this);
             add(btnSago);
 
@@ -80,7 +80,7 @@ public class Beverage extends JPanel implements ActionListener {
 
         btnWater = new JButton(new ImageIcon(waterSize));
             btnWater.setBounds(260,370,200,220);
-            btnWater.setBackground(Color.decode("#F2D0BD"));
+            btnWater.setBackground(Color.DARK_GRAY);
             btnWater.addActionListener(this);
             add(btnWater);
     }

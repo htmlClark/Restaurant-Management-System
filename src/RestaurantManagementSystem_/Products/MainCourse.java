@@ -72,7 +72,7 @@ public class MainCourse extends JPanel implements ActionListener{
 
         btnBicolExp = new JButton(new ImageIcon(bclSize));
             btnBicolExp.setBounds(200,150,160, 190);
-            btnBicolExp.setBackground(Color.decode("#F2D0BD"));
+            btnBicolExp.setBackground(Color.DARK_GRAY);
             btnBicolExp.addActionListener(this);
             add(btnBicolExp);
 
@@ -82,7 +82,7 @@ public class MainCourse extends JPanel implements ActionListener{
 
         btnSisig = new JButton(new ImageIcon(ssgSize));
             btnSisig.setBounds(370,150,160, 190);
-            btnSisig.setBackground(Color.decode("#F2D0BD"));
+            btnSisig.setBackground(Color.DARK_GRAY);
             btnSisig.addActionListener(this);
             add(btnSisig);
 
@@ -92,7 +92,7 @@ public class MainCourse extends JPanel implements ActionListener{
 
         btnLaing = new JButton(new ImageIcon(lngSize));
             btnLaing.setBounds(30,400,160, 190);
-            btnLaing.setBackground(Color.decode("#F2D0BD"));
+            btnLaing.setBackground(Color.DARK_GRAY);
             btnLaing.addActionListener(this);
             add(btnLaing);
 
@@ -102,7 +102,7 @@ public class MainCourse extends JPanel implements ActionListener{
 
         btnPinakbet = new JButton(new ImageIcon(pnkSize));
             btnPinakbet.setBounds(200,400,160, 190);
-            btnPinakbet.setBackground(Color.decode("#F2D0BD"));
+            btnPinakbet.setBackground(Color.DARK_GRAY);
             btnPinakbet.addActionListener(this);
             add(btnPinakbet);
 

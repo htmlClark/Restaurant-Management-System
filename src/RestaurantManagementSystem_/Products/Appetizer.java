@@ -51,7 +51,7 @@ public class Appetizer extends JPanel implements ActionListener {
 
         btnShanghai = new JButton(new ImageIcon(lmpSize));
         btnShanghai.setBounds(30,120,200,220);
-        btnShanghai.setBackground(Color.decode("#F2D0BD"));
+        btnShanghai.setBackground(Color.DARK_GRAY);
         btnShanghai.addActionListener(this);
         add(btnShanghai);
 
@@ -61,7 +61,7 @@ public class Appetizer extends JPanel implements ActionListener {
 
         btnTokwa = new JButton(new ImageIcon(tkwSize));
         btnTokwa.setBounds(260,120,200,220);
-        btnTokwa.setBackground(Color.decode("#F2D0BD"));
+        btnTokwa.setBackground(Color.DARK_GRAY);
         btnTokwa.addActionListener(this);
         add(btnTokwa);
 

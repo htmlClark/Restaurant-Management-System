@@ -51,19 +51,19 @@ public class invList extends JPanel implements ActionListener {
     private void functionMenu()
     {
         panelStock = new JPanel();
-        panelStock.setBounds(25, 25, 450, 100);
+        panelStock.setBounds(25, 25, 600, 100);
         panelStock.setBackground(Color.decode("#1b4a62"));
         panelStock.setLayout(null);
 
         lblStock1 = new JLabel("");
         lblStock1.setFont(new Font("Arial", Font.BOLD, 25));
         lblStock1.setForeground(Color.WHITE);
-        lblStock1.setBounds(10, 10, 280, 30);
+        lblStock1.setBounds(10, 10, 430, 30);
 
         lblStock2 = new JLabel("");
         lblStock2.setFont(new Font("Arial", Font.BOLD, 25));
         lblStock2.setForeground(Color.WHITE);
-        lblStock2.setBounds(10, 50, 280, 30);
+        lblStock2.setBounds(10, 50, 580, 30);
         
         panelStock.add(lblStock1);
         panelStock.add(lblStock2);

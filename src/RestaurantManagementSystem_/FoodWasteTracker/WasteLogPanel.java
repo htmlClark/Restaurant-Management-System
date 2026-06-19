@@ -1,5 +1,6 @@
 package RestaurantManagementSystem_.FoodWasteTracker;
 import RestaurantManagementSystem_.InventoryManagement.InventoryManager;
+import RestaurantManagementSystem_.InventoryManagement.invItem;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,22 +13,22 @@ import javax.swing.table.*;
 public class WasteLogPanel extends JPanel implements ActionListener {
     private static final List<WasteLog> SHARED_LOGS = new ArrayList<>();
     public static List<WasteLog> getSharedLogs() { return SHARED_LOGS; }
-    
-public enum Role { STAFF, ADMIN, SUPER_ADMIN }
-  public static WasteLogPanel forStaff() { return new WasteLogPanel(SHARED_LOGS, Role.STAFF); }
-  public static WasteLogPanel forAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); }
-  public static WasteLogPanel forSuperAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); }
-  
-private List<WasteLog> logs;
-private Role role;
-private boolean editMode = false;
 
-private DefaultTableModel tableModel;
-private JTable tblWasteLog;
-private JScrollPane scrollPane;
+    public enum Role { STAFF, ADMIN, SUPER_ADMIN }
+    public static WasteLogPanel forStaff() { return new WasteLogPanel(SHARED_LOGS, Role.STAFF); }
+    public static WasteLogPanel forAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.ADMIN); }
+    public static WasteLogPanel forSuperAdmin() { return new WasteLogPanel(SHARED_LOGS, Role.SUPER_ADMIN); }
 
-private JButton btnAddLog, btnEditLogs, btnConfirmEdit;
-private JPanel btnPanel;
+    private List<WasteLog> logs;
+    private Role role;
+    private boolean editMode = false;
+
+    private DefaultTableModel tableModel;
+    private JTable tblWasteLog;
+    private JScrollPane scrollPane;
+
+    private JButton btnAddLog, btnEditLogs, btnConfirmEdit;
+    private JPanel btnPanel;
 
     Color colorCream = new Color(0xFF, 0xF8, 0xE1);
     Color colorTeal = new Color(0x36, 0x63, 0x79);
@@ -96,28 +97,26 @@ private JPanel btnPanel;
         btnPanel.setBackground(colorCream);
         add(btnPanel);
 
-        if (role == Role.SUPER_ADMIN)
-        {
-            btnAddLog = new JButton("ADD LOG");
-            btnAddLog.setBounds(0, 5, 130, 38);
-            btnAddLog.setBackground(colorRed);
-            btnAddLog.setForeground(colorWhite);
-            btnAddLog.setFont(fontBold);
-            btnAddLog.setFocusPainted(false);
-            btnAddLog.setBorderPainted(false);
-            btnAddLog.addActionListener(this);
-            btnPanel.add(btnAddLog);
+        btnAddLog = new JButton("ADD LOG");
+        btnAddLog.setBounds(0, 5, 130, 38);
+        btnAddLog.setBackground(colorRed);
+        btnAddLog.setForeground(colorWhite);
+        btnAddLog.setFont(fontBold);
+        btnAddLog.setFocusPainted(false);
+        btnAddLog.setBorderPainted(false);
+        btnAddLog.addActionListener(this);
+        btnPanel.add(btnAddLog);
 
-            btnEditLogs = new JButton("EDIT LOGS");
-            btnEditLogs.setBounds(145, 5, 130, 38);
-            btnEditLogs.setBackground(colorRed);
-            btnEditLogs.setForeground(colorWhite);
-            btnEditLogs.setFont(fontBold);
-            btnEditLogs.setFocusPainted(false);
-            btnEditLogs.setBorderPainted(false);
-            btnEditLogs.addActionListener(this);
-            btnPanel.add(btnEditLogs);
-        }
+        btnEditLogs = new JButton("EDIT LOGS");
+        btnEditLogs.setBounds(145, 5, 130, 38);
+        btnEditLogs.setBackground(colorRed);
+        btnEditLogs.setForeground(colorWhite);
+        btnEditLogs.setFont(fontBold);
+        btnEditLogs.setFocusPainted(false);
+        btnEditLogs.setBorderPainted(false);
+        btnEditLogs.addActionListener(this);
+        btnEditLogs.setVisible(role == Role.SUPER_ADMIN && !logs.isEmpty());
+        btnPanel.add(btnEditLogs);
 
         refreshTable();
     }
@@ -132,6 +131,8 @@ private JPanel btnPanel;
                     log.reason, log.staff, log.remarks
             });
         }
+        if (btnEditLogs != null)
+            btnEditLogs.setVisible(role == Role.SUPER_ADMIN && !logs.isEmpty());
     }
 
     private void enterEditMode()
@@ -165,18 +166,11 @@ private JPanel btnPanel;
     private void exitEditMode()
     {
         editMode = false;
-
         btnPanel.removeAll();
-
-        if (role == Role.SUPER_ADMIN)
-        {
-            btnAddLog.setBounds(0, 5, 130, 38);
-            btnPanel.add(btnAddLog);
-
-            btnEditLogs.setBounds(145, 5, 130, 38);
-            btnPanel.add(btnEditLogs);
-        }
-
+        btnAddLog.setBounds(0, 5, 130, 38);
+        btnPanel.add(btnAddLog);
+        btnEditLogs.setBounds(145, 5, 130, 38);
+        btnPanel.add(btnEditLogs);
         btnPanel.revalidate();
         btnPanel.repaint();
         refreshTable();
@@ -196,6 +190,10 @@ private JPanel btnPanel;
 
         if (confirm == JOptionPane.YES_OPTION)
         {
+            WasteLog removed = logs.get(selectedRow);
+            double qty = 0;
+            try { qty = Double.parseDouble(removed.qty); } catch (NumberFormatException ignored) {}
+            if (qty > 0) InventoryManager.getInstance().addStock(removed.item, qty);
             logs.remove(selectedRow);
             refreshTable();
         }
@@ -215,18 +213,22 @@ private JPanel btnPanel;
         txtTime.setEditable(false);
 
         JLabel lblItem = new JLabel("* FOOD ITEM:");
-        JTextField txtItem = new JTextField();
+        RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadInventoryData();
+        List<invItem> invList = InventoryManager.getInstance().getInventoryList();
+        String[] itemNames = new String[invList.size() + 1];
+        itemNames[0] = "-Select Item-";
+        for (int i = 0; i < invList.size(); i++) itemNames[i + 1] = invList.get(i).getItemName();
+        JComboBox<String> cbItem = new JComboBox<>(itemNames);
 
         JLabel lblQty = new JLabel("* QUANTITY:");
-        JTextField txtQty  = new JTextField();
+        JTextField txtQty = new JTextField();
 
         JLabel lblReason = new JLabel("* REASON:");
         String[] reasons = {"-Select Reason-", "Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
         JComboBox<String> cbReason = new JComboBox<>(reasons);
 
-       
         JLabel lblStaff = new JLabel("STAFF:");
-        JTextField txtStaff  = new JTextField(currentEmp);
+        JTextField txtStaff = new JTextField(currentEmp);
         txtStaff.setEditable(false);
         txtStaff.setBackground(new Color(0xEE, 0xEE, 0xEE));
 
@@ -234,7 +236,7 @@ private JPanel btnPanel;
         JTextField txtRemarks = new JTextField();
 
         panelAdd.add(lblTime); panelAdd.add(txtTime);
-        panelAdd.add(lblItem); panelAdd.add(txtItem);
+        panelAdd.add(lblItem); panelAdd.add(cbItem);
         panelAdd.add(lblQty); panelAdd.add(txtQty);
         panelAdd.add(lblReason); panelAdd.add(cbReason);
         panelAdd.add(lblStaff); panelAdd.add(txtStaff);
@@ -246,12 +248,25 @@ private JPanel btnPanel;
 
         if (userConfirm == JOptionPane.OK_OPTION)
         {
-            String inputItem = txtItem.getText().trim();
+            String inputItem = (String) cbItem.getSelectedItem();
             String inputQty = txtQty.getText().trim();
+            String inputReason = (String) cbReason.getSelectedItem();
 
-            if (inputItem.isEmpty() || inputQty.isEmpty())
+            if (inputItem.equals("-Select Item-"))
             {
-                JOptionPane.showMessageDialog(frame, "Food Item and Quantity are required.", "Missing Fields", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Please select a food item.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (inputReason.equals("-Select Reason-"))
+            {
+                JOptionPane.showMessageDialog(frame, "Please select a reason.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (inputQty.isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame, "Please enter a quantity.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -261,49 +276,33 @@ private JPanel btnPanel;
                 parsedInputQty = Double.parseDouble(inputQty);
                 if (parsedInputQty <= 0)
                 {
-                    JOptionPane.showMessageDialog(frame, "Quantity must be greater than 0.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Quantity must be greater than zero.", "INVALID QUANTITY", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
             catch (NumberFormatException e)
             {
-                JOptionPane.showMessageDialog(frame, "Quantity must be a valid number.", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Please enter a valid numeric quantity.", "INVALID QUANTITY", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-      
-            if (cbReason.getSelectedItem().equals("-Select Reason-"))
-            {
-                JOptionPane.showMessageDialog(frame, "Please select a valid reason.", "ERROR", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadInventoryData();
             boolean deducted = InventoryManager.getInstance().deductStock(inputItem, parsedInputQty);
             if (!deducted)
             {
-                int proceed = JOptionPane.showConfirmDialog(
-                        frame,
-                        "\"" + inputItem + "\" was not found in inventory or has insufficient stock.\n"
-                        + "Do you still want to log this waste entry?",
-                        "Inventory Warning",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
-                if (proceed != JOptionPane.YES_OPTION) return;
+                JOptionPane.showMessageDialog(frame, "Insufficient stock for the entered quantity.", "STOCK ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
             logs.add(new WasteLog(
                     txtTime.getText().trim(),
                     inputItem,
                     inputQty,
-                    (String) cbReason.getSelectedItem(),
+                    inputReason,
                     currentEmp,
                     txtRemarks.getText().trim()
             ));
 
             refreshTable();
-            JOptionPane.showMessageDialog(frame, "Waste log added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

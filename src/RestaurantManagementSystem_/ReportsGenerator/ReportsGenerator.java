@@ -21,19 +21,24 @@ public class ReportsGenerator extends JPanel {
     private JPanel inventoryPanel;
     private JPanel wastePanel;
 
-    public ReportsGenerator() {
+    private JPanel salesMetricsContainer;
+    private JPanel bestSellerContainer;
+    private JPanel inventoryDataContainer;
+    private JPanel wasteDataContainer;
 
-        Color whitemain = Color.decode("#FFF8E1");
-        Color darkblue  = Color.decode("#366379");
-        Color red       = Color.decode("#B71C1C");
-        Color snude     = Color.decode("#F5CFBA");
-        Color steal     = Color.decode("#89B7B3");
+    private final Color whitemain = Color.decode("#FFF8E1");
+    private final Color darkblue  = Color.decode("#366379");
+    private final Color red       = Color.decode("#B71C1C");
+    private final Color snude     = Color.decode("#F5CFBA");
+    private final Color steal     = Color.decode("#89B7B3");
+
+    public ReportsGenerator() {
 
         setBounds(300, 80, 980, 720);
         setLayout(null);
         setBackground(whitemain);
 
-        //Sales n Best Sellers Panel
+        //Weekly Sales & Best Sellers Panel
         salesPanel = new JPanel();
         salesPanel.setLayout(null);
         salesPanel.setBackground(steal);
@@ -47,6 +52,16 @@ public class ReportsGenerator extends JPanel {
         salesTitle.setHorizontalAlignment(JLabel.CENTER);
         salesTitle.setBounds(0, 5, 560, 40);
         salesPanel.add(salesTitle);
+
+        salesMetricsContainer = new JPanel(null);
+        salesMetricsContainer.setOpaque(false);
+        salesMetricsContainer.setBounds(0, 55, 560, 290);
+        salesPanel.add(salesMetricsContainer);
+
+        bestSellerContainer = new JPanel(null);
+        bestSellerContainer.setOpaque(false);
+        bestSellerContainer.setBounds(0, 340, 560, 360);
+        salesPanel.add(bestSellerContainer);
 
         //Inventory Panel
         inventoryPanel = new JPanel();
@@ -62,6 +77,11 @@ public class ReportsGenerator extends JPanel {
         invTitle.setBounds(0, 10, 375, 30);
         inventoryPanel.add(invTitle);
 
+        inventoryDataContainer = new JPanel(null);
+        inventoryDataContainer.setOpaque(false);
+        inventoryDataContainer.setBounds(0, 50, 375, 300);
+        inventoryPanel.add(inventoryDataContainer);
+
         //Waste Distribution Panel
         wastePanel = new JPanel();
         wastePanel.setLayout(null);
@@ -76,13 +96,36 @@ public class ReportsGenerator extends JPanel {
         wasteTitle.setBounds(0, 10, 375, 30);
         wastePanel.add(wasteTitle);
 
+        wasteDataContainer = new JPanel(null);
+        wasteDataContainer.setOpaque(false);
+        wasteDataContainer.setBounds(0, 40, 375, 300);
+        wastePanel.add(wasteDataContainer);
+
+        refreshReportData();
+    }
+
+    public void refreshReportData() {
+        salesMetricsContainer.removeAll();
+        bestSellerContainer.removeAll();
+        inventoryDataContainer.removeAll();
+        wasteDataContainer.removeAll();
+
         loadSalesData(darkblue);
         loadBestSellers(darkblue);
         loadInventoryData(darkblue);
         loadWasteData(red, darkblue, snude);
+
+        salesMetricsContainer.revalidate();
+        salesMetricsContainer.repaint();
+        bestSellerContainer.revalidate();
+        bestSellerContainer.repaint();
+        inventoryDataContainer.revalidate();
+        inventoryDataContainer.repaint();
+        wasteDataContainer.revalidate();
+        wasteDataContainer.repaint();
     }
 
-    //tis is for the weekly sales metrics, pulled from confirmed orders in SalesRecord
+    //tis is for the weekly sales metrics from confirmed orders in SalesRecord
     private void loadSalesData(Color darkblue) {
         RecordSales sales = RecordSales.getInstance();
 
@@ -90,37 +133,37 @@ public class ReportsGenerator extends JPanel {
         double avgSales   = sales.getAverageDailySales();
         double maxDaily   = sales.getHighestDailySales();
         double minDaily   = sales.getLowestDailySales();
-
-        salesPanel.add(createSalesCard("METRIC",               "VALUE",                                    60,  darkblue,    Color.WHITE));
-        salesPanel.add(createSalesCard("Total Weekly Sales",   String.format("₱%,.2f", totalSales),       115,  Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Average Daily Sales",  String.format("₱%,.2f", avgSales),         170,  Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Highest Daily Sales",  String.format("₱%,.2f", maxDaily),         225,  Color.WHITE, Color.BLACK));
-        salesPanel.add(createSalesCard("Lowest Daily Sales",   String.format("₱%,.2f", minDaily),         280,  Color.WHITE, Color.BLACK));
+        
+        salesMetricsContainer.add(createSalesCard("METRIC",               "VALUE",                                    5,   darkblue,    Color.WHITE));
+        salesMetricsContainer.add(createSalesCard("Total Weekly Sales",   String.format("₱%,.2f", totalSales),       60,  Color.WHITE, Color.BLACK));
+        salesMetricsContainer.add(createSalesCard("Average Daily Sales",  String.format("₱%,.2f", avgSales),         115, Color.WHITE, Color.BLACK));
+        salesMetricsContainer.add(createSalesCard("Highest Daily Sales",  String.format("₱%,.2f", maxDaily),         170, Color.WHITE, Color.BLACK));
+        salesMetricsContainer.add(createSalesCard("Lowest Daily Sales",   String.format("₱%,.2f", minDaily),         225, Color.WHITE, Color.BLACK));
     }
 
-    //tis is for the top 5 best sellers, aggregated from confirmed orders in SalesRecord
+    //tis is for the top 5 best sellers from confirmed orders in SalesRecord
     private void loadBestSellers(Color darkblue) {
         JLabel bestSellerTitle = new JLabel("BEST SELLERS");
         bestSellerTitle.setFont(new Font("Arial", Font.BOLD, 22));
         bestSellerTitle.setForeground(Color.BLACK);
         bestSellerTitle.setHorizontalAlignment(JLabel.CENTER);
-        bestSellerTitle.setBounds(0, 340, 560, 40);
-        salesPanel.add(bestSellerTitle);
+        bestSellerTitle.setBounds(0, 0, 560, 40);
+        bestSellerContainer.add(bestSellerTitle);
 
-        salesPanel.add(createBestSellerRow("DISH", "UNITS SOLD", "REVENUE", 390, darkblue, Color.WHITE));
+        bestSellerContainer.add(createBestSellerRow("DISH", "UNITS SOLD", "REVENUE", 50, darkblue, Color.WHITE));
 
         List<RecordSales.BestSeller> bestSellers = RecordSales.getInstance().getBestSellers(5);
 
-        int yOffset = 445;
-        int maxY    = 690;
+        int yOffset = 105;
+        int maxY    = 350;
 
         if (bestSellers.isEmpty()) {
-            salesPanel.add(createBestSellerRow("No Sales Recorded", "—", "₱0.00", yOffset, Color.WHITE, Color.BLACK));
+            bestSellerContainer.add(createBestSellerRow("No Sales Recorded", "—", "₱0.00", yOffset, Color.WHITE, Color.BLACK));
         } else {
             for (RecordSales.BestSeller item : bestSellers) {
                 if (yOffset + 50 > maxY) break;
 
-                salesPanel.add(createBestSellerRow(
+                bestSellerContainer.add(createBestSellerRow(
                         item.dishName,
                         String.valueOf(item.unitsSold),
                         String.format("₱%,.2f", item.totalRevenue),
@@ -132,21 +175,20 @@ public class ReportsGenerator extends JPanel {
         }
     }
 
-    //tis is for the inventory status table, pulled directly from InventoryManager
+    //tis is for the inventory status table from InventoryManager
     private void loadInventoryData(Color darkblue) {
-
-        inventoryPanel.add(createInventoryRow("ITEM", "STATUS", 55, darkblue, Color.WHITE));
+        inventoryDataContainer.add(createInventoryRow("ITEM", "STATUS", 5, darkblue, Color.WHITE));
 
         List<invItem> inventoryList = InventoryManager.getInstance().getInventoryList();
 
-        int yOffset = 100;
+        int yOffset = 50;
 
         if (inventoryList.isEmpty()) {
-            inventoryPanel.add(createInventoryRow("No recorded items", "—", yOffset, Color.WHITE, Color.BLACK));
+            inventoryDataContainer.add(createInventoryRow("No recorded items", "—", yOffset, Color.WHITE, Color.BLACK));
         } else {
             for (invItem item : inventoryList) {
 
-                inventoryPanel.add(createInventoryRow(
+                inventoryDataContainer.add(createInventoryRow(
                         item.getItemName(),
                         item.getItemCurrentStatus(),
                         yOffset,
@@ -154,8 +196,7 @@ public class ReportsGenerator extends JPanel {
                         Color.BLACK));
                 yOffset += 45;
 
-                //tis is for rows don't overflow the panel
-                if (yOffset + 45 > 340) break;
+                if (yOffset + 45 > 290) break;
             }
         }
     }
@@ -191,8 +232,9 @@ public class ReportsGenerator extends JPanel {
         Color[]  wasteColors = { red, darkblue, snude, Color.ORANGE, Color.PINK, Color.CYAN, Color.GRAY };
 
         PieChartPanel pieChart = new PieChartPanel(wasteValues, wasteColors, wasteItems);
-        pieChart.setBounds(0, 45, 375, 285);
-        wastePanel.add(pieChart);
+
+        pieChart.setBounds(0, 5, 375, 285);
+        wasteDataContainer.add(pieChart);
     }
 
     //tis is for sales rowsss

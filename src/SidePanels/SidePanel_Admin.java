@@ -34,7 +34,6 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
         setBackground(DEFAULT_COLOR);
         setBounds(0, 0, 300, 1280);
 
-        // Default active button on startup
         setActiveButton(btnProducts);
     }
 
@@ -108,7 +107,7 @@ public class SidePanel_Admin extends JPanel implements ActionListener{
         ImageIcon deliLogo = new ImageIcon(getClass().getResource("/src_pack/images/delivery.png"));
         Image deliSize = deliLogo.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 
-        btnDelivery = new JButton("  DELIVERY", new ImageIcon(deliSize));
+        btnDelivery = new JButton("  STOCKS", new ImageIcon(deliSize));
             btnDelivery.setBounds(0, 400, 300, 80);
             btnDelivery.setForeground(Color.WHITE);
             btnDelivery.setBackground(DEFAULT_COLOR);

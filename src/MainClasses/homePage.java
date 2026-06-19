@@ -29,7 +29,7 @@ public class homePage extends JFrame implements ActionListener
         lblHeading = new JLabel (new ImageIcon(titleSize));
             lblHeading.setBounds(100, 150, 1050, 300);
             add(lblHeading);
-            
+
         lblStatus = new JLabel ("");
             lblStatus.setBounds(350,550, 300, 30);
             add(lblStatus);
@@ -41,7 +41,6 @@ public class homePage extends JFrame implements ActionListener
             btnStart.addActionListener(this);
             add(btnStart);
     }
-    
     
     
     @Override

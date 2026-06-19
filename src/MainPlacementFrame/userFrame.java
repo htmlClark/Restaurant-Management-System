@@ -20,7 +20,7 @@ public class userFrame extends JFrame implements ActionListener{
         setLocationRelativeTo(null);
         setResizable(false);
 
-        sidePanel = new SidePanel_Staff();  // create ONCE
+        sidePanel = new SidePanel_Staff(); 
         add(sidePanel);
         add(new Header_Staff("USER"));
         add(new Products());
@@ -31,7 +31,7 @@ public class userFrame extends JFrame implements ActionListener{
     public void switchPanel(JPanel thisPanel)
     {
         getContentPane().removeAll();
-        add(sidePanel);                     // reuse the SAME instance
+        add(sidePanel);                     
         add(new Header_Staff("USER"));
         add(thisPanel);
         revalidate();

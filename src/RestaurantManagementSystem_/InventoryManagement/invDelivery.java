@@ -159,25 +159,25 @@ public class invDelivery extends JPanel implements ActionListener {
             
             panelAdd = new JPanel(new GridLayout(10, 2, 5, 5));
 
-            lblAddDeliveryID = new JLabel("Delivery ID (Auto-generated):");
+            lblAddDeliveryID = new JLabel("Delivery ID :");
             JLabel lblAutoDeliveryID = new JLabel(autoDeliveryID);
             lblAutoDeliveryID.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
 
-            lblAddItemID = new JLabel("Item ID (Auto-generated):");
+            lblAddItemID = new JLabel("Item ID :");
             JLabel lblAutoItemID = new JLabel(autoItemID);
             lblAutoItemID.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
 
-            lblAddName = new JLabel("Item Name:");
+            lblAddName = new JLabel("*Item Name:");
             txtAddName = new JTextField();
 
-            lblAddQuantity = new JLabel("Quantity:");
+            lblAddQuantity = new JLabel("*Quantity:");
             txtAddQuantity = new JTextField();
 
-            lblAddCategory = new JLabel("Category:");
+            lblAddCategory = new JLabel("*Category:");
             String[] categories = {"MEAT", "SEASONING", "VEGETABLE", "FRUIT","CONDIMENTS", "OTHERS"};
             cbAddCategory = new JComboBox<>(categories);
 
-            lblAddMeasurement = new JLabel("Measurement:");
+            lblAddMeasurement = new JLabel("*Measurement:");
             String[] measurements = {"KG", "LITER", "PACK", "PCS"};
             cbAddMeasurement = new JComboBox<>(measurements);
 
@@ -190,7 +190,7 @@ public class invDelivery extends JPanel implements ActionListener {
             lblAddDeliveryTime = new JLabel("Delivery Time: ");
             lblAddDeliveryTime1 = new JLabel(autoTime);
 
-            lblAddDeliveryCourier = new JLabel("Courier:");
+            lblAddDeliveryCourier = new JLabel("*   Courier:");
             txtAddDeliveryCourier = new JTextField();
 
             panelAdd.add(lblAddDeliveryID);

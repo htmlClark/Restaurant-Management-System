@@ -25,7 +25,7 @@ public class ManageUsersAdmin extends JPanel {
     String[][] userData;
 
     String[] colHeaders = {"TIME LOGGED IN", "EMPLOYEE NUMBER", "NAME", "ROLE", "HIRE DATE", "STATUS"};
-    int[]    colWidths  = {130, 150, 150, 120, 160, 150};
+    int[]    colWidths  = {130, 140, 150, 120, 160, 150};
 
     public ManageUsersAdmin()
     {

@@ -2,6 +2,7 @@ package RestaurantManagementSystem_.PaymentProcess;
 import MainPlacementFrame.adminFrame;
 import MainPlacementFrame.userFrame;
 import RestaurantManagementSystem_.Products.Products;
+import RestaurantManagementSystem_.ReportsGenerator.RecordSales;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,13 +18,14 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
     private JButton btnPrintReceipt;
     private JButton btnConfirm;
     private JFrame parentFrame;
+    private Order order;
 
-    Color colorCream = new Color(0xFF, 0xF8, 0xE1);
-    Color colorRed = new Color(0xB7, 0x1C, 0x1C);
-    Color colorGold = new Color(0xFF, 0xB3, 0x00);
-    Color colorGreen   = new Color(0x2E, 0x7D, 0x32);
-    Color colorWhite = new Color(0xFF, 0xFF, 0xFF);
-    Color colorBlack = new Color(0x00, 0x00, 0x00);
+    Color colorCream  = new Color(0xFF, 0xF8, 0xE1);
+    Color colorRed    = new Color(0xB7, 0x1C, 0x1C);
+    Color colorGold   = new Color(0xFF, 0xB3, 0x00);
+    Color colorGreen  = new Color(0x2E, 0x7D, 0x32);
+    Color colorGray   = new Color(0x90, 0x90, 0x90);
+    Color colorWhite  = new Color(0xFF, 0xFF, 0xFF);
 
     Font fontHeader = new Font("Impact", Font.BOLD, 35);
     Font fontNormal = new Font("Arial", Font.PLAIN, 14);
@@ -32,10 +34,10 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
     private String dateTime = now.getMonthValue() + "/" + now.getDayOfMonth() + "/" + now.getYear()
             + "   " + String.format("%02d", now.getHour()) + ":" + String.format("%02d", now.getMinute());
 
-
     public PaymentConfirmationDialog(JFrame parent, Order order) {
         super(parent, true);
         this.parentFrame = parent;
+        this.order = order;
         setSize(500, 380);
         setLayout(null);
         setResizable(false);
@@ -92,14 +94,50 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
 
     private void confirmBtn()
     {
+         RecordSales.getInstance().recordOrder(order);
+
         JPanel nextPanel = new Products();
         parentFrame.getContentPane().removeAll();
         parentFrame.getContentPane().add(nextPanel);
         parentFrame.revalidate();
         parentFrame.repaint();
 
-        if (parentFrame instanceof userFrame)            { ((userFrame) parentFrame).switchPanel(nextPanel); }
-        else if (parentFrame instanceof adminFrame)      { ((adminFrame) parentFrame).switchPanel(nextPanel); }
+        if (parentFrame instanceof userFrame) {
+            ((userFrame) parentFrame).switchPanel(nextPanel);
+        } else if (parentFrame instanceof adminFrame) {
+            ((adminFrame) parentFrame).switchPanel(nextPanel);
+        }
+    }
+
+    private void printReceipt()
+    {
+        String line  = "-----------------------";
+        String line2 = "=======================";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("      PINOY PLATTERS\n");
+        sb.append(line).append("\n");
+        sb.append("  ").append(dateTime).append("\n");
+        sb.append(line).append("\n");
+        for (OrderItem item : order.getItems())
+        {
+            sb.append(String.format("%-14s x%d%n", item.getItemName(), item.getQuantity()));
+            sb.append(String.format("  %20s%n", "P" + String.format("%.2f", item.getTotalPrice())));
+        }
+        sb.append(line2).append("\n");
+        sb.append(String.format("%-14s P%.2f%n", "Subtotal:", order.getSubtotal()));
+        sb.append(String.format("%-14s P%.2f%n", "VAT (12%):", order.getVAT()));
+        sb.append(String.format("%-14s P%.2f%n", "TOTAL:", order.getTotal()));
+        sb.append("\n");
+        sb.append("     -- Customer Copy --\n");
+
+        JTextArea txtReceipt = new JTextArea(sb.toString());
+        txtReceipt.setEditable(false);
+        txtReceipt.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        JOptionPane.showMessageDialog(this, txtReceipt, "Receipt", JOptionPane.PLAIN_MESSAGE);
+
+        btnPrintReceipt.setBackground(new Color(0x66, 0xBB, 0x6A));
+        btnPrintReceipt.setText("PRINTED");
     }
 
     @Override
@@ -111,8 +149,7 @@ public class PaymentConfirmationDialog extends JDialog implements ActionListener
         }
         else if (e.getSource() == btnPrintReceipt)
         {
-            JOptionPane.showMessageDialog(this, "Printing receipt...", "Print", JOptionPane.INFORMATION_MESSAGE);
+            printReceipt();
         }
     }
 }
-
