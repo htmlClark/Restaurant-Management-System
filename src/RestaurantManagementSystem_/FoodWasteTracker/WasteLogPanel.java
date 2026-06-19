@@ -203,53 +203,163 @@ public class WasteLogPanel extends JPanel implements ActionListener {
     {
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
-        JPanel panelAdd = new JPanel(new GridLayout(6, 2, 5, 10));
+        // --- Step 1: Ask whether waste is from a DISH or a raw INGREDIENT ---
+        String[] logTypes = {"Ingredient", "Dish"};
+        int typeChoice = JOptionPane.showOptionDialog(
+                frame,
+                "What type of waste are you logging?",
+                "ADD WASTE LOG — Select Type",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                logTypes,
+                logTypes[0]
+        );
+        if (typeChoice == JOptionPane.CLOSED_OPTION) return;
 
-        String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
+        boolean isDish = (typeChoice == 1);
+
+        String timeNow    = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
         String currentEmp = WasteLogSession.getInstance().getEmployeeNo();
 
-        JLabel lblTime = new JLabel("TIME:");
-        JTextField txtTime = new JTextField(timeNow);
-        txtTime.setEditable(false);
-
-        JLabel lblItem = new JLabel("* FOOD ITEM:");
         RestaurantManagementSystem_.InventoryManagement.InventoryPopulatedData.loadInventoryData();
-        List<invItem> invList = InventoryManager.getInstance().getInventoryList();
-        String[] itemNames = new String[invList.size() + 1];
-        itemNames[0] = "-Select Item-";
-        for (int i = 0; i < invList.size(); i++) itemNames[i + 1] = invList.get(i).getItemName();
-        JComboBox<String> cbItem = new JComboBox<>(itemNames);
 
-        JLabel lblQty = new JLabel("* QUANTITY:");
-        JTextField txtQty = new JTextField();
-
-        JLabel lblReason = new JLabel("* REASON:");
-        String[] reasons = {"-Select Reason-", "Spoilage/Expired", "Leftovers", "Customer Returns", "Contaminated", "Staff Error", "Other"};
-        JComboBox<String> cbReason = new JComboBox<>(reasons);
-
-        JLabel lblStaff = new JLabel("STAFF:");
-        JTextField txtStaff = new JTextField(currentEmp);
-        txtStaff.setEditable(false);
-        txtStaff.setBackground(new Color(0xEE, 0xEE, 0xEE));
-
-        JLabel lblRemarks = new JLabel("REMARKS:");
-        JTextField txtRemarks = new JTextField();
-
-        panelAdd.add(lblTime); panelAdd.add(txtTime);
-        panelAdd.add(lblItem); panelAdd.add(cbItem);
-        panelAdd.add(lblQty); panelAdd.add(txtQty);
-        panelAdd.add(lblReason); panelAdd.add(cbReason);
-        panelAdd.add(lblStaff); panelAdd.add(txtStaff);
-        panelAdd.add(lblRemarks); panelAdd.add(txtRemarks);
-
-        int userConfirm = JOptionPane.showConfirmDialog(
-                frame, panelAdd, "ADD WASTE LOG", JOptionPane.OK_CANCEL_OPTION
-        );
-
-        if (userConfirm == JOptionPane.OK_OPTION)
+        if (isDish)
         {
-            String inputItem = (String) cbItem.getSelectedItem();
-            String inputQty = txtQty.getText().trim();
+            // --- DISH path: pick dish name + quantity of servings ---
+            JPanel panelDish = new JPanel(new GridLayout(5, 2, 5, 10));
+
+            JLabel lblTime = new JLabel("TIME:");
+            JTextField txtTime = new JTextField(timeNow);
+            txtTime.setEditable(false);
+
+            JLabel lblDish = new JLabel("* DISH:");
+            String[] dishNames = {"- Select Dish -", "Chicken Adobo", "Chicharon Bulaklak",
+                    "Tortang Talong", "Turon", "Iced Tea", "Buko Juice"};
+            JComboBox<String> cbDish = new JComboBox<>(dishNames);
+
+            JLabel lblQty = new JLabel("* SERVINGS:");
+            JTextField txtQty = new JTextField();
+
+            JLabel lblStaff = new JLabel("STAFF:");
+            JTextField txtStaff = new JTextField(currentEmp);
+            txtStaff.setEditable(false);
+            txtStaff.setBackground(new Color(0xEE, 0xEE, 0xEE));
+
+            JLabel lblRemarks = new JLabel("REMARKS:");
+            JTextField txtRemarks = new JTextField();
+
+            panelDish.add(lblTime);   panelDish.add(txtTime);
+            panelDish.add(lblDish);   panelDish.add(cbDish);
+            panelDish.add(lblQty);    panelDish.add(txtQty);
+            panelDish.add(lblStaff);  panelDish.add(txtStaff);
+            panelDish.add(lblRemarks);panelDish.add(txtRemarks);
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    frame, panelDish, "ADD WASTE LOG — Dish", JOptionPane.OK_CANCEL_OPTION
+            );
+            if (confirm != JOptionPane.OK_OPTION) return;
+
+            String selectedDish = (String) cbDish.getSelectedItem();
+            String inputQty     = txtQty.getText().trim();
+
+            if (selectedDish.equals("- Select Dish -"))
+            {
+                JOptionPane.showMessageDialog(frame, "Please select a dish.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (inputQty.isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame, "Please enter number of servings.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int servings;
+            try
+            {
+                servings = Integer.parseInt(inputQty);
+                if (servings <= 0)
+                {
+                    JOptionPane.showMessageDialog(frame, "Servings must be greater than zero.", "INVALID QUANTITY", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(frame, "Servings must be a whole number.", "INVALID QUANTITY", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Check if all required ingredients have enough stock before deducting
+            java.util.List<String> missing = checkDishStock(selectedDish, servings);
+            if (!missing.isEmpty())
+            {
+                JOptionPane.showMessageDialog(frame,
+                        "Insufficient stock for the following ingredients:\n" + String.join(", ", missing),
+                        "STOCK ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Deduct ingredients via recipe and log each one
+            deductDishIngredients(selectedDish, servings, timeNow, currentEmp, txtRemarks.getText().trim());
+
+            // Add a single summary log entry for the dish itself
+            logs.add(new WasteLog(
+                    timeNow,
+                    selectedDish + " (x" + servings + ")",
+                    inputQty + " serving(s)",
+                    "Dish Waste",
+                    currentEmp,
+                    txtRemarks.getText().trim()
+            ));
+            refreshTable();
+        }
+        else
+        {
+            // --- INGREDIENT path: pick inventory item + quantity ---
+            JPanel panelAdd = new JPanel(new GridLayout(6, 2, 5, 10));
+
+            JLabel lblTime = new JLabel("TIME:");
+            JTextField txtTime = new JTextField(timeNow);
+            txtTime.setEditable(false);
+
+            JLabel lblItem = new JLabel("* FOOD ITEM:");
+            List<invItem> invList = InventoryManager.getInstance().getInventoryList();
+            String[] itemNames = new String[invList.size() + 1];
+            itemNames[0] = "-Select Item-";
+            for (int i = 0; i < invList.size(); i++) itemNames[i + 1] = invList.get(i).getItemName();
+            JComboBox<String> cbItem = new JComboBox<>(itemNames);
+
+            JLabel lblQty = new JLabel("* QUANTITY:");
+            JTextField txtQty = new JTextField();
+
+            JLabel lblReason = new JLabel("* REASON:");
+            String[] reasons = {"-Select Reason-", "Spoilage/Expired", "Leftovers",
+                    "Customer Returns", "Contaminated", "Staff Error", "Other"};
+            JComboBox<String> cbReason = new JComboBox<>(reasons);
+
+            JLabel lblStaff = new JLabel("STAFF:");
+            JTextField txtStaff = new JTextField(currentEmp);
+            txtStaff.setEditable(false);
+            txtStaff.setBackground(new Color(0xEE, 0xEE, 0xEE));
+
+            JLabel lblRemarks = new JLabel("REMARKS:");
+            JTextField txtRemarks = new JTextField();
+
+            panelAdd.add(lblTime);    panelAdd.add(txtTime);
+            panelAdd.add(lblItem);    panelAdd.add(cbItem);
+            panelAdd.add(lblQty);     panelAdd.add(txtQty);
+            panelAdd.add(lblReason);  panelAdd.add(cbReason);
+            panelAdd.add(lblStaff);   panelAdd.add(txtStaff);
+            panelAdd.add(lblRemarks); panelAdd.add(txtRemarks);
+
+            int userConfirm = JOptionPane.showConfirmDialog(
+                    frame, panelAdd, "ADD WASTE LOG — Ingredient", JOptionPane.OK_CANCEL_OPTION
+            );
+            if (userConfirm != JOptionPane.OK_OPTION) return;
+
+            String inputItem   = (String) cbItem.getSelectedItem();
+            String inputQty    = txtQty.getText().trim();
             String inputReason = (String) cbReason.getSelectedItem();
 
             if (inputItem.equals("-Select Item-"))
@@ -257,13 +367,11 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(frame, "Please select a food item.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
             if (inputReason.equals("-Select Reason-"))
             {
                 JOptionPane.showMessageDialog(frame, "Please select a reason.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
             if (inputQty.isEmpty())
             {
                 JOptionPane.showMessageDialog(frame, "Please enter a quantity.", "MISSING FIELD", JOptionPane.WARNING_MESSAGE);
@@ -286,10 +394,20 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                 return;
             }
 
+            // Validate against available stock BEFORE deducting
+            boolean hasStock = InventoryManager.getInstance().hasStock(inputItem, parsedInputQty);
+            if (!hasStock)
+            {
+                JOptionPane.showMessageDialog(frame,
+                        "Insufficient stock. The quantity entered exceeds what is available in inventory.",
+                        "STOCK ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             boolean deducted = InventoryManager.getInstance().deductStock(inputItem, parsedInputQty);
             if (!deducted)
             {
-                JOptionPane.showMessageDialog(frame, "Insufficient stock for the entered quantity.", "STOCK ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Failed to deduct stock. Please try again.", "STOCK ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -301,8 +419,83 @@ public class WasteLogPanel extends JPanel implements ActionListener {
                     currentEmp,
                     txtRemarks.getText().trim()
             ));
-
             refreshTable();
+        }
+    }
+
+    // Returns names of ingredients that have insufficient stock for the given dish/servings
+    private java.util.List<String> checkDishStock(String dishName, int servings)
+    {
+        java.util.List<String> missing = new java.util.ArrayList<>();
+        java.util.Map<String, Double> requirements = getDishRequirements(dishName, servings);
+        for (java.util.Map.Entry<String, Double> entry : requirements.entrySet())
+        {
+            if (!InventoryManager.getInstance().hasStock(entry.getKey(), entry.getValue()))
+                missing.add(entry.getKey());
+        }
+        return missing;
+    }
+
+    // Returns a map of ingredient name → required quantity for the dish
+    private java.util.Map<String, Double> getDishRequirements(String dishName, int qty)
+    {
+        java.util.Map<String, Double> req = new java.util.LinkedHashMap<>();
+        switch (dishName)
+        {
+            case "Chicken Adobo":
+                req.put("Chicken",      0.30 * qty);
+                req.put("Garlic",       0.02 * qty);
+                req.put("Onion",        0.05 * qty);
+                req.put("Soy Sauce",    0.05 * qty);
+                req.put("Vinegar",      0.05 * qty);
+                req.put("Black Pepper", 0.005 * qty);
+                break;
+            case "Chicharon Bulaklak":
+                req.put("Pork Intestine", 0.30 * qty);
+                req.put("Cooking Oil",    0.10 * qty);
+                req.put("Salt",           0.01 * qty);
+                break;
+            case "Tortang Talong":
+                req.put("Eggplant",    0.20 * qty);
+                req.put("Egg",         2.0  * qty);
+                req.put("Salt",        0.005 * qty);
+                req.put("Cooking Oil", 0.02 * qty);
+                break;
+            case "Turon":
+                req.put("Banana",              0.15 * qty);
+                req.put("Spring Roll Wrapper", 1.0  * qty);
+                req.put("Sugar",               0.02 * qty);
+                req.put("Cooking Oil",         0.05 * qty);
+                break;
+            case "Iced Tea":
+                req.put("Tea Powder", 0.01 * qty);
+                req.put("Sugar",      0.03 * qty);
+                req.put("Water",      0.50 * qty);
+                break;
+            case "Buko Juice":
+                req.put("Coconut", 1.0  * qty);
+                req.put("Water",   0.20 * qty);
+                req.put("Sugar",   0.01 * qty);
+                break;
+        }
+        return req;
+    }
+
+    // Deducts all ingredients for the dish and logs each one individually
+    private void deductDishIngredients(String dishName, int servings, String timeNow, String emp, String remarks)
+    {
+        java.util.Map<String, Double> req = getDishRequirements(dishName, servings);
+        for (java.util.Map.Entry<String, Double> entry : req.entrySet())
+        {
+            InventoryManager.getInstance().deductStock(entry.getKey(), entry.getValue());
+            logs.add(new WasteLog(
+                    timeNow,
+                    entry.getKey(),
+                    String.valueOf(entry.getValue()),
+                    "Dish Waste (" + dishName + ")",
+                    emp,
+                    remarks
+            ));
         }
     }
 

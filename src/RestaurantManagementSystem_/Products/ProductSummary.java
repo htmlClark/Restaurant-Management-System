@@ -8,6 +8,7 @@ import SidePanels.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.List;
 
 public class ProductSummary extends JPanel implements ActionListener {
     private JScrollPane scrollPane;
@@ -209,14 +210,24 @@ public class ProductSummary extends JPanel implements ActionListener {
 
     private void deductIngredients(String name, int quantity)
     {
+        List<String> missing;
         switch (name)
         {
-            case "CHKN ADB": invRecipe.chickenAdobo(quantity); break;
-            case "CHRN BLK": invRecipe.chicharonBulaklak(quantity); break;
-            case "TRTA TLNG": invRecipe.tortangTalong(quantity); break;
-            case "TURON": invRecipe.turon(quantity); break;
-            case "ICD TEA": invRecipe.icedTea(quantity); break;
-            case "BK JC": invRecipe.bukoJuice(quantity); break;
+            case "CHKN ADB":   missing = invRecipe.chickenAdobo(quantity);       break;
+            case "CHRN BLK":   missing = invRecipe.chicharonBulaklak(quantity);  break;
+            case "TRTA TLNG":  missing = invRecipe.tortangTalong(quantity);      break;
+            case "TURON":      missing = invRecipe.turon(quantity);              break;
+            case "ICD TEA":    missing = invRecipe.icedTea(quantity);            break;
+            case "BK JC":      missing = invRecipe.bukoJuice(quantity);          break;
+            default:           missing = new java.util.ArrayList<>();            break;
+        }
+        if (!missing.isEmpty())
+        {
+            JOptionPane.showMessageDialog(null,
+                    "Low / missing stock for: " + String.join(", ", missing)
+                    + "\nInventory updated with whatever was available.",
+                    "STOCK WARNING",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
 

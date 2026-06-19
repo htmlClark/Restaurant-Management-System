@@ -50,6 +50,24 @@ public class InventoryManager {
         delivered.setItemCurrentStatus(computeStatus(delivered.getItemQuantity(), delivered.getItemCategory()));
     }
 
+    /** Returns true if the item exists in inventory AND has at least {@code amount} units. */
+    public boolean hasStock(String itemName, double amount) {
+        for (invItem item : inventoryList) {
+            if (item.getItemName().equalsIgnoreCase(itemName)) {
+                return item.getItemQuantity() >= amount;
+            }
+        }
+        return false; // item not found in inventory
+    }
+
+    /** Returns true if an item with this name exists in inventory (any quantity). */
+    public boolean itemExistsInInventory(String itemName) {
+        for (invItem item : inventoryList) {
+            if (item.getItemName().equalsIgnoreCase(itemName)) return true;
+        }
+        return false;
+    }
+
     public boolean deductStock(String itemName, double amount) {
         for (invItem item : inventoryList) {
             if (item.getItemName().equalsIgnoreCase(itemName)) {

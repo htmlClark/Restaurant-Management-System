@@ -240,6 +240,20 @@ public class invDelivery extends JPanel implements ActionListener {
                         }
                         else
                         {
+                            // Validate that item name exists in inventory before adding delivery
+                            boolean itemKnown = InventoryManager.getInstance().itemExistsInInventory(inputItemName);
+                            if (!itemKnown)
+                            {
+                                JOptionPane.showMessageDialog(this,
+                                        "\"" + inputItemName + "\" does not exist in inventory.\n" +
+                                        "Only items already recorded in the inventory can receive deliveries.\n" +
+                                        "Please check the item name and try again.",
+                                        "Add Delivery | Item Not Found",
+                                        JOptionPane.ERROR_MESSAGE);
+                                InventoryManager.rollbackItemID();
+                                return;
+                            }
+
                             invItem item = new invItem(autoItemID, inputItemName, inputItemQuantityDouble, inputItemCategory, inputItemMeasurement, autoDeliveryID, inputItemExpiration, autoDate, autoTime, inputDeliveryCourier, "");
 
                             deliveryList.add(item);
